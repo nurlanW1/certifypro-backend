@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign up – CertifyPro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">Certify<span>Pro</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="templates.html">Templates</a>
+      <a href="editor.html">Editor</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="verify.html">Verify</a>
+    </nav>
+  </div>
+</header>
+
+
+  <!-- SIGN UP MAIN -->
+  <main class="auth-main">
+    <div class="auth-card">
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-subtitle">
+        Start building and exporting certificates in minutes.
+      </p>
+
+      <form class="auth-form">
+        <label class="auth-label">
+          Full name
+          <input type="text" class="auth-input" placeholder="Your name" required />
+        </label>
+
+        <label class="auth-label">
+          Email
+          <input type="email" class="auth-input" placeholder="you@example.com" required />
+        </label>
+
+        <label class="auth-label">
+          Password
+          <input type="password" class="auth-input" placeholder="At least 8 characters" required />
+        </label>
+
+        <label class="auth-label">
+          Confirm password
+          <input type="password" class="auth-input" placeholder="Repeat password" required />
+        </label>
+
+        <label class="auth-checkbox" style="margin-top: 4px;">
+          <input type="checkbox" required />
+          <span>I agree to the Terms and Privacy Policy</span>
+        </label>
+
+        <button type="submit" class="btn btn-primary auth-submit">
+          Create account
+        </button>
+
+        <button type="button" class="btn btn-light auth-provider">
+          Sign up with Google
+        </button>
+
+        <p class="auth-footer-text">
+          Already have an account?
+          <a href="login.html" class="auth-link">Log in</a>
+        </p>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

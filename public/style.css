@@ -1,0 +1,2428 @@
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  color: #111827;
+  background: #f3f4f6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* COMMON BUTTONS */
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  transition: 0.25s;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+}
+
+.btn-outline:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #374151;
+}
+
+.btn-ghost:hover {
+  color: #111827;
+}
+
+.btn-light {
+  background: white;
+  color: #2563eb;
+  border: 1px solid #e5e7eb;
+}
+
+.btn-light:hover {
+  background: #f3f4f6;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+/* NAVBAR */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.logo span {
+  color: #2563eb;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-links a {
+  font-size: 16px;
+  color: #374151;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: #111827;
+}
+
+.nav-active {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* GENERIC SECTION */
+
+.section {
+  padding: 80px 0;
+}
+
+.section-gray {
+  background: #f9fafb;
+}
+
+/* HERO (LANDING) */
+
+.hero {
+  padding: 120px 0;
+  background: white;
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.hero-text {
+  max-width: 520px;
+}
+
+.badge {
+  font-size: 14px;
+  background: #e0e7ff;
+  color: #1e3a8a;
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.hero-text h1 {
+  font-size: 44px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.hero-text .sub {
+  font-size: 18px;
+  color: #4b5563;
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.trust {
+  margin-top: 10px;
+  color: #6b7280;
+}
+
+/* ====== Landingdagi A4 LANDSCAPE preview ====== */
+
+.hero-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+
+/* Tashqi karta – sahifadan yumshoq ajralib turadi */
+.hero-preview .certificate-card {
+  background: transparent;          /* fonni cert-a4 oladi */
+  padding: 0;
+}
+
+/* A4 qog'oz – LANDSCAPE nisbat (width > height) */
+.hero-preview .cert-a4 {
+  width: 540px;                     /* asosiy kenglik */
+  aspect-ratio: 1.414 / 1;          /* A4 landscape ratio */
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.18);  /* yumshoq soya */
+  position: relative;
+}
+
+/* Ichki ko'k ramka – qog'oz chetidan ~20–24px ichkarida */
+.hero-preview .cert-inner-border {
+  position: absolute;
+  inset: 24px;                      /* hamma tomondan 24px margin */
+  border: 2px solid #1e40af;
+  border-radius: 8px;
+  padding: 40px 70px;               /* ichki kontent uchun joy */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+/* TITLE ("CERTIFICATE") */
+.hero-preview .cert-title {
+  font-family: 'Times New Roman', Times, serif;
+  margin: 0 0 4px;
+  font-size: 30px;
+  letter-spacing: 0.25em;
+}
+
+/* Subtitle ("of completion") */
+.hero-preview .cert-sub {
+  margin: 0 0 16px;
+  font-size: 15px;
+}
+
+/* Ism – animatsiya bo'ladigan joy */
+.hero-preview .hero-name {
+  position: absolute;
+  top: 100px;       /* ismning vertikal joylashuvi */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 20px;
+}
+
+.hero-preview .cert-body {
+  position: relative;
+  margin-top: 65px; /* ism absolute bo'lgani uchun endi pastga tushmadi */
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+
+/* Pastki imzo va sana qismi */
+.hero-preview .cert-footer {
+  margin-top: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hero-preview .cert-footer-col {
+  text-align: center;
+}
+
+.hero-preview .cert-line {
+  width: 140px;
+  height: 1px;
+  background: #000;
+  margin: 0 auto 4px;
+}
+
+.hero-preview .cert-footer span {
+  font-size: 11px;
+}
+
+
+
+/* ====== FEATURES / TEMPLATES / HOW / PRICING (LANDING) ====== */
+
+.section-header {
+  max-width: 720px;
+  margin-bottom: 32px;
+}
+
+.section-kicker {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 30px;
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: #4b5563;
+  max-width: 640px;
+}
+
+/* FEATURES GRID */
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.feature-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.feature-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* BROWSE TEMPLATES SECTION */
+
+.templates-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.templates-hero-text {
+  max-width: 520px;
+}
+
+/* 👉 Tugmani matndan pastroqqa tushirish */
+.templates-hero-text .btn {
+  margin-top: 22px;          /* tugma matndan uzoqroq turadi */
+  display: inline-block;     /* joylashuv barqaror bo‘lishi uchun */
+}
+
+.templates-hero-preview {
+  display: flex;
+  justify-content: center;
+}
+
+.templates-stack {
+  position: relative;
+  width: 260px;
+  height: 180px;
+}
+
+.templates-stack-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+}
+
+.templates-stack-main {
+  transform: translate(0, 0);
+}
+
+.templates-stack-alt {
+  transform: translate(-18px, 18px);
+  background: linear-gradient(135deg, #dbeafe, #93c5fd);
+}
+
+.templates-stack-lux {
+  transform: translate(18px, 26px);
+  background: linear-gradient(135deg, #fef3c7, #facc15);
+}
+
+
+/* HOW IT WORKS */
+
+.how-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.step-item {
+  display: flex;
+  gap: 12px;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  margin-top: 3px;
+}
+
+.step-item h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.step-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.how-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+}
+
+.how-card h3 {
+  margin: 0 0 6px;
+}
+
+.how-card p {
+  margin: 0 0 14px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.how-card-preview {
+  height: 160px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+}
+
+/* PRICING */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.pricing-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px 20px 22px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  position: relative;
+}
+
+.pricing-card-featured {
+  border: 1px solid #2563eb;
+  transform: translateY(-4px);
+}
+
+.pricing-badge {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.pricing-card h3 {
+  margin: 0 0 10px;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.price-note {
+  margin: 0 0 14px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.pricing-list li + li {
+  margin-top: 4px;
+}
+
+/* CTA SECTION */
+
+.section-cta {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.section-cta-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* ========== TEMPLATES PAGE SIMPLE ========== */
+
+.templates-search {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ========== EDITOR PAGE – FULLSCREEN LAYOUT ========== */
+
+.editor-main {
+  background: #e5e7eb;
+  min-height: calc(100vh - 64px);
+  padding: 8px 16px 16px;
+}
+
+/* topbar */
+.editor-topbar {
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 10px 18px;
+  background: #777777;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.editor-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-title-input {
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  background: transparent;
+  outline: none;
+}
+
+.editor-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.editor-status-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.editor-topbar-right {
+  display: flex;
+  gap: 8px;
+}
+/* Uch ustunli editor layout */
+.editor-layout {
+  max-width: 100%;
+  height: calc(100vh - 60px);
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 320px;
+  gap: 0;
+}
+
+/* O'rta qism – workspace */
+.editor-canvas-area {
+  position: relative;          /* pultga parent */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #e5e7eb;
+}
+
+.editor-canvas-wrapper {
+  flex: 1 1 auto;
+  background: #f3f4f6;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* ===== EDITOR TOOLBAR (navbar ostida) ===== */
+
+.editor-toolbar {
+  position: sticky;          /* sahifa skroll bo‘lsa ham tepada yuradi */
+  top: 56px;                 /* navbar balandligiga qarab sozla */
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 8px 24px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.editor-toolbar-left,
+.editor-toolbar-center,
+.editor-toolbar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s,
+              transform 0.05s;
+}
+
+.tool-btn:hover {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+
+.tool-btn:active {
+  transform: translateY(1px);
+}
+
+.tool-btn.is-active {
+  background: #1d4ed8;
+  color: #ffffff;
+  border-color: #1d4ed8;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #e5e7eb;
+  margin: 0 4px;
+}
+
+.toolbar-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.toolbar-zoom-value {
+  min-width: 42px;
+  text-align: center;
+  font-size: 13px;
+  color: #111827;
+}
+
+/* Canvas qog'ozi */
+.editor-canvas-shadow {
+  background: transparent;
+}
+
+.editor-canvas {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  /* A4 landscape nisbatiga yaqin */
+  width: 900px;
+  height: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* uch ustunli fullscreen grid */
+.editor-layout {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 320px;
+  column-gap: 16px;
+  height: calc(100vh - 120px);
+}
+
+/* chap / o‘ng panel */
+.editor-sidebar,
+.editor-panel {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* LEFT sidebar specifics */
+.editor-sidebar-header h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.editor-sidebar-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-template-thumb {
+  height: 80px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.sidebar-template-alt {
+  background: linear-gradient(135deg, #dbeafe, #93c5fd);
+}
+
+.sidebar-template-lux {
+  background: linear-gradient(135deg, #fef3c7, #facc15);
+}
+
+.sidebar-template-corp {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+}
+
+.editor-canvas-area {
+  position: relative;      /* pult uchun parent */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #e5e7eb;
+}
+
+/* pultning o‘zi – pastda, markazda */
+.canvas-command-bar {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);   /* markazga keltiramiz */
+  z-index: 10;
+
+  background: #ffffff;
+  border-radius: 0px;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.18);
+  padding: 8px 12px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* drag uchun ingichka “ushlagich” */
+.canvas-drag-handle {
+  height: 5px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  cursor: grab;
+  margin-bottom: 6px;
+}
+
+.canvas-command-bar.is-dragging .canvas-drag-handle {
+  cursor: grabbing;
+  background: #d1d5db;
+}
+
+/* qolgan input/tugmalar drag qilmaydi */
+.canvas-prompt-input {
+  width: 420px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+
+/* Ish maydoni (workspace) */
+.editor-canvas-wrapper {
+  flex: 1;
+  background: #eef1f4;
+  overflow: auto;
+  position: relative;
+
+  display: flex;
+  justify-content: center;   /* CANVASNI GORIZONTAL MARKAZGA */
+  align-items: flex-start;   /* TEPA TOMONDAN BOSHLANADI */
+  padding: 60px;             /* Atrofida bo‘sh joy */
+}
+
+
+/* Kichik "pad" bilan katta, lekin cheksiz emas workspace */
+.editor-canvas-shadow {
+  margin: 0 auto;
+  padding: 200px 260px;                /* har tomonda bo'sh joy */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+/* ====== sahifa (editor-canvas) + orientation ====== */
+
+/* Sahifaning o'zi */
+.cert-inner {
+  position: absolute;
+  inset: 36px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 2px solid rgba(55, 65, 81, 0.45);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* YANGISI: ichki vertikal joylashuvni to‘g‘irlash */
+  justify-content: flex-start;   
+  padding-top: 60px;              /* matnni biroz pastga tushiradi */
+  padding-bottom: 80px;           /* footer bilan to‘qnashmaslik uchun */
+  gap: 22px;                      /* matnlar orasidagi aniq masofa */
+}
+
+
+/* LANDSCAPE */
+.editor-canvas.is-landscape {
+  width: 960px;
+  height: 680px;
+}
+
+/* PORTRAIT */
+.editor-canvas.is-portrait {
+  width: 680px;
+  height: 960px;
+}
+
+
+.cert-border {
+  width: 92%;
+  height: 89%;
+  position: relative;
+  padding: 40px 50px;
+  background: white;
+
+
+  /* Tashqi ramka — ingichka */
+  border: 4px solid #838383;
+  border-radius: 6px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Ichki ramka — qalin */
+.cert-border::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+
+  border: 2px solid #838383;
+  border-radius: 4px;
+  pointer-events: none; /* muhim! ichki ramka bosilmaydi */
+}
+
+
+/* matnlar */
+.cert-title {
+  font-family: 'Times New Roman', Times, serif;
+  margin-top: -20px;   /* yuqoriga ko‘taradi */
+  font-size: 56px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+ .cert-sub {
+  margin: 10 10 60px;   /* ❌ noto‘g‘ri yozilgan margin */
+  font-size: 35px;
+  color: #000000;
+}
+
+
+
+.cert-name {
+  margin-top: 10px;   /* yuqoriga ko‘taradi */
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 55px;
+  font-weight: 300;
+  font-style: italic;
+}
+
+
+.cert-body {
+  margin: 4px 0 20px;
+  max-width: 70%;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #000000;
+}
+
+/* imzo chiziqlari */
+.cert-footer {
+  margin-top: -20px;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #4b5563;
+}
+
+.cert-footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cert-line {
+  width: 160px;
+  height: 1px;
+  background: #9ca3af;
+}
+
+.cert-footer-label {
+  margin: 0;
+}
+
+/* RIGHT PANEL text controls */
+.editor-panel-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.editor-tab {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: none;
+  background: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.editor-tab-active {
+  background: #2563eb;
+  color: white;
+}
+
+.editor-panel-section {
+  margin-bottom: 12px;
+}
+
+.editor-panel-section h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.editor-small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.editor-label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.editor-input,
+.editor-textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.editor-textarea {
+  resize: vertical;
+}
+
+.editor-color {
+  width: 100%;
+  height: 32px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: transparent;
+}
+
+
+/* ========== VERIFY PAGE (DESKTOP) ========== */
+
+.verify-main {
+  background: #f3f4f6;
+}
+
+.verify-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.verify-subtitle {
+  max-width: 520px;
+  color: #4b5563;
+  margin-bottom: 24px;
+}
+
+.verify-form {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.verify-label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.verify-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.verify-input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.verify-hint {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.verify-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.verify-card h3 {
+  margin-top: 0;
+}
+
+.verify-status-row {
+  margin-bottom: 14px;
+}
+
+.verify-status-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.verify-status-neutral {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.verify-status-valid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.verify-status-invalid {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.verify-message {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 10px;
+}
+
+.verify-details p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* FOOTER */
+
+.footer {
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 0;
+  margin-top: 20px;
+}
+
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: #6b7280;
+}
+
+.footer-links a:hover {
+  color: #111827;
+}
+/* === HERO sertifikatini A4 nisbatli va naqshli qilish === */
+
+/* Hero previewdagi umumiy konteynerni biroz shaffof va toza qilamiz */
+.certificate-card {
+  width: 430px;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* A4 portret nisbat: 210x297 => aspect-ratio: 210 / 297 */
+/* A4 LANDSCAPE nisbat: 297 x 210 */
+.hero-page {
+  width: 460px;                 /* biroz kengroq */
+  aspect-ratio: 297 / 210;      /* ENI katta, bo‘yi past */
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 0px;
+  box-shadow: 0 20px 65px rgba(15, 23, 42, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Ichki ko‘k ramkani gorizontal formatga moslashtiramiz */
+.hero-cert-border {
+  width: calc(100% - 32px);
+  height: calc(100% - 32px);
+  margin: 0;
+  padding: 30px 64px;           /* o‘ng-chap tomondan ko‘proq joy */
+  border-radius: 0px;
+  border: 2px solid #1d4ed8;
+  position: relative;
+}
+
+
+/* Ichki naqshli chiziq (naqsh efekti uchun dashed) */
+.hero-cert-border::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 8px;
+  border: 1px dashed rgba(37, 99, 235, 0.55);
+  pointer-events: none;
+}
+
+/* Burchaklarda ozgina dekor (ornament effekt) */
+.hero-cert-border::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 8px;
+  border-top: 3px solid rgba(37, 99, 235, 0.7);
+  border-left: 3px solid rgba(37, 99, 235, 0.7);
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  opacity: 0.25;
+}
+
+/* Hero’dagi matnlarni biroz kattaroq va nafisroq qilamiz */
+.hero-cert-border .cert-title {
+  letter-spacing: 0.22em;
+  font-size: 18px;
+}
+
+.hero-cert-border .cert-name {
+  font-size: 40px;
+}
+
+/* Typing kursor animatsiyasi */
+.typing-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #111827;
+  margin-left: 2px;
+  animation: caretBlink 0.9s steps(1) infinite;
+  vertical-align: -0.1em;
+}
+
+@keyframes caretBlink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+/* Footer layout: ikkita chiziqni yonma-yon joylashtirish */
+.cert-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.cert-footer-col {
+  width: 40%;          /* har biri A4 bo‘yicha teng joy egallaydi */
+  text-align: center;
+}
+
+.cert-line {
+  width: 100%;
+  height: 1px;
+  background: #1f2937;
+  margin: 2px 0 2px 0;   /* chiziq bilan yozuv orasidagi masofa minimal */
+}
+
+/* ====== TEMPLATES PAGE LAYOUT TUNING ====== */
+
+.templates-page {
+  background: #f9fafb;
+}
+
+.page-header {
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  margin: 8px 0;
+}
+
+.page-subtitle {
+  max-width: 640px;
+  color: #4b5563;
+}
+
+/* Thumbnail’lar uchun yana ikki rang kombinatsiyasi */
+
+.template-thumb-main {
+  background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+}
+
+.template-thumb-webinar {
+  background: linear-gradient(135deg, #e0f2fe, #93c5fd);
+}
+
+.template-thumb-gift {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+}
+/* HAND TOOL – kursorni haqiqiy qo'lga aylantiradi */
+.editor-canvas-wrapper.hand-mode {
+  cursor: grab !important;          /* qo'l ikonka */
+}
+
+.editor-canvas-wrapper.hand-mode.hand-panning {
+  cursor: grabbing !important;      /* ushlab turgan qo'l */
+}
+
+/* Hand rejimida matn belgilanishini bloklaymiz */
+.editor-canvas-wrapper.hand-mode,
+.editor-canvas-wrapper.hand-mode * {
+  user-select: none;
+}
+
+/* Hand rejimi faqat workspace ichida – canvas ham shu kursordan foydalansin */
+.editor-canvas-wrapper.hand-mode .editor-canvas {
+  cursor: inherit;
+}
+/* ================== AUTH PAGES (LOGIN / REGISTER) ================== */
+
+.auth-main {
+  min-height: calc(100vh - 70px);
+
+  background-image:
+    
+    url("backg.jpg");   /* <-- 100% TO‘G‘RI MANZIL */
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+
+
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 460px;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px 28px 30px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.15);
+  border: 1px solid #e5e7eb;
+}
+
+.auth-title {
+  font-size: 26px;
+  margin: 0 0 6px;
+  color: #111827;
+}
+
+.auth-subtitle {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.auth-label {
+  font-size: 13px;
+  color: #374151;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.auth-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.auth-checkbox-label input {
+  accent-color: #2563eb;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.auth-footer-text {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin: 0;
+}
+
+.auth-link,
+.auth-link-small {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.auth-link:hover,
+.auth-link-small:hover {
+  text-decoration: underline;
+}
+/* O'rta ustun – ustma-ust joylashishi uchun */
+.editor-canvas-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+/* Credits / Upgrade chiplari */
+.canvas-chip-btn,
+.canvas-upgrade-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  color: #111827;
+}
+
+.canvas-chip-btn:hover {
+  background: #f3f4f6;
+}
+
+.canvas-upgrade-btn {
+  background: #fef3c7;
+  border-color: #facc15;
+  color: #92400e;
+}
+
+.canvas-upgrade-btn:hover {
+  background: #fde68a;
+}
+
+.chip-icon {
+  font-size: 13px;
+}
+/* ====== GLOBAL LAYOUT 16:9 FULL DESKTOP ====== */
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.editor-main {
+  height: calc(100vh - 56px - 56px); /* nav + editor-toolbar taxminan */
+  min-height: 480px;
+}
+
+.editor-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* chap va o'ng panellar scroll bilan */
+.editor-sidebar,
+.editor-panel {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* o'rta qism */
+.editor-canvas-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #f3f4f6;
+}
+
+/* ====== TOOLBAR CENTER ====== */
+.editor-toolbar {
+  display: flex;
+  justify-content: center;  /* markazga */
+  align-items: center;
+  gap: 32px;
+  padding: 10px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.editor-toolbar-left,
+.editor-toolbar-center,
+.editor-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-btn {
+  border: none;
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tool-btn.is-active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* zoom label */
+.toolbar-zoom-value {
+  min-width: 40px;
+  text-align: center;
+}
+
+/* divider */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: #e5e7eb;
+}
+
+/* ====== CANVAS WRAPPER & ZOOM ====== */
+.editor-canvas-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  padding: 32px 0;
+}
+
+.editor-canvas-shadow {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.24);
+  padding: 32px;
+  transition: transform 0.15s ease-out;
+}
+
+/* A4 landscape / portrait nisbatlari */
+.editor-canvas {
+  background: #fdfdfd;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* A4 ratio: 1.414 */
+.editor-canvas.is-landscape {
+  width: 960px;
+  height: calc(960px / 1.414);
+}
+
+.editor-canvas.is-portrait {
+  height: 960px;
+  width: calc(960px / 1.414);
+}
+
+/* ichki ko'k ramka */
+.cert-border {
+  width: 88%;
+  height: 84%;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #264081;
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 12px;
+  text-align: center;
+}
+
+/* ikki qatlamli ramka hisobi */
+.cert-border::before {
+  content: "";
+  position: absolute;
+  inset: 24px;
+  border-radius: 10px;
+  border: 2px solid rgba(37, 99, 235, 0.4);
+  pointer-events: none;
+}
+
+/* ====== PAGE ORIENTATION TUGMALARI ====== */
+.editor-canvas-toolbar {
+  width: 100%;
+  padding: 10px 24px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.page-orientation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+.page-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.page-size {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.pill-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  background: transparent;
+  color: #4b5563;
+}
+
+.pill-btn.pill-active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* ====== DRAGGABLE PULT (canvas-command-bar) ====== */
+.canvas-command-bar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 650px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.25);
+  padding: 6px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 5;
+}
+
+.canvas-drag-handle {
+  height: 4px;
+  border-radius: 50px;
+  background: #e5e7eb;
+  cursor: grab;
+  margin: 0 auto 4px;
+  width: 60px;
+}
+
+.canvas-command-bar.is-dragging .canvas-drag-handle {
+  cursor: grabbing;
+}
+
+.canvas-prompt-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: #f9fafb;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.canvas-tools-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.canvas-tools-left,
+.canvas-tools-center,
+.canvas-tools-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.canvas-icon-btn,
+.canvas-zoom-btn,
+.canvas-chip-btn,
+.canvas-upgrade-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #f3f4f6;
+}
+
+.canvas-icon-btn.is-active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.canvas-zoom-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.canvas-zoom-value {
+  min-width: 36px;
+  text-align: center;
+}
+
+/* ====== TEMPLATE BACKGROUNDS (chapdagi gradientlar) ====== */
+
+.editor-canvas-shadow.template-plain {
+  background: #ffffff;
+}
+
+.editor-canvas-shadow.template-blue {
+  background: radial-gradient(circle at top left, #dbeafe, #eff6ff);
+}
+
+.editor-canvas-shadow.template-gold {
+  background: radial-gradient(circle at top left, #fef3c7, #fffbeb);
+}
+
+.editor-canvas-shadow.template-soft {
+  background: radial-gradient(circle at top left, #e0f2fe, #fdf2ff);
+}
+
+/* Sertifikatning o'zi har doim oq qog'oz bo'lib qoladi */
+.editor-canvas-shadow.template-blue .editor-canvas,
+.editor-canvas-shadow.template-gold .editor-canvas,
+.editor-canvas-shadow.template-soft .editor-canvas {
+  background: #ffffff;
+}
+
+/* ====== FONT CONTROL LABELS ====== */
+.editor-label-small {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  color: #6b7280;
+}
+
+.editor-select {
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+/* Title / subtitle / name / body uchun default font */
+.js-cert-title     { font-family: 'DM Serif Display', serif; letter-spacing: 0.3em; font-size: 22px; }
+.js-cert-sub       { font-family: 'Inter', system-ui; font-size: 13px; color: #6b7280; }
+.js-cert-name      { font-family: 'DM Serif Display', serif; font-size: 26px; }
+.js-cert-body      { font-family: 'Inter', system-ui; font-size: 13px; color: #374151; }
+
+/* Google fonts uchun (agar ishlatmoqchi bo'lsangiz) */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600&display=swap');
+.cert-title,
+.cert-sub,
+.cert-name,
+.cert-body,
+.cert-footer-label {
+  transition: all 0.15s ease;
+}
+/* ====== GLOBAL ====== */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #f3f5f7;
+  color: #111827;
+}
+
+/* Navbar avvalgidek ishlaydi – o‘zgartirish shart emas */
+
+/* ====== EDITOR SHELL ====== */
+
+.editor-shell {
+  display: grid;
+  grid-template-columns: 56px 260px minmax(0, 1fr) 320px;
+  grid-template-rows: minmax(0, calc(100vh - 64px)); /* nav balandligi ~64px */
+  height: calc(100vh - 64px);
+}
+
+/* LEFT RAIL */
+
+.left-rail {
+  background: #111827;
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 8px;
+}
+
+.brand-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #2563eb, #6366f1);
+  color: #f9fafb;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.rail-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rail-icon-btn:hover {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+/* TEMPLATES PANEL */
+
+.templates-panel {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease, transform 0.2s ease;
+}
+
+.templates-panel.is-collapsed {
+  width: 0;
+  transform: translateX(-100%);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.panel-toggle {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.templates-search-wrap {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.templates-search {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+}
+
+.templates-list {
+  padding: 8px 8px 16px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+/* Template gradient thumb’lar */
+
+.template-thumb {
+  border-radius: 10px;
+  /* height: 72px;  <-- BUNi O‘CHIRAMIZ */
+  aspect-ratio: 297 / 210;   /* A4 landscape nisbat – eni bo‘yidan katta */
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+  background-size: cover;
+  background-position: center;
+}
+
+
+/* Oxirgi element pastda qo‘shimcha bo‘sh joy qoldirmasin */
+.template-thumb:last-child {
+  margin-bottom: 0;
+}
+.templates-list {
+  padding: 8px 8px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;       /* <<< ORALIQ MASOFA SHU YERDA */
+}
+/* Har bir gradient (xohlagancha o‘zgartir) */
+.template-thumb.t1 { background-image: linear-gradient(135deg,#2563eb,#a855f7); }
+.template-thumb.t2 { background-image: linear-gradient(135deg,#ec4899,#f97316); }
+.template-thumb.t3 { background-image: linear-gradient(135deg,#10b981,#22c55e); }
+.template-thumb.t4 { background-image: linear-gradient(135deg,#0ea5e9,#6366f1); }
+.template-thumb.t5 { background-image: linear-gradient(135deg,#f59e0b,#ef4444); }
+.template-thumb.t6 { background-image: linear-gradient(135deg,#4ade80,#14b8a6); }
+.template-thumb.t7 { background-image: linear-gradient(135deg,#f97316,#22d3ee); }
+.template-thumb.t8 { background-image: linear-gradient(135deg,#e11d48,#7c3aed); }
+.template-thumb.t9 { background-image: linear-gradient(135deg,#22c55e,#a3e635); }
+.template-thumb.t10 { background-image: linear-gradient(135deg,#0ea5e9,#f472b6); }
+
+/* WORKSPACE (CENTER) */
+
+.workspace {
+  background: #f3f5f7;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top toolbar */
+
+.top-toolbar {
+  height: 52px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
+  background: #f9fafb;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.chip {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #fff;
+}
+
+.chip-muted {
+  background: #f3f4f6;
+}
+
+.chip-group {
+  display: inline-flex;
+  border-radius: 999px;
+  background: #e5e7eb;
+  padding: 2px;
+}
+
+.chip-toggle {
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.chip-toggle-active {
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+}
+
+.toolbar-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.zoom-readout {
+  font-size: 13px;
+  min-width: 44px;
+  text-align: center;
+}
+
+/* CANVAS AREA */
+
+.canvas-scroll {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.canvas-wrapper {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Sertifikat sahifasi */
+
+.certificate-page {
+  width: 1120px;  /* A4 landscape taxminiy */
+  height: 792px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
+  position: relative;
+  transform-origin: center center;
+  transition: width 0.2s ease, height 0.2s ease, transform 0.15s ease;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Portrait holat */
+
+.certificate-page.is-portrait {
+  width: 792px;
+  height: 1120px;
+}
+
+/* Ichki oq “karton” */
+
+.cert-inner {
+  position: absolute;
+  inset: 36px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 40px 64px;
+  border: 2px solid rgba(55, 65, 81, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Matnlar */
+
+.cert-title {
+  font-size: 26px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.cert-sub {
+  font-size: 14px;
+  margin: 0 0 40px;
+  color: #6b7280;
+}
+
+.cert-name {
+  font-size: 28px;
+  margin: 0 0 24px;
+}
+
+.cert-body {
+  font-size: 14px;
+  max-width: 540px;
+  margin: 0 0 64px;
+  line-height: 1.6;
+}
+
+/* Footer */
+
+.cert-footer {
+  margin-top: auto;
+  display: flex;
+  gap: 120px;
+}
+
+.cert-footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cert-line {
+  width: 220px;
+  height: 1px;
+  background: #111827;
+  margin-bottom: 8px;
+}
+
+.cert-footer-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* BOTTOM COMMAND BAR */
+
+.bottom-command {
+  padding: 10px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bottom-prompt {
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 10px 16px;
+  font-size: 13px;
+  background: #ffffff;
+}
+
+.bottom-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bottom-tools-left,
+.bottom-tools-center,
+.bottom-tools-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.circle-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: none;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.circle-btn.is-active {
+  background: #2563eb;
+  color: #f9fafb;
+}
+
+.zoom-chip {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+/* RIGHT PROPERTIES PANEL */
+
+.properties-panel {
+  background: #ffffff;
+  border-left: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease, transform 0.2s ease;
+}
+
+.properties-panel.is-collapsed {
+  width: 0;
+  transform: translateX(100%);
+}
+
+.panel-scroll {
+  overflow-y: auto;
+  padding: 8px 12px 16px;
+}
+
+/* Prop blocks */
+
+.prop-block {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 10px;
+  background: #f9fafb;
+}
+
+.prop-block-header {
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prop-block-body {
+  padding: 8px 10px 10px;
+  font-size: 12px;
+}
+
+.prop-label {
+  display: block;
+  font-size: 11px;
+  color: #6b7280;
+  margin: 4px 0 2px;
+}
+
+.prop-textarea {
+  width: 100%;
+  resize: vertical;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.prop-input,
+.prop-select {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.prop-color {
+  width: 100%;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  padding: 0;
+}
+
+.prop-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.prop-col {
+  flex: 1;
+}
+
+.prop-align-group {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.align-btn {
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  padding: 2px 5px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.align-btn.is-active {
+  background: #2563eb;
+  color: #f9fafb;
+  border-color: #1d4ed8;
+}
+
+/* Panel header reused */
+
+.properties-panel .panel-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Faqat editor sahifasi uchun */
+body.editor-page {
+  padding-top: 0;          /* agar globalda padding-top bor bo'lsa, bekor qiladi */
+}
+
+/* Editor layout to'liq oynani egallasin */
+body.editor-page .editor-layout {
+  height: 100vh;
+  max-height: 100vh;
+}
+/* Faqat editor sahifasi uchun maxsus sozlamalar */
+body.editor-page {
+  margin: 0;
+  padding: 0;
+}
+
+/* Editor sahifasida umumiy footer kerak emas */
+body.editor-page .footer {
+  display: none;
+}
+
+/* === EDITOR: pastdagi bo'sh zonani yo'qotish === */
+
+/* HTML va body to'liq balandlikda bo'lsin */
+html, body {
+  height: 100%;
+}
+
+/* Faqat editor sahifasi */
+body.editor-page {
+  margin: 0;
+  padding: 0;
+  background: #f3f5f7; /* hozirgi och kulrang fon */
+}
+
+/* Kittle-ga o'xshagan yangi layout uchun:
+   navbarsiz to'liq 100vh ishlatsin */
+body.editor-page .editor-shell {
+  height: 100vh;
+  grid-template-rows: minmax(0, 1fr);  /* `calc(100vh - 64px)`ni bosib ketadi */
+}
+
+/* Workspace va canvas scroll ham oynadan tashqariga chiqmasin */
+body.editor-page .workspace {
+  height: 100%;
+}
+
+body.editor-page .canvas-scroll {
+  padding-bottom: 0;   /* pastki paddingni olib tashlaymiz */
+}
+
+/* Agar pastda eski "bottom-command" qismi bo'lsa – yashirib turamiz */
+body.editor-page .bottom-command {
+  display: none;
+}
+
+/* Editor sahifasida umumiy footer kerak emas */
+body.editor-page .footer {
+  display: none;
+}
+/* ===== HOME PAGE PREVIEW FIX ===== */
+
+.hero-preview .cert-footer {
+  margin-top: 20px !important; /* avvalgidan yuqoriroq */
+  padding-bottom: 0 !important;
+}
+
+.hero-preview .cert-footer-col {
+  margin-top: 0 !important;
+}
+
+.hero-preview .cert-line {
+  margin-bottom: 2px !important;
+}

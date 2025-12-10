@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editor – CertifyPro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="editor-page">
+  <!-- 🔹 EDITOR SHELL – Kittle uslubi -->
+  <div class="editor-shell">
+
+    <!-- CHAP VERTIKAL LOGO / ICON BAR -->
+    <aside class="left-rail">
+      <!-- Minimal logo: CP → Home -->
+      <a href="index.html" class="brand-badge">CP</a>
+
+      <button class="rail-icon-btn js-toggle-templates" title="Toggle templates">
+        ☰ 
+      </button>
+
+      <button class="rail-icon-btn" title="Text tool">T</button>
+      <button class="rail-icon-btn" title="Shapes">▢</button>
+      <button class="rail-icon-btn" title="Images">🖼</button>
+    </aside>
+
+    <!-- CHAP: TEMPLATES PANEL -->
+    <aside class="templates-panel is-open">
+      <div class="panel-header">
+        <span class="panel-title">Templates</span>
+        <button class="panel-toggle js-toggle-templates">⟨⟩</button>
+      </div>
+
+      <div class="templates-search-wrap">
+        <input
+          type="text"
+          class="templates-search"
+          placeholder="Search: certificate"
+        />
+      </div>
+
+      <div class="templates-list">
+        <!-- Gradient shablonlar -->
+        <button class="template-thumb t1" data-bg="t1"></button>
+        <button class="template-thumb t2" data-bg="t2"></button>
+        <button class="template-thumb t3" data-bg="t3"></button>
+        <button class="template-thumb t4" data-bg="t4"></button>
+        <button class="template-thumb t5" data-bg="t5"></button>
+        <button class="template-thumb t6" data-bg="t6"></button>
+        <button class="template-thumb t7" data-bg="t7"></button>
+        <button class="template-thumb t8" data-bg="t8"></button>
+        <button class="template-thumb t9" data-bg="t9"></button>
+        <button class="template-thumb t10" data-bg="t10"></button>
+      </div>
+    </aside>
+
+    <!-- O‘RTA: WORKSPACE + CANVAS -->
+    <main class="workspace">
+
+      <!-- YUQORI TOOLBAR -->
+      <div class="top-toolbar">
+        <div class="toolbar-left">
+          <span class="toolbar-label">Page</span>
+          <span class="chip chip-muted">A4</span>
+
+          <div class="chip-group">
+            <button
+              class="chip chip-toggle js-orientation-btn chip-toggle-active"
+              data-orientation="landscape"
+            >
+              Landscape
+            </button>
+            <button
+              class="chip chip-toggle js-orientation-btn"
+              data-orientation="portrait"
+            >
+              Portrait
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar-center">
+          <!-- keyin artboard nomi va h.k. qo‘shish mumkin -->
+        </div>
+
+        <div class="toolbar-right">
+          <span class="toolbar-label">Zoom</span>
+          <button class="toolbar-icon js-zoom-minus">−</button>
+          <span class="zoom-readout js-zoom-value">100%</span>
+          <button class="toolbar-icon js-zoom-plus">＋</button>
+
+          <button class="toolbar-icon js-hand-toggle" title="Hand tool">
+            ✋
+          </button>
+
+          <button class="btn btn-primary btn-sm">
+            Share
+          </button>
+
+          <!-- Editor ichidan PDF yuklab olish tugmasi -->
+          <button id="editorDownloadBtn" class="btn btn-primary btn-sm">
+            Download PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- CANVAS SCROLL ZONE -->
+      <div class="canvas-scroll js-canvas-scroll">
+        <div class="canvas-wrapper js-canvas-wrapper">
+          <!-- 🔹 Sertifikat sahifasi – FAQAT YANGI SHABLON -->
+          <div class="certificate-page js-canvas is-landscape">
+            <!-- Eski ikki chiziqli .cert-border o‘rniga: bitta .cert-inner -->
+            <div class="cert-inner">
+              <p class="cert-title js-cert-title">
+                CERTIFICATE
+              </p>
+
+              <p class="cert-sub js-cert-sub">
+                of participation
+              </p>
+
+              <p class="cert-name js-cert-name">
+                Name Surname
+              </p>
+
+              <p class="cert-body js-cert-body">
+                This is to certify that the person above has successfully
+                completed the course.
+              </p>
+
+              <div class="cert-footer">
+                <div class="cert-footer-col">
+                  <div class="cert-line"></div>
+                  <p class="cert-footer-label js-footer-signature">
+                    Signature
+                  </p>
+                </div>
+                <div class="cert-footer-col">
+                  <div class="cert-line"></div>
+                  <p class="cert-footer-label js-footer-date">
+                    Date
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div><!-- /.certificate-page -->
+        </div>
+      </div>
+
+      <!-- PASTKI FLOATING COMMAND BAR (Kittle / Canva uslubi) -->
+      <div class="bottom-command">
+        <input
+          type="text"
+          class="bottom-prompt"
+          placeholder="Describe what you want to create"
+        />
+
+        <div class="bottom-tools">
+          <div class="bottom-tools-left">
+            <button class="circle-btn is-active" title="Select">➤</button>
+            <button class="circle-btn" title="Shapes">▢</button>
+            <button class="circle-btn" title="Text">T</button>
+            <button class="circle-btn" title="Image">🖼</button>
+          </div>
+
+          <div class="bottom-tools-center">
+            <button class="circle-btn js-undo">⟲</button>
+            <button class="circle-btn js-redo">⟳</button>
+          </div>
+
+          <div class="bottom-tools-right">
+            <span class="zoom-chip js-zoom-value-bottom">100%</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- O‘NG: PROPERTIES / TEXT PANEL -->
+    <aside class="properties-panel is-open">
+      <div class="panel-header">
+        <span class="panel-title">Text</span>
+        <button class="panel-toggle js-toggle-properties">⟨⟩</button>
+      </div>
+
+      <div class="panel-scroll">
+
+        <!-- TITLE BLOKI -->
+        <section class="prop-block">
+          <div class="prop-block-header">
+            <span>Title</span>
+          </div>
+          <div class="prop-block-body">
+            <textarea
+              class="prop-textarea js-input-title"
+              rows="2"
+            >CERTIFICATE</textarea>
+
+            <label class="prop-label">Font family</label>
+            <select class="prop-select js-font-title-family">
+              <option value="'Times New Roman', serif">Times</option>
+              <option value="Poppins, system-ui" selected>Poppins</option>
+              <option value="Georgia, serif">Georgia</option>
+            </select>
+
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Size</label>
+                <input
+                  type="number"
+                  class="prop-input js-font-title-size"
+                  value="28"
+                />
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Color</label>
+                <input
+                  type="color"
+                  class="prop-color js-font-title-color"
+                  value="#2b2b2b"
+                />
+              </div>
+            </div>
+
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Weight</label>
+                <select class="prop-select js-font-title-weight">
+                  <option value="400">Regular</option>
+                  <option value="500" selected>Medium</option>
+                  <option value="700">Bold</option>
+                </select>
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Letter spacing</label>
+                <input
+                  type="number"
+                  class="prop-input js-font-title-letter"
+                  value="4"
+                />
+              </div>
+            </div>
+
+            <div class="prop-row">
+              <label class="prop-label">Align</label>
+              <div class="prop-align-group">
+                <button class="align-btn js-title-align" data-align="left">L</button>
+                <button class="align-btn is-active js-title-align" data-align="center">C</button>
+                <button class="align-btn js-title-align" data-align="right">R</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SUBTITLE -->
+        <section class="prop-block">
+          <div class="prop-block-header">
+            <span>Subtitle</span>
+          </div>
+          <div class="prop-block-body">
+            <textarea
+              class="prop-textarea js-input-subtitle"
+              rows="2"
+            >of participation</textarea>
+
+            <label class="prop-label">Font family</label>
+            <select class="prop-select js-font-sub-family">
+              <option value="Poppins, system-ui" selected>Poppins</option>
+              <option value="'Times New Roman', serif">Times</option>
+            </select>
+
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Size</label>
+                <input
+                  type="number"
+                  class="prop-input js-font-sub-size"
+                  value="16"
+                />
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Color</label>
+                <input
+                  type="color"
+                  class="prop-color js-font-sub-color"
+                  value="#666666"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NAME -->
+        <section class="prop-block">
+          <div class="prop-block-header">
+            <span>Name</span>
+          </div>
+          <div class="prop-block-body">
+            <textarea
+              class="prop-textarea js-input-name"
+              rows="2"
+            >Name Surname</textarea>
+
+            <label class="prop-label">Font family</label>
+            <select class="prop-select js-font-name-family">
+              <option value="'Times New Roman', serif" selected>Times</option>
+              <option value="'Alex Brush', cursive">Alex Brush (if loaded)</option>
+            </select>
+
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Size</label>
+                <input
+                  type="number"
+                  class="prop-input js-font-name-size"
+                  value="28"
+                />
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Color</label>
+                <input
+                  type="color"
+                  class="prop-color js-font-name-color"
+                  value="#5a3434"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BODY -->
+        <section class="prop-block">
+          <div class="prop-block-header">
+            <span>Body text</span>
+          </div>
+          <div class="prop-block-body">
+            <textarea
+              class="prop-textarea js-input-body"
+              rows="4"
+            >This is to certify that the person above has successfully completed the course.</textarea>
+
+            <label class="prop-label">Font family</label>
+            <select class="prop-select js-font-body-family">
+              <option value="Poppins, system-ui" selected>Poppins</option>
+              <option value="Georgia, serif">Georgia</option>
+            </select>
+
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Size</label>
+                <input
+                  type="number"
+                  class="prop-input js-font-body-size"
+                  value="14"
+                />
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Color</label>
+                <input
+                  type="color"
+                  class="prop-color js-font-body-color"
+                  value="#333333"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SIGNATURE / DATE -->
+        <section class="prop-block">
+          <div class="prop-block-header">
+            <span>Footer labels</span>
+          </div>
+          <div class="prop-block-body">
+            <div class="prop-row">
+              <div class="prop-col">
+                <label class="prop-label">Signature text</label>
+                <input
+                  type="text"
+                  class="prop-input js-input-signature"
+                  value="Signature"
+                />
+              </div>
+              <div class="prop-col">
+                <label class="prop-label">Date text</label>
+                <input
+                  type="text"
+                  class="prop-input js-input-date"
+                  value="Date"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /.panel-scroll -->
+    </aside>
+
+  </div><!-- /.editor-shell -->
+
+  <script src="script.js"></script>
+</body>
+</html>

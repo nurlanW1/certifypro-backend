@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify certificate – CertifyPro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">Certify<span>Pro</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="templates.html">Templates</a>
+      <a href="editor.html">Editor</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="verify.html">Verify</a>
+      <a href="login.html" class="btn btn-outline">Log in</a>
+<a href="register.html" class="btn btn-primary">Get Started</a>
+
+    </nav>
+  </div>
+</header>
+
+
+  <!-- VERIFY MAIN -->
+  <main class="section verify-main">
+    <div class="container verify-layout">
+      <!-- Left text -->
+      <div>
+        <p class="badge">Certificate verification</p>
+        <h1>Verify a certificate</h1>
+        <p class="verify-subtitle">
+          Enter the certificate ID (or scan the QR code and open this page) to
+          check if the certificate is valid and view its details.
+        </p>
+
+        <form class="verify-form">
+          <label class="verify-label" for="verify-id">Certificate ID</label>
+          <div class="verify-input-row">
+            <input
+              type="text"
+              id="verify-id"
+              class="verify-input"
+              placeholder="e.g. ABC123 or UZ-2025-0001"
+            />
+            <button type="submit" class="btn btn-primary btn-sm">
+              Check
+            </button>
+          </div>
+          <p class="verify-hint">
+            Demo: sinab ko‘rish uchun <strong>ABC123</strong> yoki
+            <strong>UZ-2025-0001</strong> deb yozing.
+          </p>
+        </form>
+      </div>
+
+      <!-- Right result card -->
