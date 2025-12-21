@@ -459,11 +459,14 @@ if (editorDownloadBtn) {
       console.log("API_BASE_URL:", API_BASE_URL);
 
       // ✅ Backendga jo‘natamiz (local yoki Railway)
-      const response = await fetch(`${API_BASE_URL}/api/generate-pdf`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+     const API = window.API_BASE_URL || "http://localhost:4000";
+
+const response = await fetch(`${API}/api/generate-pdf`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload),
+});
+
 
       if (!response.ok) {
         const t = await response.text().catch(() => "");
