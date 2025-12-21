@@ -97,9 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
   orientationBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       const mode = btn.dataset.orientation;
-      orientationBtns.forEach((b) =>
-        b.classList.remove("chip-toggle-active")
-      );
+      orientationBtns.forEach((b) => b.classList.remove("chip-toggle-active"));
       btn.classList.add("chip-toggle-active");
 
       if (!canvasEl) return;
@@ -203,14 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ====== FONT HELPERS ======
   function bindFontControls(opts) {
-    const {
-      el,
-      familySelect,
-      sizeInput,
-      colorInput,
-      weightSelect,
-      letterInput,
-    } = opts;
+    const { el, familySelect, sizeInput, colorInput, weightSelect, letterInput } = opts;
     if (!el) return;
 
     if (familySelect) {
@@ -319,16 +310,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const current = names[nameIndex];
 
     if (!isDeleting) {
-      // Yozib borish
       nameEl.textContent = current.substring(0, charIndex + 1);
       charIndex++;
 
       if (charIndex === current.length) {
-        // To‘liq yozildi → biroz kutish
         setTimeout(() => (isDeleting = true), 1000);
       }
     } else {
-      // O‘chirish
       nameEl.textContent = current.substring(0, charIndex - 1);
       charIndex--;
 
@@ -338,9 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Tezlik
     const typingSpeed = isDeleting ? 60 : 80;
-
     setTimeout(typeEffect, typingSpeed);
   }
 
@@ -354,7 +340,27 @@ function getText(selector, fallback = "") {
   return (el.textContent || "").trim() || fallback;
 }
 
-// ================== EDITORDAN PDF YUKLASH (YANGI) ==================
+// ================== API CONFIG (Railway + Local) ==================
+const DEFAULT_PROD_BACKEND = "https://graceful-courage-production.up.railway.app";
+// ↑ agar sizning backend domen boshqa bo'lsa, shu joyni almashtiring.
+
+function getApiBaseUrl() {
+  // 1) HTML ichida window.API_BASE_URL berilgan bo‘lsa — shuni olamiz
+  if (window.API_BASE_URL) return window.API_BASE_URL;
+
+  // 2) local bo‘lsa — localhost
+  const host = window.location.hostname;
+  if (host === "localhost" || host === "127.0.0.1") {
+    return "http://localhost:4000";
+  }
+
+  // 3) production default
+  return DEFAULT_PROD_BACKEND;
+}
+
+const API_BASE_URL = getApiBaseUrl();
+
+// ================== EDITORDAN PDF YUKLASH ==================
 const editorDownloadBtn = document.getElementById("editorDownloadBtn");
 
 if (editorDownloadBtn) {
@@ -379,7 +385,6 @@ if (editorDownloadBtn) {
         signatureLabel: getText(".js-footer-signature", "Signature"),
         dateLabel: getText(".js-footer-date", "Date"),
         orientation,
-        // 3) Har bir blok uchun style obyektlar
         titleStyle: {},
         subStyle: {},
         nameStyle: {},
@@ -388,40 +393,20 @@ if (editorDownloadBtn) {
 
       // ===== TITLE STYLE =====
       const titleEl = document.querySelector(".js-cert-title");
-      const titleComputed = titleEl
-        ? window.getComputedStyle(titleEl)
-        : null;
+      const titleComputed = titleEl ? window.getComputedStyle(titleEl) : null;
 
-      const titleFamilySelect = document.querySelector(
-        ".js-font-title-family"
-      );
-      const titleSizeInput = document.querySelector(
-        ".js-font-title-size"
-      );
-      const titleColorInput = document.querySelector(
-        ".js-font-title-color"
-      );
-      const titleWeightSelect = document.querySelector(
-        ".js-font-title-weight"
-      );
-      const titleLetterInput = document.querySelector(
-        ".js-font-title-letter"
-      );
+      const titleFamilySelect = document.querySelector(".js-font-title-family");
+      const titleSizeInput = document.querySelector(".js-font-title-size");
+      const titleColorInput = document.querySelector(".js-font-title-color");
+      const titleWeightSelect = document.querySelector(".js-font-title-weight");
+      const titleLetterInput = document.querySelector(".js-font-title-letter");
 
       payload.titleStyle = {
         fontFamily: titleFamilySelect ? titleFamilySelect.value : "",
-        fontSize: titleSizeInput
-          ? parseFloat(titleSizeInput.value) || 24
-          : 24,
-        color: titleColorInput
-          ? titleColorInput.value || "#111827"
-          : "#111827",
-        fontWeight: titleWeightSelect
-          ? titleWeightSelect.value || "500"
-          : "500",
-        letterSpacing: titleLetterInput
-          ? parseFloat(titleLetterInput.value) || 0
-          : 0,
+        fontSize: titleSizeInput ? parseFloat(titleSizeInput.value) || 24 : 24,
+        color: titleColorInput ? titleColorInput.value || "#111827" : "#111827",
+        fontWeight: titleWeightSelect ? titleWeightSelect.value || "500" : "500",
+        letterSpacing: titleLetterInput ? parseFloat(titleLetterInput.value) || 0 : 0,
         align: titleComputed ? titleComputed.textAlign || "center" : "center",
       };
 
@@ -429,20 +414,14 @@ if (editorDownloadBtn) {
       const subEl = document.querySelector(".js-cert-sub");
       const subComputed = subEl ? window.getComputedStyle(subEl) : null;
 
-      const subFamilySelect = document.querySelector(
-        ".js-font-sub-family"
-      );
+      const subFamilySelect = document.querySelector(".js-font-sub-family");
       const subSizeInput = document.querySelector(".js-font-sub-size");
       const subColorInput = document.querySelector(".js-font-sub-color");
 
       payload.subStyle = {
         fontFamily: subFamilySelect ? subFamilySelect.value : "",
-        fontSize: subSizeInput
-          ? parseFloat(subSizeInput.value) || 14
-          : 14,
-        color: subColorInput
-          ? subColorInput.value || "#666666"
-          : "#666666",
+        fontSize: subSizeInput ? parseFloat(subSizeInput.value) || 14 : 14,
+        color: subColorInput ? subColorInput.value || "#666666" : "#666666",
         align: subComputed ? subComputed.textAlign || "center" : "center",
       };
 
@@ -450,24 +429,14 @@ if (editorDownloadBtn) {
       const nameEl = document.querySelector(".js-cert-name");
       const nameComputed = nameEl ? window.getComputedStyle(nameEl) : null;
 
-      const nameFamilySelect = document.querySelector(
-        ".js-font-name-family"
-      );
-      const nameSizeInput = document.querySelector(
-        ".js-font-name-size"
-      );
-      const nameColorInput = document.querySelector(
-        ".js-font-name-color"
-      );
+      const nameFamilySelect = document.querySelector(".js-font-name-family");
+      const nameSizeInput = document.querySelector(".js-font-name-size");
+      const nameColorInput = document.querySelector(".js-font-name-color");
 
       payload.nameStyle = {
         fontFamily: nameFamilySelect ? nameFamilySelect.value : "",
-        fontSize: nameSizeInput
-          ? parseFloat(nameSizeInput.value) || 28
-          : 28,
-        color: nameColorInput
-          ? nameColorInput.value || "#000000"
-          : "#000000",
+        fontSize: nameSizeInput ? parseFloat(nameSizeInput.value) || 28 : 28,
+        color: nameColorInput ? nameColorInput.value || "#000000" : "#000000",
         align: nameComputed ? nameComputed.textAlign || "center" : "center",
       };
 
@@ -475,44 +444,35 @@ if (editorDownloadBtn) {
       const bodyEl = document.querySelector(".js-cert-body");
       const bodyComputed = bodyEl ? window.getComputedStyle(bodyEl) : null;
 
-      const bodyFamilySelect = document.querySelector(
-        ".js-font-body-family"
-      );
-      const bodySizeInput = document.querySelector(
-        ".js-font-body-size"
-      );
-      const bodyColorInput = document.querySelector(
-        ".js-font-body-color"
-      );
+      const bodyFamilySelect = document.querySelector(".js-font-body-family");
+      const bodySizeInput = document.querySelector(".js-font-body-size");
+      const bodyColorInput = document.querySelector(".js-font-body-color");
 
       payload.bodyStyle = {
         fontFamily: bodyFamilySelect ? bodyFamilySelect.value : "",
-        fontSize: bodySizeInput
-          ? parseFloat(bodySizeInput.value) || 14
-          : 14,
-        color: bodyColorInput
-          ? bodyColorInput.value || "#333333"
-          : "#333333",
+        fontSize: bodySizeInput ? parseFloat(bodySizeInput.value) || 14 : 14,
+        color: bodyColorInput ? bodyColorInput.value || "#333333" : "#333333",
         align: bodyComputed ? bodyComputed.textAlign || "center" : "center",
       };
 
       console.log("PDF payload:", payload);
+      console.log("API_BASE_URL:", API_BASE_URL);
 
-      // 4) Backendga jo‘natamiz
-      const response = await fetch("http://localhost:4000/api/generate-pdf", {
+      // ✅ Backendga jo‘natamiz (local yoki Railway)
+      const response = await fetch(`${API_BASE_URL}/api/generate-pdf`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        throw new Error("Server error: " + response.status);
+        const t = await response.text().catch(() => "");
+        throw new Error("Server error: " + response.status + " " + t);
       }
 
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
 
-      // 5) Random fayl nomi
       const random = Math.floor(100000 + Math.random() * 900000);
       const a = document.createElement("a");
       a.href = url;
