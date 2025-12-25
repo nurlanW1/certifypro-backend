@@ -9,13 +9,12 @@ const { PORT, FRONTEND_URL } = require("./config");
 const app = express();
 
 /**
- * ✅ 1) JSON limit (katta data yuborilsa yiqilmasin)
+ * 1) JSON limit (katta data yuborilsa yiqilmasin)
  */
 app.use(express.json({ limit: "1mb" }));
 
 /**
- * ✅ 2) CORS — local + prod uchun yumshoqroq
- * FRONTEND_URL bo'sh bo'lsa, hammasiga ruxsat (debug uchun)
+ * 2) CORS — local + prod uchun yumshoqroq
  */
 const allowedOrigins = [
   FRONTEND_URL,
@@ -26,21 +25,18 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Postman/curl kabi origin bo'lmaydi -> ruxsat
+      // Postman / curl kabi so‘rovlar uchun origin bo‘lmaydi -> ruxsat
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) return callback(null, true);
 
-      // origin mos kelmasa ham, xato chiqarmay bloklab qo'yamiz
       return callback(new Error("Not allowed by CORS: " + origin));
     },
     methods: ["GET", "POST", "OPTIONS"],
   })
 );
 
-/**
- * ✅ 3) Preflight OPTIONS (browser uchun)
- */
+// Preflight
 app.options("*", cors());
 
 /**
@@ -72,7 +68,7 @@ function pickPoppinsByWeight(weight) {
 }
 
 /**
- * ✅ 4) Healthcheck routes (Railway uchun)
+ * Healthcheck routelar
  */
 app.get("/", (req, res) => {
   res.send("CertifyPro backend is running ✅");
@@ -83,7 +79,7 @@ app.get("/api/health", (req, res) => {
 });
 
 /**
- * ✅ 5) Fontlarni xavfsiz register qilish (Railwayda font topilmasa 502 bo'lmasin)
+ * Fontlarni xavfsiz register qilish
  */
 function safeRegisterFont(doc, fontName, filePath) {
   try {
@@ -91,11 +87,11 @@ function safeRegisterFont(doc, fontName, filePath) {
       doc.registerFont(fontName, filePath);
       return true;
     } else {
-      console.warn(`[WARN] Font not found: ${filePath}`);
+      console.warn("[WARN] Font not found:", filePath);
       return false;
     }
   } catch (e) {
-    console.warn(`[WARN] Font register failed: ${fontName}`, e);
+    console.warn("[WARN] Font register failed:", fontName, e);
     return false;
   }
 }
@@ -126,25 +122,39 @@ app.post("/api/generate-pdf", (req, res) => {
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
     });
 
-    // Agar client uzilib qolsa — PDF yazishni to'xtatamiz
+    // Client uzilsa — PDF ni yopamiz
     res.on("close", () => {
       try {
         doc.end();
       } catch (_) {}
     });
 
-    // ✅ Fontlarni register
-    safeRegisterFont(doc, "PoppinsRegular", path.join(FONTS_DIR, "Poppins-Regular.ttf"));
-    safeRegisterFont(doc, "PoppinsMedium", path.join(FONTS_DIR, "Poppins-Medium.ttf"));
+    // Fontlar
+    safeRegisterFont(
+      doc,
+      "PoppinsRegular",
+      path.join(FONTS_DIR, "Poppins-Regular.ttf")
+    );
+    safeRegisterFont(
+      doc,
+      "PoppinsMedium",
+      path.join(FONTS_DIR, "Poppins-Medium.ttf")
+    );
     safeRegisterFont(doc, "TimesNew", path.join(FONTS_DIR, "TimesNewRoman.ttf"));
-    safeRegisterFont(doc, "AlexBrush", path.join(FONTS_DIR, "AlexBrush-Regular.ttf"));
+    safeRegisterFont(
+      doc,
+      "AlexBrush",
+      path.join(FONTS_DIR, "AlexBrush-Regular.ttf")
+    );
 
-    // random filename
     const randomSuffix = Math.floor(100000 + Math.random() * 900000);
     const filename = `CertifyPro_${randomSuffix}.pdf`;
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${filename}"`
+    );
 
     doc.pipe(res);
 
@@ -184,7 +194,7 @@ app.post("/api/generate-pdf", (req, res) => {
     const titleAlign = titleStyle.align || "center";
 
     doc
-      .font(titleFontName || "Helvetica") // fallback
+      .font(titleFontName || "Helvetica")
       .fontSize(titleFontSize)
       .fillColor(titleColor)
       .text(title, contentX, cardY + 40, {
@@ -241,6 +251,7 @@ app.post("/api/generate-pdf", (req, res) => {
     const sigLineX = centerX - lineWidth - footerGap / 2;
     const dateLineX = centerX + footerGap / 2;
 
+    // Signature line
     doc.save().rect(sigLineX, footerY, lineWidth, 1).fill("#4b5563").restore();
     doc
       .font("PoppinsRegular" || "Helvetica")
@@ -251,6 +262,7 @@ app.post("/api/generate-pdf", (req, res) => {
         align: "center",
       });
 
+    // Date line
     doc.save().rect(dateLineX, footerY, lineWidth, 1).fill("#4b5563").restore();
     doc
       .font("PoppinsRegular" || "Helvetica")
@@ -261,12 +273,13 @@ app.post("/api/generate-pdf", (req, res) => {
         align: "center",
       });
 
-    // ✅ YAKUN
-    return doc.end();
+    doc.end();
   } catch (err) {
     console.error("PDF generation error:", err);
     if (!res.headersSent) {
-      res.status(500).json({ error: "PDF generation failed", details: String(err) });
+      res
+        .status(500)
+        .json({ error: "PDF generation failed", details: String(err) });
     }
   }
 });
@@ -280,6 +293,7 @@ app.all("/api/debug", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log("Server running on", PORT));
-
+// ⬇️ faqat BITTA app.listen – boshqa joyda const PORT yo‘q
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
