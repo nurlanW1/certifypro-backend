@@ -1,3 +1,24 @@
+// === BACKEND URL CONFIG (GLOBAL) ===
+const DEFAULT_PROD_BACKEND =
+  "https://certfiyprobackend-production.up.railway.app";
+
+function getApiBaseUrl() {
+  // 1) HTML / config.js orqali berilgan bo‘lsa – shuni olamiz
+  if (window.API_BASE_URL) return window.API_BASE_URL;
+
+  // 2) Lokal ishlayotgan bo‘lsa – localhost
+  const host = window.location.hostname;
+  if (host === "localhost" || host === "127.0.0.1") {
+    return "http://localhost:4000";
+  }
+
+  // 3) Production default
+  return DEFAULT_PROD_BACKEND;
+}
+
+const API_BASE_URL = getApiBaseUrl();
+
+// ================== EDITOR UI LOGIKA ==================
 document.addEventListener("DOMContentLoaded", () => {
   // ====== ELEMENTLAR ======
   const templatesPanel = document.querySelector(".templates-panel");
@@ -97,7 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
   orientationBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       const mode = btn.dataset.orientation;
-      orientationBtns.forEach((b) => b.classList.remove("chip-toggle-active"));
+      orientationBtns.forEach((b) =>
+        b.classList.remove("chip-toggle-active")
+      );
       btn.classList.add("chip-toggle-active");
 
       if (!canvasEl) return;
@@ -201,7 +224,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ====== FONT HELPERS ======
   function bindFontControls(opts) {
-    const { el, familySelect, sizeInput, colorInput, weightSelect, letterInput } = opts;
+    const {
+      el,
+      familySelect,
+      sizeInput,
+      colorInput,
+      weightSelect,
+      letterInput,
+    } = opts;
     if (!el) return;
 
     if (familySelect) {
@@ -340,33 +370,12 @@ function getText(selector, fallback = "") {
   return (el.textContent || "").trim() || fallback;
 }
 
-// ================== API CONFIG (Railway + Local) ==================
-const DEFAULT_PROD_BACKEND = "https://graceful-courage-production.up.railway.app";
-// ↑ agar sizning backend domen boshqa bo'lsa, shu joyni almashtiring.
-
-function getApiBaseUrl() {
-  // 1) HTML ichida window.API_BASE_URL berilgan bo‘lsa — shuni olamiz
-  if (window.API_BASE_URL) return window.API_BASE_URL;
-
-  // 2) local bo‘lsa — localhost
-  const host = window.location.hostname;
-  if (host === "localhost" || host === "127.0.0.1") {
-    return "http://localhost:4000";
-  }
-
-  // 3) production default
-  return DEFAULT_PROD_BACKEND;
-}
-
-const API_BASE_URL = getApiBaseUrl();
-
 // ================== EDITORDAN PDF YUKLASH ==================
 const editorDownloadBtn = document.getElementById("editorDownloadBtn");
 
 if (editorDownloadBtn) {
   editorDownloadBtn.addEventListener("click", async () => {
     try {
-      // 1) Canvas orientatsiyasi (.js-canvas = .certificate-page)
       const canvasEl =
         document.querySelector(".js-canvas") ||
         document.querySelector(".certificate-page");
@@ -376,7 +385,6 @@ if (editorDownloadBtn) {
           ? "portrait"
           : "landscape";
 
-      // 2) Canvasdagi matnlar
       const payload = {
         title: getText(".js-cert-title", "CERTIFICATE"),
         subtitle: getText(".js-cert-sub", "of participation"),
@@ -403,10 +411,18 @@ if (editorDownloadBtn) {
 
       payload.titleStyle = {
         fontFamily: titleFamilySelect ? titleFamilySelect.value : "",
-        fontSize: titleSizeInput ? parseFloat(titleSizeInput.value) || 24 : 24,
-        color: titleColorInput ? titleColorInput.value || "#111827" : "#111827",
-        fontWeight: titleWeightSelect ? titleWeightSelect.value || "500" : "500",
-        letterSpacing: titleLetterInput ? parseFloat(titleLetterInput.value) || 0 : 0,
+        fontSize: titleSizeInput
+          ? parseFloat(titleSizeInput.value) || 24
+          : 24,
+        color: titleColorInput
+          ? titleColorInput.value || "#111827"
+          : "#111827",
+        fontWeight: titleWeightSelect
+          ? titleWeightSelect.value || "500"
+          : "500",
+        letterSpacing: titleLetterInput
+          ? parseFloat(titleLetterInput.value) || 0
+          : 0,
         align: titleComputed ? titleComputed.textAlign || "center" : "center",
       };
 
@@ -420,8 +436,12 @@ if (editorDownloadBtn) {
 
       payload.subStyle = {
         fontFamily: subFamilySelect ? subFamilySelect.value : "",
-        fontSize: subSizeInput ? parseFloat(subSizeInput.value) || 14 : 14,
-        color: subColorInput ? subColorInput.value || "#666666" : "#666666",
+        fontSize: subSizeInput
+          ? parseFloat(subSizeInput.value) || 14
+          : 14,
+        color: subColorInput
+          ? subColorInput.value || "#666666"
+          : "#666666",
         align: subComputed ? subComputed.textAlign || "center" : "center",
       };
 
@@ -435,8 +455,12 @@ if (editorDownloadBtn) {
 
       payload.nameStyle = {
         fontFamily: nameFamilySelect ? nameFamilySelect.value : "",
-        fontSize: nameSizeInput ? parseFloat(nameSizeInput.value) || 28 : 28,
-        color: nameColorInput ? nameColorInput.value || "#000000" : "#000000",
+        fontSize: nameSizeInput
+          ? parseFloat(nameSizeInput.value) || 28
+          : 28,
+        color: nameColorInput
+          ? nameColorInput.value || "#000000"
+          : "#000000",
         align: nameComputed ? nameComputed.textAlign || "center" : "center",
       };
 
@@ -450,24 +474,23 @@ if (editorDownloadBtn) {
 
       payload.bodyStyle = {
         fontFamily: bodyFamilySelect ? bodyFamilySelect.value : "",
-        fontSize: bodySizeInput ? parseFloat(bodySizeInput.value) || 14 : 14,
-        color: bodyColorInput ? bodyColorInput.value || "#333333" : "#333333",
+        fontSize: bodySizeInput
+          ? parseFloat(bodySizeInput.value) || 14
+          : 14,
+        color: bodyColorInput
+          ? bodyColorInput.value || "#333333"
+          : "#333333",
         align: bodyComputed ? bodyComputed.textAlign || "center" : "center",
       };
 
       console.log("PDF payload:", payload);
       console.log("API_BASE_URL:", API_BASE_URL);
 
-      // ✅ Backendga jo‘natamiz (local yoki Railway)
-     const API = window.API_BASE_URL || "http://localhost:4000";
-
-fetch(`${window.API_BASE_URL}/api/generate-pdf`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload),
-});
-
-
+      const response = await fetch(`${API_BASE_URL}/api/generate-pdf`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) {
         const t = await response.text().catch(() => "");
