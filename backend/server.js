@@ -13,31 +13,32 @@ const app = express();
  */
 app.use(express.json({ limit: "1mb" }));
 
+
 /**
  * 2) CORS — local + prod uchun yumshoqroq
  */
 const allowedOrigins = [
-  FRONTEND_URL,
+  FRONTEND_URL,           // .env / Railway dan: https://profly.uz
+  "https://profly.uz",    // qo‘shimcha kafolat uchun
+  "http://profly.uz",     // agar http orqali ham kirsa
   "http://127.0.0.1:5500",
   "http://localhost:5500",
 ].filter(Boolean);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Postman / curl kabi so‘rovlar uchun origin bo‘lmaydi -> ruxsat
-      if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-
-      return callback(new Error("Not allowed by CORS: " + origin));
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-  })
-);
-
-// Preflight
+app.use(cors({
+  origin: [
+    "https://profly.uz",
+    "http://profly.uz",
+    FRONTEND_URL,
+    "http://127.0.0.1:5500",
+    "http://localhost:5500"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true
+}));
 app.options("*", cors());
+
 
 /**
  * Fonts papkasi
