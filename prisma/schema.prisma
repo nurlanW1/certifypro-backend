@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]
+  designs   Design[]
+}
+
+model Event {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  name         String
+  type         EventType
+  date         DateTime?
+  location     String?
+  organization String?
+  language     String    @default("uz")
+  logoUrl      String?
+  primaryColor String    @default("#534AB7")
+  accentColor  String    @default("#26215C")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  designs      Design[]
+}
+
+model Template {
+  id          String           @id @default(cuid())
+  name        String
+  nameUz      String?
+  nameRu      String?
+  category    MaterialCategory
+  eventType   EventType?
+  isPremium   Boolean          @default(false)
+  previewUrl  String
+  svgContent  String           @db.Text
+  tags        String[]
+  createdAt   DateTime         @default(now())
+  designs     Design[]
+}
+
+model Design {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  eventId     String?
+  event       Event?   @relation(fields: [eventId], references: [id])
+  templateId  String
+  template    Template @relation(fields: [templateId], references: [id])
+  name        String
+  canvasData  Json
+  exportedUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum EventType {
+  CONFERENCE
+  SEMINAR
+  FORUM
+  WORKSHOP
+  CORPORATE
+  SCIENTIFIC
+  EDUCATIONAL
+  OTHER
+}
+
+enum MaterialCategory {
+  CERTIFICATE
+  BADGE
+  INVITATION
+  FLYER
+  POSTER
+  SCIENTIFIC_POSTER
+  PROGRAM_BOOK
+  ROLL_UP
+  PRESS_WALL
+  STAGE_BACKDROP
+  LED_SCREEN
+  TABLE_TENT
+  NAVIGATION
+  SOCIAL_MEDIA
+  EMAIL_BANNER
+  SOUVENIR
+  NAME_TAG
+  SPONSOR_BANNER
+}
