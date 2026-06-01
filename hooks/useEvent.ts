@@ -15,8 +15,8 @@ export function useEvent() {
     try {
       const res = await fetch('/api/events')
       if (!res.ok) throw new Error('Failed to fetch events')
-      const data = (await res.json()) as Event[]
-      setEvents(data)
+      const data = (await res.json()) as { events: Event[] } | Event[]
+      setEvents(Array.isArray(data) ? data : data.events)
     } catch {
       toast.error('Tadbirlarni yuklashda xatolik')
     } finally {
@@ -25,19 +25,19 @@ export function useEvent() {
   }, [setEvents])
 
   const createEvent = useCallback(
-    async (form: EventFormData) => {
+    async (form: EventFormData, selectedMaterials?: string[]) => {
       setLoading(true)
       try {
         const res = await fetch('/api/events', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(form),
+          body: JSON.stringify({ formData: form, selectedMaterials }),
         })
         if (!res.ok) throw new Error('Failed to create event')
-        const event = (await res.json()) as Event
-        addEvent(event)
+        const data = (await res.json()) as { event: Event }
+        addEvent(data.event)
         toast.success('Tadbir yaratildi')
-        return event
+        return data.event
       } catch {
         toast.error('Tadbir yaratishda xatolik')
         return null

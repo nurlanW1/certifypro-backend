@@ -1,59 +1,76 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
-import type { EventFormData } from '@/types/event'
+import type { EventFormData, MaterialCategory } from '@/types/event'
 
-export async function GET() {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+export async function POST(req: NextRequest) {
+  try {
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  const user = await prisma.user.findUnique({ where: { clerkId: userId } })
-  if (!user) {
-    return NextResponse.json([])
-  }
+    const body = (await req.json()) as {
+      formData: EventFormData
+      selectedMaterials?: MaterialCategory[]
+      email?: string
+    }
 
-  const events = await prisma.event.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: 'desc' },
-  })
+    const { formData, selectedMaterials = [] } = body
 
-  return NextResponse.json(events)
-}
+    let user = await prisma.user.findUnique({
+      where: { clerkId: userId },
+    })
 
-export async function POST(request: Request) {
-  const { userId } = await auth()
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          clerkId: userId,
+          email: body.email || `${userId}@clerk.local`,
+        },
+      })
+    }
 
-  const body = (await request.json()) as EventFormData
-
-  let user = await prisma.user.findUnique({ where: { clerkId: userId } })
-  if (!user) {
-    user = await prisma.user.create({
+    const event = await prisma.event.create({
       data: {
-        clerkId: userId,
-        email: `${userId}@clerk.local`,
+        userId: user.id,
+        name: formData.name,
+        type: formData.type,
+        date: formData.date ? new Date(formData.date) : null,
+        location: formData.location || null,
+        organization: formData.organization || null,
+        language: formData.language || 'uz',
+        primaryColor: formData.primaryColor || '#534AB7',
+        accentColor: formData.accentColor || '#26215C',
+        logoUrl: formData.logoUrl ?? null,
       },
     })
+
+    return NextResponse.json({ event, selectedMaterials }, { status: 201 })
+  } catch (error) {
+    console.error('Event create error:', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
+}
 
-  const event = await prisma.event.create({
-    data: {
-      userId: user.id,
-      name: body.name,
-      type: body.type,
-      date: body.date ? new Date(body.date) : null,
-      location: body.location || null,
-      organization: body.organization || null,
-      language: body.language,
-      logoUrl: body.logoUrl ?? null,
-      primaryColor: body.primaryColor,
-      accentColor: body.accentColor,
-    },
-  })
+export async function GET() {
+  try {
+    const { userId } = await auth()
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
-  return NextResponse.json(event, { status: 201 })
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId },
+      include: {
+        events: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    })
+
+    return NextResponse.json({ events: user?.events ?? [] })
+  } catch (error) {
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  }
 }

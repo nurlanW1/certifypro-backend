@@ -1,29 +1,25 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { TopBar } from '@/components/layout/TopBar'
-import { Card } from '@/components/ui/Card'
 import { EventWizard } from '@/components/events/EventWizard'
-import { useEvent } from '@/hooks/useEvent'
-import type { EventFormData } from '@/types/event'
+
+export const metadata = {
+  title: 'Yangi tadbir — Gildia',
+  description: 'Yangi tadbir loyihasini yarating',
+}
 
 export default function NewEventPage() {
-  const router = useRouter()
-  const { createEvent, loading } = useEvent()
-
-  const handleComplete = async (data: EventFormData) => {
-    const event = await createEvent(data)
-    if (event) router.push(`/events/${event.id}`)
-  }
-
   return (
-    <>
-      <TopBar title="Yangi tadbir" />
-      <div className="flex-1 overflow-auto p-6">
-        <Card className="mx-auto max-w-xl">
-          <EventWizard onComplete={handleComplete} loading={loading} />
-        </Card>
+    <div className="min-h-screen bg-surface-secondary">
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-text-primary">
+            Yangi tadbir yaratish
+          </h1>
+          <p className="mt-1 text-sm text-text-muted">
+            Ma&apos;lumotlarni bir marta kiriting — barcha dizayn materiallar avtomatik
+            tayyorlanadi
+          </p>
+        </div>
+        <EventWizard />
       </div>
-    </>
+    </div>
   )
 }
