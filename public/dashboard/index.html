@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Gildia</title>
+  <link rel="stylesheet" href="/landing.css?v=1" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a href="/index.html" class="brand"><span class="brand-dot"></span><span>Gildia.uz</span></a>
+      <nav class="nav">
+        <a href="/templates.html">Shablonlar</a>
+        <a href="/dashboard/index.html" class="active">Dashboard</a>
+        <a href="/editor.html">Editor</a>
+      </nav>
+      <div class="actions">
+        <a class="btn ghost" href="/login.html">Kirish</a>
+        <a class="btn primary" href="/register.html">Ro‘yxatdan o‘tish</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1>Dashboard</h1>
+        <p class="muted">Sizning tadbirlaringiz va loyihalaringiz</p>
+
+        <div style="display:flex;gap:16px;margin:20px 0;flex-wrap:wrap">
+          <a class="btn primary" href="/templates.html">Shablon tanlash</a>
+          <a class="btn ghost" href="/dashboard/events/index.html">Tadbir yaratish</a>
+          <a class="btn" href="/dashboard/bulk-generate.html">Upload Excel</a>
+        </div>
+
+        <h3>My Events</h3>
+        <div class="grid grid-3">
+          <article class="card">
+            <h4>Tashkent International Forum 2026</h4>
+            <p class="muted-small">125 certificates • 125 badges • 1 agenda</p>
+            <div style="margin-top:12px"><a class="btn" href="/dashboard/events/event.html">Open workspace</a></div>
+          </article>
+          <article class="card">
+            <h4>Academic Symposium 2026</h4>
+            <p class="muted-small">40 certificates • 40 badges</p>
+            <div style="margin-top:12px"><a class="btn" href="/dashboard/events/event.html">Open workspace</a></div>
+          </article>
+          <article class="card">
+            <h4>City Council Meeting</h4>
+            <p class="muted-small">10 certificates • 10 badges</p>
+            <div style="margin-top:12px"><a class="btn" href="/dashboard/events/event.html">Open workspace</a></div>
+          </article>
+        </div>
+
+        <h3 style="margin-top:24px">Quick actions</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" href="/editor.html">Create Certificate</a>
+          <a class="btn" href="/editor.html">Create Badge</a>
+          <a class="btn" href="/templates.html">Use Template</a>
+          <a class="btn" href="/dashboard/bulk-generate.html">Upload Excel</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row"><p>© 2026 Gildia.uz</p><div></div></div>
+  </footer>
+</body>
+</html>

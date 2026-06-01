@@ -1,0 +1,1481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gildia – Online Event Graphics Editor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- SEO & Meta -->
+  <meta name="description" content="Gildia – Online platform for designing official event graphics like invitations, badges, and programs.">
+  <meta name="keywords" content="event design, conference graphics, invitation, badge, flyer, program, Gildia">
+  <meta name="theme-color" content="#0dd4b3">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stripe.js - Payment processing -->
+  <script src="https://js.stripe.com/v3/" async></script>
+  
+  <!-- SignaturePad - Signature drawing library (required for react-signature-canvas) -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+  
+  <!-- QRCode Generator - QR code generation library (required for qrcode.react) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  
+  <!-- SVG.js - Lightweight library for manipulating and animating SVG -->
+  <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.2.5/dist/svg.min.js"></script>
+  
+  <!-- PapaParse - Fast and powerful CSV parser -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  
+  <!-- SheetJS (xlsx) - Spreadsheet data toolkit -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  
+  <!-- JSZip - Create, read and edit .zip files -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  
+  <!-- Mammoth.js - Convert Word documents (.docx) to HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  
+  <!-- html2canvas - Convert HTML/CSS to Canvas/Image -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="editor.css?v=42">
+
+  <!-- Backend URL -->
+  <script src="config.js"></script>
+
+  <!-- React and ReactDOM (required for React DnD libraries) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- React DnD - Drag and Drop for React -->
+  <script src="https://unpkg.com/react-dnd@16.0.1/dist/umd/react-dnd.min.js"></script>
+  <script src="https://unpkg.com/react-dnd-html5-backend@16.0.1/dist/umd/react-dnd-html5-backend.min.js"></script>
+  
+  <!-- React Beautiful DnD - Beautiful drag and drop for lists -->
+  <script src="https://unpkg.com/react-beautiful-dnd@13.1.1/dist/react-beautiful-dnd.min.js"></script>
+  
+  <!-- Konva.js - HTML5 Canvas Framework -->
+  <script src="https://unpkg.com/konva@10.2.0/konva.min.js"></script>
+  
+  <!-- React-Konva - React bindings for Konva.js -->
+  <script src="https://unpkg.com/react-konva@18.2.10/umd/react-konva.js"></script>
+  
+  <!-- Redux and Redux-Undo (for advanced undo/redo functionality) -->
+  <script src="https://unpkg.com/redux@4.2.1/dist/redux.min.js"></script>
+  <script src="https://unpkg.com/redux-undo@1.1.0/dist/redux-undo.min.js"></script>
+  
+  <!-- LocalForage - Offline storage library (IndexedDB, WebSQL, localStorage) -->
+  <script src="https://unpkg.com/localforage@1.10.0/dist/localforage.min.js"></script>
+  
+  <!-- Lucide Icons - Beautiful & consistent icon toolkit -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+
+<body class="editor-page">
+  <div class="pf-editor" data-app="pf-editor">
+    <!-- Shared icon sprite (keeps all left-panel icons consistent) -->
+    <svg class="pf-icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="pf-i-chevron" viewBox="0 0 24 24">
+        <path d="M9 6l6 6-6 6" />
+      </symbol>
+      <symbol id="pf-i-add" viewBox="0 0 24 24">
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </symbol>
+      <symbol id="pf-i-panel" viewBox="0 0 24 24">
+        <path d="M4 5h16v14H4z" />
+        <path d="M9 5v14" />
+      </symbol>
+      <symbol id="pf-i-home" viewBox="0 0 24 24">
+        <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-7H10v7H5a1 1 0 0 1-1-1z" />
+      </symbol>
+      <symbol id="pf-i-text" viewBox="0 0 24 24">
+        <path d="M5 6h14" />
+        <path d="M12 6v14" />
+      </symbol>
+      <symbol id="pf-i-shapes" viewBox="0 0 24 24">
+        <path d="M5 6h7v7H5z" />
+        <circle cx="16.5" cy="15.5" r="3.5" />
+      </symbol>
+      <symbol id="pf-i-images" viewBox="0 0 24 24">
+        <path d="M5 6h14v12H5z" />
+        <path d="M8 14l2.5-3 3 4 2-2.5L19 16" />
+        <path d="M9 10.5h.01" />
+      </symbol>
+      <symbol id="pf-i-upload" viewBox="0 0 24 24">
+        <path d="M12 14V5" />
+        <path d="m8.5 8.5 3.5-3.5 3.5 3.5" />
+        <path d="M5 19h14" />
+      </symbol>
+      <symbol id="pf-i-layers" viewBox="0 0 24 24">
+        <path d="M12 4 3 9l9 5 9-5z" />
+        <path d="M3 13l9 5 9-5" />
+      </symbol>
+      <symbol id="pf-i-templates" viewBox="0 0 24 24">
+        <path d="M4 4h6v6H4z" />
+        <path d="M14 4h6v6h-6z" />
+        <path d="M4 14h6v6H4z" />
+        <path d="M14 14h6v6h-6z" />
+      </symbol>
+      <symbol id="pf-i-help" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.8 9a2.4 2.4 0 1 1 3.4 2.2c-.9.4-1.2 1-1.2 1.8v.4" />
+        <path d="M12 17h.01" />
+      </symbol>
+      <symbol id="pf-i-save" viewBox="0 0 24 24">
+        <path d="M7 4h10l3 3v13H7z" />
+        <path d="M9 20v-6h6v6" />
+        <path d="M9 8h6" />
+      </symbol>
+      <symbol id="pf-i-file-plus" viewBox="0 0 24 24">
+        <path d="M7 4h8l3 3v13H7z" />
+        <path d="M12 11v6" />
+        <path d="M9 14h6" />
+      </symbol>
+      <symbol id="pf-i-import" viewBox="0 0 24 24">
+        <path d="M12 3v10" />
+        <path d="m8.5 6.5 3.5-3.5 3.5 3.5" />
+        <path d="M5 14v5h14v-5" />
+      </symbol>
+      <symbol id="pf-i-share" viewBox="0 0 24 24">
+        <path d="M14 9l-4 6" />
+        <path d="M16 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+        <path d="M8 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+        <path d="M16 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+      </symbol>
+
+      <!-- Topbar icons (keep header icons consistent & high-quality) -->
+      <symbol id="pf-i-download" viewBox="0 0 24 24">
+        <path d="M12 3v10" />
+        <path d="m7 10 5 5 5-5" />
+        <path d="M5 21h14" />
+      </symbol>
+      <symbol id="pf-i-lock" viewBox="0 0 24 24">
+        <rect x="6" y="11" width="12" height="9" rx="2" />
+        <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+      </symbol>
+      <symbol id="pf-i-arrange" viewBox="0 0 24 24">
+        <path d="M4 7h8M4 17h8M12 12h8" />
+        <path d="M16 9l4-4M20 5v4" />
+        <path d="M8 15l-4 4M4 19v-4" />
+      </symbol>
+      <symbol id="pf-i-style" viewBox="0 0 24 24">
+        <path d="M12 3a9 9 0 1 0 0 18h4a3 3 0 0 0 0-6h-1" />
+        <circle cx="7.5" cy="10.5" r="1.5" />
+        <circle cx="10.5" cy="7.5" r="1.5" />
+        <circle cx="14.5" cy="7.5" r="1.5" />
+      </symbol>
+      <symbol id="pf-i-circle" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="6" />
+      </symbol>
+      <symbol id="pf-i-triangle" viewBox="0 0 24 24">
+        <path d="M12 5 3 19h18z" />
+      </symbol>
+      <symbol id="pf-i-crown" viewBox="0 0 24 24">
+        <path d="M3 8l4 3 5-6 5 6 4-3-2 11H5z" />
+      </symbol>
+      <symbol id="pf-i-crown-solid" viewBox="0 0 24 24">
+        <path d="M4 7l3.6 5L12 7l4.4 5L20 7l-1.6 12H5.6L4 7z" />
+      </symbol>
+      <symbol id="pf-i-user" viewBox="0 0 24 24">
+        <path d="M20 21a8 8 0 1 0-16 0" />
+        <circle cx="12" cy="8" r="3" />
+      </symbol>
+    </svg>
+    <header class="pf-topbar" aria-label="Editor actions">
+      <div class="pf-topbar__group pf-topbar__group--left">
+        <a href="index.html" class="pf-topbar__logo" aria-label="Go to home">
+          <img src="logo.png" alt="Gildia logo" />
+        </a>
+        <div class="pf-topbar__cluster">
+        </div>
+      </div>
+
+      <div class="pf-topbar__group pf-topbar__group--center">
+        <div class="pf-topbar__cluster">
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-action="history:undo" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>
+            <i data-lucide="rotate-ccw" class="lucide-icon"></i>
+          </button>
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-action="history:redo" aria-label="Redo" title="Redo (Ctrl+Y / Ctrl+Shift+Z)" disabled>
+            <i data-lucide="rotate-cw" class="lucide-icon"></i>
+          </button>
+        </div>
+        <div class="pf-topbar__sep"></div>
+        <div class="pf-topbar__cluster">
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon is-active" data-tool="select" aria-label="Select tool" title="Select (V)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4l7 16 2-7 7-2z"/></svg>
+          </button>
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-tool="hand" aria-label="Hand tool" title="Hand / Pan (Space)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 11V6a2 2 0 1 0-4 0v5"/><path d="M14 10V5a2 2 0 1 0-4 0v6"/><path d="M10 10.5V4a2 2 0 1 0-4 0v10"/><path d="M18 8a2 2 0 1 1 4 0v2a2 2 0 0 1-2 2h-1"/><path d="M6 14a2 2 0 0 0-2 2v1a6 6 0 0 0 6 6h4a4 4 0 0 0 4-4v-3"/></svg>
+          </button>
+        </div>
+        <div class="pf-topbar__sep"></div>
+        <div class="pf-topbar__cluster">
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-action="align:left" title="Align left" aria-label="Align left">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14"/><path d="M7 8h11"/><path d="M7 12h8"/><path d="M7 16h12"/></svg>
+          </button>
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-action="align:center" title="Align center" aria-label="Align center">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 8h14"/><path d="M7 12h10"/><path d="M6 16h12"/></svg>
+          </button>
+          <button type="button" class="pf-topbar-btn pf-topbar-btn--icon" data-action="align:right" title="Align right" aria-label="Align right">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14"/><path d="M6 8h11"/><path d="M9 12h8"/><path d="M4 16h12"/></svg>
+          </button>
+        </div>
+        <div class="pf-topbar__sep"></div>
+        <div class="pf-topbar__cluster">
+          <div class="pf-topbar-seg" role="group" aria-label="Orientation">
+            <button class="pf-topbar-seg__btn" type="button" data-action="page:portrait" aria-selected="false">Portrait</button>
+            <button class="pf-topbar-seg__btn is-active" type="button" data-action="page:landscape" aria-selected="true">Landscape</button>
+          </div>
+        </div>
+        <div class="pf-topbar__cluster pf-topbar__cluster--actions">
+          <button class="pf-topbar-btn pf-topbar-btn--label" type="button" data-action="project:save" aria-label="Save project">Save project</button>
+          <button class="pf-topbar-btn pf-topbar-btn--label" type="button" data-action="file:export" aria-label="Export">Export</button>
+          <button class="pf-topbar-btn pf-topbar-btn--label" type="button" data-action="bulk:generate" aria-label="Bulk generate">Bulk generate</button>
+          <button class="pf-topbar-btn pf-topbar-btn--label" type="button" data-action="print:settings" aria-label="Print settings">Print settings</button>
+          <button class="pf-topbar-btn pf-topbar-btn--label" type="button" data-action="preview:open" aria-label="Preview">Preview</button>
+        </div>
+          <div class="pf-rail-group">
+            <button class="pf-rail-btn is-active" type="button" data-left-tab="templates" aria-selected="true" aria-label="Templates" title="Templates">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-templates" /></svg>
+              <span class="pf-rail-label">Templates</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="uploads" aria-selected="false" aria-label="My uploads" title="My uploads">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-upload" /></svg>
+              <span class="pf-rail-label">My uploads</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="logos" aria-selected="false" aria-label="Logos" title="Logos">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-images" /></svg>
+              <span class="pf-rail-label">Logos</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="signatures" aria-selected="false" aria-label="Signatures" title="Signatures">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-upload" /></svg>
+              <span class="pf-rail-label">Signatures</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="stamps" aria-selected="false" aria-label="Stamps" title="Stamps">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-shapes" /></svg>
+              <span class="pf-rail-label">Stamps</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="sponsors" aria-selected="false" aria-label="Sponsor logos" title="Sponsor logos">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-images" /></svg>
+              <span class="pf-rail-label">Sponsor logos</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="speakers" aria-selected="false" aria-label="Speaker photos" title="Speaker photos">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-images" /></svg>
+              <span class="pf-rail-label">Speaker photos</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="qr" aria-selected="false" aria-label="QR generator" title="QR generator">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-circle" /></svg>
+              <span class="pf-rail-label">QR generator</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="excel" aria-selected="false" aria-label="Excel bulk list" title="Excel bulk list">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-import" /></svg>
+              <span class="pf-rail-label">Excel list</span>
+            </button>
+          </div>
+
+          <div class="pf-rail-group">
+            <button class="pf-rail-btn is-active" type="button" data-left-tab="home" aria-selected="true" aria-label="Home" title="Home">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-home" /></svg>
+              <span class="pf-rail-label">Home</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="arrange" aria-selected="false" aria-label="Arrange" title="Arrange">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-arrange" /></svg>
+              <span class="pf-rail-label">Arrange</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="style" aria-selected="false" aria-label="Style" title="Style">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-style" /></svg>
+              <span class="pf-rail-label">Style</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="text" aria-selected="false" aria-label="Text" title="Text">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-text" /></svg>
+              <span class="pf-rail-label">Text</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="illustrations" aria-selected="false" aria-label="Shapes" title="Shapes">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-shapes" /></svg>
+              <span class="pf-rail-label">Shapes</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="images" aria-selected="false" aria-label="Images" title="Images">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-images" /></svg>
+              <span class="pf-rail-label">Images</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="upload" aria-selected="false" aria-label="Upload" title="Upload">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-upload" /></svg>
+              <span class="pf-rail-label">Upload</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="layers" aria-selected="false" aria-label="Layers" title="Layers">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-layers" /></svg>
+              <span class="pf-rail-label">Layers</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="templates" aria-selected="false" aria-label="Templates" title="Templates">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-templates" /></svg>
+              <span class="pf-rail-label">Templates</span>
+            </button>
+          </div>
+
+          <div class="pf-rail-group pf-rail-group--bottom">
+            <button class="pf-rail-btn" type="button" data-left-tab="help" aria-selected="false" aria-label="Help" title="Help">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-help" /></svg>
+              <span class="pf-rail-label">Help</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-left-tab="save" aria-selected="false" aria-label="Save" title="Save">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-save" /></svg>
+              <span class="pf-rail-label">Save</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pf-left__panel" aria-live="polite">
+          <div class="pf-panel-header">
+            <div class="pf-panel-headings">
+              <p class="pf-panel-kicker">Tools</p>
+              <div class="pf-panel-title" data-left-title>Home</div>
+            </div>
+            <div class="pf-panel-actions">
+            </div>
+          </div>
+
+          <div class="pf-left-body">
+            <div class="pf-left-view" data-left-view="add" hidden>
+              <div class="pf-panel-section">
+                <h4>New & import</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="file:new"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-file-plus" /></svg></span>New File</button>
+                  <button class="pf-action-item" type="button" data-action="file:import"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-import" /></svg></span>Import</button>
+                </div>
+                <input class="pf-file-import" type="file" accept="image/*" data-action="add:image" data-file-import hidden />
+              </div>
+              <div class="pf-panel-section">
+                <h4>Text</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="title"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add heading</button>
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="subtitle"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add subheading</button>
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="body"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add body text</button>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <!-- Shapes panel removed from Add tab -->
+              </div>
+              <div class="pf-panel-section">
+                <h4>Images</h4>
+                <label class="pf-action-item" aria-label="Upload image">
+                  <span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-images" /></svg></span>
+                  Upload image
+                  <input type="file" accept="image/*" data-action="add:image" />
+                </label>
+                <button class="pf-action-item" type="button" data-action="add:imagePlaceholder"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-images" /></svg></span>Image placeholder</button>
+                <div class="pf-dragdrop-zone" data-dragdrop-image>
+                  <span class="pf-dragdrop-icon"><svg class="pf-i"><use href="#pf-i-images" /></svg></span>
+                  <span class="pf-dragdrop-label">Drag & drop image here</span>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Icons & accents</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:sealIcon"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-crown" /></svg></span>Badge seal</button>
+                  <button class="pf-action-item" type="button" data-action="add:line"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-shapes" /></svg></span>Accent line</button>
+                </div>
+                <p class="pf-hint">Minimal decorative accents for clean layouts.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view is-active" data-left-view="home">
+              <div class="pf-panel-section">
+                <h4>Canvas controls</h4>
+                <div class="pf-toggle-list">
+                  <button class="pf-toggle" type="button" aria-pressed="false" data-action="view:gridToggle">Grid</button>
+                  <button class="pf-toggle" type="button" aria-pressed="false" data-action="view:rulerToggle">Rulers & guides</button>
+                </div>
+                <div class="pf-control-row">
+                  <button class="pf-icon" type="button" data-action="view:zoomOut" aria-label="Zoom out">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+                  </button>
+                  <button class="pf-chip" type="button" data-action="view:zoom100" aria-label="Zoom to 100%"><span data-zoom-readout>100%</span></button>
+                  <button class="pf-icon" type="button" data-action="view:zoomIn" aria-label="Zoom in">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  </button>
+                  <button class="pf-chip" type="button" data-action="view:fit" aria-label="Fit to screen">Fit</button>
+                </div>
+                <label class="pf-field">
+                  <span class="pf-field__label">Units</span>
+                  <select class="pf-select" data-unit-select>
+                    <option value="px">Pixels (px)</option>
+                    <option value="mm">Millimeters (mm)</option>
+                    <option value="in">Inches (in)</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="pf-panel-section">
+                <h4>Templates</h4>
+                <input class="pf-input" type="search" placeholder="Search templates" data-template-search aria-label="Search templates" />
+                <div class="pf-templates-min" data-templates>
+                  <button class="pf-template-mini t1" type="button" data-template="t1" data-template-name="Classic Elegant"></button>
+                  <button class="pf-template-mini t2" type="button" data-template="t2" data-template-name="Modern Minimal"></button>
+                  <button class="pf-template-mini t3" type="button" data-template="t3" data-template-name="Premium Luxury"></button>
+                  <button class="pf-template-mini t4" type="button" data-template="t4" data-template-name="Academic / Diploma"></button>
+                  <button class="pf-template-mini t5" type="button" data-template="t5" data-template-name="Creative Geometric"></button>
+                  <button class="pf-template-mini t6" type="button" data-template="t6" data-template-name="Corporate Professional"></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="arrange" hidden>
+              <div class="pf-panel-section">
+                <h4>Transform & Arrange</h4>
+                <p class="pf-hint">Select an element to use these tools.</p>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="node:duplicate"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-add" /></svg></span>Duplicate</button>
+                  <button class="pf-action-item" type="button" data-action="node:delete"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-panel" /></svg></span>Delete</button>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Align</h4>
+                <p class="pf-hint">Align selected elements relative to the canvas or each other.</p>
+                <div class="pf-control-row">
+                  <button class="pf-icon" type="button" data-action="align:left" title="Align left" aria-label="Align left">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14"/><path d="M7 8h11"/><path d="M7 12h8"/><path d="M7 16h12"/></svg>
+                  </button>
+                  <button class="pf-icon" type="button" data-action="align:center" title="Align center" aria-label="Align center">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 8h14"/><path d="M7 12h10"/><path d="M6 16h12"/></svg>
+                  </button>
+                  <button class="pf-icon" type="button" data-action="align:right" title="Align right" aria-label="Align right">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14"/><path d="M6 8h11"/><path d="M9 12h8"/><path d="M4 16h12"/></svg>
+                  </button>
+                  <button class="pf-icon" type="button" data-action="align:top" title="Align top" aria-label="Align top">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14"/><path d="M8 8v10"/><path d="M12 8v7"/><path d="M16 8v12"/></svg>
+                  </button>
+                  <button class="pf-icon" type="button" data-action="align:middle" title="Align middle" aria-label="Align middle">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M8 6v12"/><path d="M12 8v8"/><path d="M16 5v14"/></svg>
+                  </button>
+                  <button class="pf-icon" type="button" data-action="align:bottom" title="Align bottom" aria-label="Align bottom">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18h14"/><path d="M8 6v10"/><path d="M12 9v7"/><path d="M16 4v14"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Layer Order</h4>
+                <p class="pf-hint">Change the stacking order of selected elements.</p>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="layer:forward"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-layers" /></svg></span>Bring forward</button>
+                  <button class="pf-action-item" type="button" data-action="layer:backward"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-layers" /></svg></span>Send backward</button>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Group</h4>
+                <p class="pf-hint">Group multiple elements together (coming soon).</p>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" disabled title="Multi-select grouping coming soon.">Group</button>
+                  <button class="pf-action-item" type="button" disabled title="Multi-select grouping coming soon.">Ungroup</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="style" hidden data-left-style>
+              <div class="pf-panel-section">
+                <h4>Color & style</h4>
+                <div class="pf-grid2">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Fill</span>
+                    <input class="pf-input pf-input--color" type="color" data-left-prop="fill" />
+                  </label>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Stroke</span>
+                    <input class="pf-input pf-input--color" type="color" data-left-prop="stroke" />
+                  </label>
+                </div>
+                <div class="pf-grid2">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Stroke width</span>
+                    <input class="pf-input" type="number" step="1" data-left-prop="strokeWidth" />
+                  </label>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Opacity</span>
+                    <input class="pf-input" type="range" min="0" max="100" step="1" data-left-prop="opacity" />
+                  </label>
+                </div>
+                <div class="pf-control-row">
+                  <button class="pf-chip" type="button" disabled title="Gradients coming soon.">Gradient</button>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Typography</h4>
+                <label class="pf-field">
+                  <span class="pf-field__label">Font</span>
+                  <select class="pf-select" data-left-prop="fontFamily"></select>
+                </label>
+                <div class="pf-grid2">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Size</span>
+                    <input class="pf-input" type="number" min="6" max="200" step="1" data-left-prop="fontSize" />
+                  </label>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Weight</span>
+                    <select class="pf-select" data-left-prop="fontWeight"></select>
+                  </label>
+                </div>
+                <label class="pf-field">
+                  <span class="pf-field__label">Text color</span>
+                  <input class="pf-input pf-input--color" type="color" data-left-prop="color" />
+                </label>
+              </div>
+              <p class="pf-hint">Select an element to edit its styles here.</p>
+            </div>
+
+            <div class="pf-left-view" data-left-view="text" hidden>
+              <div class="pf-panel-section">
+                <h4>Add Text</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="heading"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add heading</button>
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="subheading"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add subheading</button>
+                  <button class="pf-action-item" type="button" data-action="add:text" data-preset="body"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-text" /></svg></span>Add body text</button>
+                </div>
+                <p class="pf-hint">Click any text option to add it to your design. You can edit the text, font, size, and color after adding.</p>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Text Presets</h4>
+                <p class="pf-hint">Text elements are automatically positioned in the center. Drag to reposition and use the Style panel to customize appearance.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="illustrations" hidden>
+              <div class="pf-panel-section">
+                <h4>Shapes</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:rect"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-shapes" /></svg></span>Rectangle</button>
+                  <button class="pf-action-item" type="button" data-action="add:line"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-shapes" /></svg></span>Line</button>
+                  <button class="pf-action-item" type="button" data-action="add:circle"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-circle" /></svg></span>Circle</button>
+                  <button class="pf-action-item" type="button" data-action="add:triangle"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-triangle" /></svg></span>Triangle</button>
+                </div>
+                <p class="pf-hint">Click any shape to add it to your design. You can resize, move, and style shapes after adding them.</p>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Icons & Accents</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:sealIcon"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-crown" /></svg></span>Event seal</button>
+                  <button class="pf-action-item" type="button" data-action="add:line"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-shapes" /></svg></span>Accent line</button>
+                </div>
+                <p class="pf-hint">Add decorative elements to enhance your event design.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="images" hidden>
+              <div class="pf-panel-section">
+                <h4>Upload Images</h4>
+                <label class="pf-upload-card">
+                  <div class="pf-upload-card__icon" aria-hidden="true">
+                    <svg class="pf-i" aria-hidden="true"><use href="#pf-i-images" /></svg>
+                  </div>
+                  <div class="pf-upload-card__body">
+                    <strong>Upload image</strong>
+                    <span>Drag & drop or browse</span>
+                  </div>
+                  <input type="file" accept="image/*" data-action="add:image" />
+                </label>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Image Options</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="add:imagePlaceholder"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-images" /></svg></span>Image placeholder</button>
+                </div>
+                <div class="pf-dragdrop-zone" data-dragdrop-image>
+                  <span class="pf-dragdrop-icon"><svg class="pf-i"><use href="#pf-i-images" /></svg></span>
+                  <span class="pf-dragdrop-label">Drag & drop image here</span>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Image Library</h4>
+                <p class="pf-hint">Upload your own images or use placeholders. Supported formats: JPG, PNG, SVG, GIF.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="upload" hidden>
+              <div class="pf-panel-section">
+                <h4>Upload Files</h4>
+                <label class="pf-upload-card">
+                  <div class="pf-upload-card__icon" aria-hidden="true">
+                    <svg class="pf-i" aria-hidden="true"><use href="#pf-i-upload" /></svg>
+                  </div>
+                  <div class="pf-upload-card__body">
+                    <strong>Upload files</strong>
+                    <span>Drag & drop or browse</span>
+                  </div>
+                  <input type="file" accept="image/*" data-action="add:image" />
+                </label>
+              </div>
+              
+              <div class="pf-panel-section">
+                <h4>Libraries & Tools</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="lib:stripe">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="credit-card" class="lucide-icon"></i></span>
+                    Stripe Payment
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:pdfLib">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="file-text" class="lucide-icon"></i></span>
+                    PDF-lib Tools
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:signature">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="pen-tool" class="lucide-icon"></i></span>
+                    Signature Canvas
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:qrcode">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="qr-code" class="lucide-icon"></i></span>
+                    QR Code Generator
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:svgjs">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="vector" class="lucide-icon"></i></span>
+                    SVG.js Tools
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:dropzone">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="upload" class="lucide-icon"></i></span>
+                    React Dropzone
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:csv">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="file-spreadsheet" class="lucide-icon"></i></span>
+                    CSV Parser (PapaParse)
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:excel">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="table" class="lucide-icon"></i></span>
+                    Excel Tools (SheetJS)
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:zip">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="archive" class="lucide-icon"></i></span>
+                    ZIP Files (JSZip)
+                  </button>
+                  <button class="pf-action-item" type="button" data-action="lib:word">
+                    <span class="pf-action-item__icon" aria-hidden="true"><i data-lucide="file-type" class="lucide-icon"></i></span>
+                    Word to HTML (Mammoth)
+                  </button>
+                </div>
+                <p class="pf-hint">Click any tool to open its interface or upload files.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="layers" hidden>
+              <div class="pf-panel-section">
+                <div class="pf-layers__header">
+                  <div>
+                    <h4>Layers</h4>
+                    <p class="pf-panel-subtitle">Select and reorder elements</p>
+                  </div>
+                  <div class="pf-layers__controls">
+                    <button class="pf-icon pf-icon--sm" type="button" data-action="layer:forward" title="Move forward">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+                    </button>
+                    <button class="pf-icon pf-icon--sm" type="button" data-action="layer:backward" title="Move backward">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="pf-layers" data-layers></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="templates" hidden>
+              <div class="pf-panel-section">
+                <h4>Templates</h4>
+                <div class="pf-template-filter-row" aria-label="Template categories">
+                  <button type="button" class="pf-template-filter is-active" data-template-filter="all">All</button>
+                  <button type="button" class="pf-template-filter" data-template-filter="certificate">Certificates</button>
+                  <button type="button" class="pf-template-filter" data-template-filter="event">Event assets</button>
+                  <button type="button" class="pf-template-filter" data-template-filter="premium">Premium</button>
+                </div>
+                <input class="pf-input" type="search" placeholder="Search templates" data-templates-search aria-label="Search templates" />
+                <div class="pf-templates-list" data-templates-list>
+                  <!-- Templates will be inserted here by JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Event-focused panels: uploads, logos, signatures, stamps, sponsors, speakers, QR, Excel -->
+            <div class="pf-left-view" data-left-view="uploads" hidden>
+              <div class="pf-panel-section">
+                <h4>My Uploads</h4>
+                <p class="pf-hint">Upload logos, speaker photos, stamps and other assets. Supported: PNG, JPG, SVG, WEBP, PDF.</p>
+                <label class="pf-upload-card">
+                  <div class="pf-upload-card__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-upload" /></svg></div>
+                  <div class="pf-upload-card__body">
+                    <strong>Drag & drop files here</strong>
+                    <span>or browse to upload</span>
+                  </div>
+                  <input type="file" accept="image/*,.svg,.pdf" multiple />
+                </label>
+                <div class="pf-assets-grid" aria-live="polite">
+                  <!-- asset thumbnails -->
+                </div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="logos" hidden>
+              <div class="pf-panel-section">
+                <h4>Logos</h4>
+                <p class="pf-hint">Event logo and organization logos. Drag a logo onto the canvas.</p>
+                <div class="pf-assets-grid"></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="signatures" hidden>
+              <div class="pf-panel-section">
+                <h4>Signatures & Stamps</h4>
+                <p class="pf-hint">Upload scanned signatures or draw one using the signature tool.</p>
+                <button class="pf-action-item" type="button" data-action="lib:signature">Open signature canvas</button>
+                <div class="pf-assets-grid"></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="stamps" hidden>
+              <div class="pf-panel-section">
+                <h4>Stamps</h4>
+                <p class="pf-hint">Official stamps for certificates and documents.</p>
+                <div class="pf-assets-grid"></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="sponsors" hidden>
+              <div class="pf-panel-section">
+                <h4>Sponsor logos</h4>
+                <p class="pf-hint">Upload and manage sponsor assets to place on banners and materials.</p>
+                <div class="pf-assets-grid"></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="speakers" hidden>
+              <div class="pf-panel-section">
+                <h4>Speaker photos</h4>
+                <p class="pf-hint">Upload speaker photos and drag onto speaker cards.</p>
+                <div class="pf-assets-grid"></div>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="qr" hidden>
+              <div class="pf-panel-section">
+                <h4>QR Generator</h4>
+                <p class="pf-hint">Create event registration, attendance, and verification QR codes. Customize color and embed logo.</p>
+                <label class="pf-field"><span class="pf-field__label">QR content (URL or text)</span><input class="pf-input" type="text" placeholder="https://..." /></label>
+                <div class="pf-control-row">
+                  <button class="pf-chip" type="button" data-action="qr:generate">Generate</button>
+                  <button class="pf-chip" type="button" data-action="qr:attach">Attach to canvas</button>
+                </div>
+                <p class="pf-hint">TODO: backend QR types (registration/attendance) will be integrated later.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="excel" hidden>
+              <div class="pf-panel-section">
+                <h4>Excel / Bulk Generation</h4>
+                <p class="pf-hint">Upload XLSX/CSV, map columns to template variables and bulk-generate certificates and badges.</p>
+                <label class="pf-upload-card">
+                  <div class="pf-upload-card__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-import" /></svg></div>
+                  <div class="pf-upload-card__body">
+                    <strong>Upload XLSX/CSV</strong>
+                    <span>Download sample template available</span>
+                  </div>
+                  <input type="file" accept=".csv,.xlsx" />
+                </label>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="excel:map">Map columns</button>
+                  <button class="pf-action-item" type="button" data-action="excel:preview">Preview</button>
+                  <button class="pf-action-item" type="button" data-action="excel:generate">Generate ZIP</button>
+                </div>
+                <p class="pf-hint">TODO: frontend-only placeholders; backend bulk-generation endpoint integration required.</p>
+              </div>
+            </div>
+
+            <div class="pf-left-view" data-left-view="help" hidden>
+              <div class="pf-panel-section">
+                <h4>Keyboard Shortcuts</h4>
+                <div class="pf-action-list">
+                  <div class="pf-shortcut-item">
+                    <span class="pf-shortcut-key">Ctrl + Z</span>
+                    <span class="pf-shortcut-label">Undo</span>
+                  </div>
+                  <div class="pf-shortcut-item">
+                    <span class="pf-shortcut-key">Ctrl + Y</span>
+                    <span class="pf-shortcut-label">Redo</span>
+                  </div>
+                  <div class="pf-shortcut-item">
+                    <span class="pf-shortcut-key">Delete</span>
+                    <span class="pf-shortcut-label">Delete selected</span>
+                  </div>
+                  <div class="pf-shortcut-item">
+                    <span class="pf-shortcut-key">Ctrl + D</span>
+                    <span class="pf-shortcut-label">Duplicate</span>
+                  </div>
+                  <div class="pf-shortcut-item">
+                    <span class="pf-shortcut-key">Ctrl + S</span>
+                    <span class="pf-shortcut-label">Save</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Guides & Snapping</h4>
+                <p class="pf-hint">Enable grid and rulers from the Home panel. Elements will automatically snap to grid lines and other objects for precise alignment.</p>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Exporting</h4>
+                <p class="pf-hint">Use the download button in the top bar to export your design. Choose from PDF, PNG, JPG, or SVG formats with customizable quality settings.</p>
+              </div>
+            </div>
+            <div class="pf-left-view" data-left-view="save" hidden>
+              <div class="pf-panel-section">
+                <h4>Save Document</h4>
+                <div class="pf-action-list">
+                  <button class="pf-action-item" type="button" data-action="file:saveDoc"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-save" /></svg></span>Save to Browser</button>
+                  <button class="pf-action-item" type="button" data-action="file:share"><span class="pf-action-item__icon" aria-hidden="true"><svg class="pf-i"><use href="#pf-i-share" /></svg></span>Share Link</button>
+                </div>
+                <p class="pf-hint">Your work is automatically saved to your browser's local storage. Use the share button to generate a shareable link.</p>
+              </div>
+              <div class="pf-panel-section">
+                <h4>Export Options</h4>
+                <p class="pf-hint">Use the download button in the top toolbar to export your design in various formats (PDF, PNG, JPG, SVG).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pf-resizer" data-resizer="left" aria-hidden="true"></div>
+      </aside>
+
+      <!-- CENTER CANVAS / WORK AREA -->
+
+      <main class="pf-center" aria-label="Canvas workspace">
+        <div class="pf-viewport" data-viewport>
+            <div class="pf-ruler pf-ruler--top" data-ruler="x" aria-hidden="true"></div>
+            <div class="pf-ruler pf-ruler--left" data-ruler="y" aria-hidden="true"></div>
+          <div class="pf-stage-wrap" data-stage-wrap>
+            <div class="pf-stage" data-stage tabindex="0" role="application" aria-label="Canvas">
+                <div class="pf-guidelines" data-guidelines aria-hidden="true"></div>
+              <div class="pf-artboard-grid" data-artboard-grid aria-hidden="true"></div>
+              <div class="pf-guides" data-guides aria-hidden="true">
+                <div class="pf-guide pf-guide--v" data-guide="v"></div>
+                <div class="pf-guide pf-guide--h" data-guide="h"></div>
+              </div>
+              <div class="pf-artboard-overlay" data-artboard-overlay aria-hidden="true">
+                <div class="pf-artboard-box"></div>
+                <button type="button" class="pf-artboard-handle" data-artboard-handle="nw" aria-label="Resize artboard"></button>
+                <button type="button" class="pf-artboard-handle" data-artboard-handle="ne" aria-label="Resize artboard"></button>
+                <button type="button" class="pf-artboard-handle" data-artboard-handle="se" aria-label="Resize artboard"></button>
+                <button type="button" class="pf-artboard-handle" data-artboard-handle="sw" aria-label="Resize artboard"></button>
+              </div>
+              <!-- Nodes injected by JS -->
+              <div class="pf-selection" data-selection aria-hidden="true">
+                <div class="pf-selection__box"></div>
+                <div class="pf-selection__line pf-selection__line--v" aria-hidden="true"></div>
+                <div class="pf-selection__line pf-selection__line--h" aria-hidden="true"></div>
+                <button type="button" class="pf-rotate-handle" data-handle="rotate" aria-label="Rotate"></button>
+                <button type="button" class="pf-handle" data-handle="nw" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="n" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="ne" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="e" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="se" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="s" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="sw" aria-label="Resize"></button>
+                <button type="button" class="pf-handle" data-handle="w" aria-label="Resize"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT PROPERTIES (contextual) -->
+      <aside class="pf-right is-collapsed" aria-label="Properties" id="pf-right-panel" aria-expanded="false">
+        <div class="pf-right__rail" role="tablist" aria-label="Right panel tools">
+          <div class="pf-rail-group pf-rail-group--top">
+            <button class="pf-rail-btn is-active" type="button" data-right-tab="inspector" aria-selected="true" aria-label="Inspector" title="Inspector">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-settings" /></svg>
+              <span class="pf-rail-label">Inspector</span>
+            </button>
+            <button class="pf-rail-btn" type="button" data-right-tab="templates" aria-selected="false" aria-label="Templates" title="Templates">
+              <svg class="pf-i" aria-hidden="true"><use href="#pf-i-layout" /></svg>
+              <span class="pf-rail-label">Templates</span>
+            </button>
+          </div>
+        </div>
+        <div class="pf-right-shell">
+          <div class="pf-panel-header">
+            <div class="pf-panel-headings">
+              <p class="pf-panel-kicker" data-right-kicker>Inspector</p>
+              <div class="pf-panel-title" data-right-title>Properties</div>
+            </div>
+            <div class="pf-panel-actions">
+            </div>
+          </div>
+
+          <div class="pf-right__scroll">
+            <section class="pf-account-panel" data-right-section="account" hidden>
+              <div class="pf-panel-section">
+                <h4>Account</h4>
+                <div class="pf-account-card">
+                  <div>
+                    <strong>Gildia Studio</strong>
+                    <span>gildia@studio.com</span>
+                  </div>
+                  <span class="pf-badge">Pro</span>
+                </div>
+                <div class="pf-panel-section">
+                  <h4>Plan</h4>
+                  <p class="pf-panel-subtitle">Unlimited exports · Priority rendering</p>
+                  <button class="pf-btn pf-btn--primary" type="button">Manage billing</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="pf-templates-panel" data-right-section="templates" hidden>
+              <div class="pf-panel-section">
+                <h4>Templates</h4>
+                <input class="pf-input" type="search" placeholder="Search templates" data-template-search aria-label="Search templates" />
+                <div class="pf-templates-min" data-templates>
+                  <!-- Template mini previews will be injected here by JS -->
+                </div>
+              </div>
+            </section>
+
+            <div class="pf-empty" data-empty-state hidden>
+              Select an element to edit its style. Double-click text to edit inline.
+            </div>
+
+            <form class="pf-props" data-props hidden>
+              <section class="pf-object-info">
+                <div>
+                  <p class="pf-panel-kicker">Object</p>
+                  <p class="pf-object-type" data-object-type>Text</p>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Layer name</span>
+                    <input class="pf-input" type="text" data-prop="name" />
+                  </label>
+                </div>
+                <div class="pf-inline-toggles">
+                  <label class="pf-toggle-row">
+                    <span>Lock</span>
+                  </label>
+                  <label class="pf-toggle-row">
+                    <span>Hide</span>
+                    <input type="checkbox" class="pf-check" data-prop="hidden" />
+                  </label>
+                </div>
+              </section>
+
+              <div class="pf-inspector-group">Layout</div>
+
+              <details class="pf-accordion" data-accordion-id="align" open data-for="text image shape">
+                <summary>Align</summary>
+                <div class="pf-accordion__body">
+                  <div class="pf-control-row">
+                    <button class="pf-icon" type="button" data-action="align:left" title="Align left">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14"/><path d="M8 8h10"/><path d="M8 12h7"/><path d="M8 16h12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="align:center" title="Align center">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 8h14"/><path d="M7 12h10"/><path d="M6 16h12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="align:right" title="Align right">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14"/><path d="M6 8h10"/><path d="M9 12h7"/><path d="M4 16h12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="align:top" title="Align top">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14"/><path d="M8 8v10"/><path d="M12 8v7"/><path d="M16 8v12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="align:middle" title="Align middle">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M8 6v12"/><path d="M12 8v8"/><path d="M16 5v14"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="align:bottom" title="Align bottom">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18h14"/><path d="M8 6v10"/><path d="M12 9v7"/><path d="M16 4v14"/></svg>
+                    </button>
+                  </div>
+                  <div class="pf-control-row">
+                    <button class="pf-icon pf-icon--sm" type="button" data-action="distribute:h" title="Distribute horizontally">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7v10"/><path d="M19 7v10"/><path d="M9 12h6"/></svg>
+                    </button>
+                    <button class="pf-icon pf-icon--sm" type="button" data-action="distribute:v" title="Distribute vertically">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10"/><path d="M7 19h10"/><path d="M12 9v6"/></svg>
+                    </button>
+                  </div>
+                  <p class="pf-hint">Smart guides show when edges align.</p>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="size" open data-for="text image shape">
+                <summary>Size</summary>
+                <div class="pf-accordion__body">
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Width</span>
+                      <input class="pf-input" type="number" step="1" data-prop="w" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Height</span>
+                      <input class="pf-input" type="number" step="1" data-prop="h" />
+                    </label>
+                  </div>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Scale %</span>
+                      <input class="pf-input" type="number" min="10" max="400" step="1" data-prop="scale" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Lock ratio</span>
+                      <input type="checkbox" class="pf-check" data-prop="lockRatio" />
+                    </label>
+                  </div>
+                  <div class="pf-control-row">
+                    <button class="pf-chip" type="button" data-prop-toggle="flipX">Flip H</button>
+                    <button class="pf-chip" type="button" data-prop-toggle="flipY">Flip V</button>
+                  </div>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="position" open data-for="text image shape">
+                <summary>Position</summary>
+                <div class="pf-accordion__body">
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">X</span>
+                      <input class="pf-input" type="number" step="1" data-prop="x" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Y</span>
+                      <input class="pf-input" type="number" step="1" data-prop="y" />
+                    </label>
+                  </div>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Rotate</span>
+                      <input class="pf-input" type="number" step="1" data-prop="rotate" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Skew</span>
+                      <input class="pf-input" type="number" step="1" data-prop="skew" />
+                    </label>
+                  </div>
+                  <button class="pf-btn pf-btn--ghost" type="button" data-action="transform:reset">Reset transform</button>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="text" open data-for="text">
+                <summary>Text</summary>
+                <div class="pf-accordion__body">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Font</span>
+                    <select class="pf-select" data-prop="fontFamily"></select>
+                  </label>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Size</span>
+                      <input class="pf-input" type="number" min="6" max="200" step="1" data-prop="fontSize" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Weight</span>
+                      <select class="pf-select" data-prop="fontWeight"></select>
+                    </label>
+                  </div>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Line height</span>
+                      <input class="pf-input" type="number" step="0.1" data-prop="lineHeight" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Letter spacing</span>
+                      <input class="pf-input" type="number" step="0.1" data-prop="letterSpacing" />
+                    </label>
+                  </div>
+                  <div class="pf-control-row">
+                    <button class="pf-icon" type="button" data-action="text:alignLeft" title="Align left">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5v14"/><path d="M8 8h10"/><path d="M8 12h7"/><path d="M8 16h12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="text:alignCenter" title="Align center">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M5 8h14"/><path d="M7 12h10"/><path d="M6 16h12"/></svg>
+                    </button>
+                    <button class="pf-icon" type="button" data-action="text:alignRight" title="Align right">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5v14"/><path d="M6 8h10"/><path d="M9 12h7"/><path d="M4 16h12"/></svg>
+                    </button>
+                  </div>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Text color</span>
+                    <input class="pf-input pf-input--color" type="color" data-prop="color" />
+                  </label>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="image" open data-for="image">
+                <summary>Image</summary>
+                <div class="pf-accordion__body">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Replace image</span>
+                    <input type="file" accept="image/*" data-action="image:replace" />
+                  </label>
+                  <div class="pf-control-row">
+                    <button class="pf-chip" type="button" disabled>Crop</button>
+                    <button class="pf-chip" type="button" disabled>Mask</button>
+                  </div>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Filter</span>
+                    <select class="pf-select" data-prop="filter">
+                      <option value="none">None</option>
+                      <option value="grayscale(1)">Grayscale</option>
+                      <option value="sepia(0.8)">Sepia</option>
+                      <option value="contrast(1.2)">Contrast</option>
+                      <option value="saturate(1.4)">Vibrance</option>
+                    </select>
+                  </label>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="shape" open data-for="shape">
+                <summary>Shape</summary>
+                <div class="pf-accordion__body">
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Fill</span>
+                      <input class="pf-input pf-input--color" type="color" data-prop="fill" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Stroke</span>
+                      <input class="pf-input pf-input--color" type="color" data-prop="stroke" />
+                    </label>
+                  </div>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Stroke width</span>
+                      <input class="pf-input" type="number" step="1" data-prop="strokeWidth" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Stroke style</span>
+                      <select class="pf-select" data-prop="strokeStyle">
+                        <option value="solid">Solid</option>
+                        <option value="dashed">Dashed</option>
+                        <option value="dotted">Dotted</option>
+                      </select>
+                    </label>
+                  </div>
+                  <button class="pf-btn pf-btn--ghost" type="button" disabled>Edit vector path</button>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="color" open data-for="text image shape">
+                <summary>Color</summary>
+                <div class="pf-accordion__body">
+                  <div data-for="text">
+                    <label class="pf-field">
+                      <span class="pf-field__label">RGBA color</span>
+                      <input class="pf-input pf-input--color" type="color" data-prop="color" />
+                    </label>
+                  </div>
+                  <div data-for="shape">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Fill color</span>
+                      <input class="pf-input pf-input--color" type="color" data-prop="fill" />
+                    </label>
+                  </div>
+                  <label class="pf-field">
+                    <span class="pf-field__label">Opacity</span>
+                    <input class="pf-input" type="range" min="0" max="100" step="1" data-prop="opacity" />
+                  </label>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="effects" open data-for="text image shape">
+                <summary>Effects</summary>
+                <div class="pf-accordion__body">
+                  <label class="pf-toggle-row">
+                    <span>Shadow</span>
+                    <input type="checkbox" class="pf-check" data-prop="shadowOn" />
+                  </label>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Offset X</span>
+                      <input class="pf-input" type="number" step="1" data-prop="shadowX" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Offset Y</span>
+                      <input class="pf-input" type="number" step="1" data-prop="shadowY" />
+                    </label>
+                  </div>
+                  <div class="pf-grid2">
+                    <label class="pf-field">
+                      <span class="pf-field__label">Blur</span>
+                      <input class="pf-input" type="number" step="1" data-prop="shadowBlur" />
+                    </label>
+                    <label class="pf-field">
+                      <span class="pf-field__label">Shadow color</span>
+                      <input class="pf-input pf-input--color" type="color" data-prop="shadowColor" />
+                    </label>
+                  </div>
+                  <div class="pf-control-row">
+                    <button class="pf-chip" type="button" disabled>Glow</button>
+                    <button class="pf-chip" type="button" disabled>Blur</button>
+                  </div>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="boolean" open data-for="shape">
+                <summary>Shape boolean</summary>
+                <div class="pf-accordion__body">
+                  <div class="pf-control-row">
+                    <button class="pf-chip" type="button" disabled>Union</button>
+                    <button class="pf-chip" type="button" disabled>Subtract</button>
+                    <button class="pf-chip" type="button" disabled>Intersect</button>
+                    <button class="pf-chip" type="button" disabled>Exclude</button>
+                  </div>
+                  <button class="pf-btn pf-btn--ghost" type="button" disabled>Reset boolean</button>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="texture" open data-for="shape">
+                <summary>Texture & fill</summary>
+                <div class="pf-accordion__body">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Texture</span>
+                    <select class="pf-select" disabled>
+                      <option>Paper</option>
+                      <option>Noise</option>
+                      <option>Fabric</option>
+                    </select>
+                  </label>
+                  <div class="pf-hint">Preview grid appears on hover.</div>
+                </div>
+              </details>
+
+              <details class="pf-accordion" data-accordion-id="export" open data-for="text image shape">
+                <summary>Export</summary>
+                <div class="pf-accordion__body">
+                  <label class="pf-field">
+                    <span class="pf-field__label">Share link</span>
+                    <input class="pf-input" type="text" value="https://gildia.uz/share/abc123" readonly />
+                  </label>
+                  <div class="pf-control-row">
+                    <button class="pf-btn" type="button">Copy link</button>
+                    <button class="pf-btn" type="button">Permissions</button>
+                  </div>
+                  <div class="pf-control-row">
+                    <button class="pf-btn" type="button" data-action="file:saveDoc">Save</button>
+                    <button class="pf-btn pf-btn--primary" type="button" data-action="file:exportPdf">Export PDF</button>
+                    <button class="pf-btn" type="button" data-action="file:exportPng">Export PNG</button>
+                    <button class="pf-btn" type="button" data-action="file:exportJpg">Export JPG</button>
+                    <button class="pf-btn" type="button" data-action="file:exportSvg">Export SVG</button>
+                  </div>
+                </div>
+              </details>
+            </form>
+          </div>
+
+          <div class="pf-resizer" data-resizer="right" aria-hidden="true"></div>
+        </div>
+        <button class="pf-panel-toggle pf-panel-toggle--right" type="button" data-action="right:toggle" aria-label="Collapse/expand right panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div class="pf-export-modal" data-export-modal hidden role="dialog" aria-modal="true" aria-labelledby="pf-export-title">
+    <div class="pf-export-modal__backdrop" data-export-modal-close></div>
+    <div class="pf-export-modal__dialog" role="document">
+      <button type="button" class="pf-export-modal__close" data-export-modal-close aria-label="Close export dialog" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </button>
+      
+      <div class="pf-export-modal__header">
+        <h2 id="pf-export-title" class="pf-export-modal__title">Export Design</h2>
+        <p class="pf-export-modal__subtitle">Choose format and settings for download</p>
+      </div>
+
+      <div class="pf-export-modal__body">
+        <div class="pf-export-format">
+          <label class="pf-export-label">Format</label>
+          <div class="pf-export-format-grid">
+            <button type="button" class="pf-export-format-btn" data-format="pdf" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <span>PDF</span>
+            </button>
+            <button type="button" class="pf-export-format-btn" data-format="png" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M9 9h6v6H9z" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <span>PNG</span>
+            </button>
+            <button type="button" class="pf-export-format-btn" data-format="jpg" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                <path d="M21 15l-5-5L5 21" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <span>JPG</span>
+            </button>
+            <button type="button" class="pf-export-format-btn" data-format="svg" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+              <span>SVG</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pf-export-params" data-export-params>
+          <!-- PNG Parameters -->
+          <div class="pf-export-param-group" data-param-group="png" hidden>
+            <label class="pf-export-label">
+              <span>Scale (Resolution)</span>
+              <span class="pf-export-value" data-param-value="png-scale">2x</span>
+            </label>
+            <input type="range" class="pf-export-slider" data-param="png-scale" min="1" max="4" step="0.5" value="2">
+            <div class="pf-export-hint">Higher scale = better quality, larger file size</div>
+          </div>
+
+          <!-- JPG Parameters -->
+          <div class="pf-export-param-group" data-param-group="jpg" hidden>
+            <label class="pf-export-label">
+              <span>Quality</span>
+              <span class="pf-export-value" data-param-value="jpg-quality">92%</span>
+            </label>
+            <input type="range" class="pf-export-slider" data-param="jpg-quality" min="50" max="100" step="1" value="92">
+            <div class="pf-export-hint">Higher quality = better image, larger file size</div>
+            
+            <label class="pf-export-label" style="margin-top: 16px;">
+              <span>Scale (Resolution)</span>
+              <span class="pf-export-value" data-param-value="jpg-scale">2x</span>
+            </label>
+            <input type="range" class="pf-export-slider" data-param="jpg-scale" min="1" max="4" step="0.5" value="2">
+          </div>
+
+          <!-- SVG Parameters -->
+          <div class="pf-export-param-group" data-param-group="svg" hidden>
+            <div class="pf-export-hint">SVG exports as vector format - scalable without quality loss</div>
+          </div>
+
+          <!-- PDF Parameters -->
+          <div class="pf-export-param-group" data-param-group="pdf">
+            <div class="pf-export-hint">PDF exports with high quality, ready for print</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-export-modal__footer">
+        <button type="button" class="pf-btn pf-btn--ghost" data-export-modal-close>Cancel</button>
+        <button type="button" class="pf-btn pf-btn--primary" data-export-submit>
+          <svg class="pf-i" aria-hidden="true"><use href="#pf-i-download" /></svg>
+          <span>Download</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pf-context-menu" data-context-menu hidden role="menu" aria-label="Object actions">
+    <button type="button" class="pf-context-item" data-context-action="duplicate">Duplicate</button>
+    <button type="button" class="pf-context-item pf-context-item--danger" data-context-action="delete">Delete</button>
+  </div>
+
+  <!-- Upgrade modal (isolated overlay; does not affect layout) -->
+  <div class="pf-upgrade-modal" data-upgrade-modal data-open="false" hidden role="dialog" aria-modal="true" aria-labelledby="pf-upgrade-title">
+    <div class="pf-upgrade-modal__dialog" data-upgrade-modal-dialog role="document">
+      <button type="button" class="pf-upgrade-modal__close" data-upgrade-modal-close data-action="upgradeModal:close" aria-label="Close upgrade popup" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12" />
+          <path d="M18 6L6 18" />
+        </svg>
+      </button>
+
+      <div class="pf-upgrade-modal__header">
+        <div>
+          <h2 id="pf-upgrade-title" class="pf-upgrade-modal__title">Upgrade your plan</h2>
+          <p class="pf-upgrade-modal__subtitle">Unlock premium templates, exports, and brand controls. This is UI-only for now.</p>
+        </div>
+      </div>
+
+      <div class="pf-upgrade-plans" aria-label="Upgrade plans">
+        <section class="pf-upgrade-plan" aria-label="Free plan">
+          <div class="pf-upgrade-plan__top">
+            <h3 class="pf-upgrade-plan__name">Free</h3>
+            <div class="pf-upgrade-plan__price">$0<span>/mo</span></div>
+          </div>
+          <ul class="pf-upgrade-plan__list">
+            <li>Basic templates</li>
+            <li>Standard editor tools</li>
+            <li>Watermarked export</li>
+          </ul>
+          <button type="button" class="pf-btn" disabled>Current plan</button>
+        </section>
+
+        <section class="pf-upgrade-plan" aria-label="Silver plan">
+          <div class="pf-upgrade-plan__top">
+            <h3 class="pf-upgrade-plan__name">Silver</h3>
+            <div class="pf-upgrade-plan__price">$9<span>/mo</span></div>
+          </div>
+          <ul class="pf-upgrade-plan__list">
+            <li>Premium templates</li>
+            <li>High-quality PDF export</li>
+            <li>Priority support</li>
+          </ul>
+          <button type="button" class="pf-btn pf-btn--primary">Choose Silver</button>
+        </section>
+
+        <section class="pf-upgrade-plan pf-upgrade-plan--featured" aria-label="Gold plan">
+          <div class="pf-upgrade-plan__badge">Best value</div>
+          <div class="pf-upgrade-plan__top">
+            <h3 class="pf-upgrade-plan__name">Gold</h3>
+            <div class="pf-upgrade-plan__price">$19<span>/mo</span></div>
+          </div>
+          <ul class="pf-upgrade-plan__list">
+            <li>Everything in Silver</li>
+            <li>Brand kit (colors & fonts)</li>
+            <li>Bulk export (coming soon)</li>
+          </ul>
+          <button type="button" class="pf-btn pf-btn--primary">Choose Gold</button>
+        </section>
+      </div>
+
+      <div class="pf-upgrade-modal__footer">
+        <button type="button" class="pf-btn" data-action="upgradeModal:close">Not now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hammer.js - Multi-touch gestures library -->
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+  
+  <script src="undo-redo-manager.js"></script>
+  <script src="transform-frame.js"></script>
+  <script src="grid-snap.js"></script>
+  <script src="hammer-gestures.js"></script>
+  <script src="react-dnd-integration.js"></script>
+  <script src="react-components.js"></script>
+  <script src="konva-integration.js"></script>
+  <script src="react-konva-integration.js"></script>
+  <script src="google-fonts-integration.js"></script>
+  <script src="stripe-integration.js"></script>
+  <script src="pdf-lib-integration.js"></script>
+  <script src="react-signature-canvas-integration.js"></script>
+  <script src="qrcode-react-integration.js"></script>
+  <script src="svgjs-integration.js"></script>
+  <script src="react-dropzone-integration.js"></script>
+  <script src="papaparse-integration.js"></script>
+  <script src="sheetjs-integration.js"></script>
+  <script src="jszip-integration.js"></script>
+  <script src="mammoth-integration.js"></script>
+  <script src="editor.js?v=12" defer></script>
+  <script src="react-root.js" defer></script>
+  <script src="lucide-init.js" defer></script>
+  <script src="editor-icons-replace.js" defer></script>
+</body>
+</html>

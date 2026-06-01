@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shablonlar – Gildia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="home.css?v=22" />
+  <link rel="stylesheet" href="templates.css?v=55" />
+
+  <!-- Brand colors & favicons -->
+  <meta name="theme-color" content="#0dd4b3">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+  <body class="templates-page">
+
+  <!-- NAVBAR -->
+  <header class="nav nav-fullscreen">
+    <div class="nav-inner-full">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="Gildia logo" class="nav-logo-img">
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Bosh sahifa</a>
+        <a href="templates.html" class="nav-link is-active">Shablonlar</a>
+        <a href="editor.html" class="nav-link">Editor</a>
+        <a href="index.html#pricing" class="nav-link">Narxlar</a>
+        <a href="verify.html" class="nav-link">Tekshirish</a>
+        <a href="login.html" class="btn btn-outline">Kirish</a>
+        <a href="register.html" class="btn btn-primary">Ro‘yxatdan o‘tish</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tpl-page">
+
+  <!-- HERO SECTION WITH GRADIENT -->
+  <section class="tpl-hero-gradient">
+    <div class="tpl-hero-gradient-inner">
+        <div class="tpl-hero-gradient-content">
+        <h2 class="tpl-hero-gradient-title">Tadbirlar va konferensiyalar uchun shablonlar</h2>
+        <p class="tpl-hero-gradient-text">
+          Taklifnoma, sertifikat, bejik, dastur, banner va ijtimoiy postlar uchun maxsus tayyorlangan shablonlar.
+          Tez sozlang, print-ready fayllarga eksport qiling va tadbirga tayyor bo‘ling.
+        </p>
+      </div>
+    </div>
+  </section>
+
+    <!-- FILTERS + SEARCH (sticky) -->
+    <section class="tpl-toolbar" aria-label="Template filters">
+      <div class="container tpl-toolbar-inner">
+        <div class="tpl-toolbar-controls">
+          <div class="tpl-filters" role="tablist" aria-label="Categories">
+            <button type="button" class="tpl-filter is-active" data-filter="all" role="tab" aria-selected="true">Barchasi</button>
+            <button type="button" class="tpl-filter" data-filter="certificate" role="tab" aria-selected="false">Sertifikatlar</button>
+            <button type="button" class="tpl-filter" data-filter="invitation" role="tab" aria-selected="false">Taklifnomalar</button>
+            <button type="button" class="tpl-filter" data-filter="badge" role="tab" aria-selected="false">Bejiklar</button>
+            <button type="button" class="tpl-filter" data-filter="flyer" role="tab" aria-selected="false">Flyerlar</button>
+            <button type="button" class="tpl-filter" data-filter="program" role="tab" aria-selected="false">Tadbir dasturlari</button>
+            <button type="button" class="tpl-filter" data-filter="agenda" role="tab" aria-selected="false">Agenda</button>
+            <button type="button" class="tpl-filter" data-filter="speaker-card" role="tab" aria-selected="false">Speaker cards</button>
+            <button type="button" class="tpl-filter" data-filter="sponsor-banner" role="tab" aria-selected="false">Sponsor bannerlar</button>
+            <button type="button" class="tpl-filter" data-filter="rollup" role="tab" aria-selected="false">Roll-up bannerlar</button>
+            <button type="button" class="tpl-filter" data-filter="social-post" role="tab" aria-selected="false">Social postlar</button>
+            <button type="button" class="tpl-filter" data-filter="event-package" role="tab" aria-selected="false">Rasmiy tadbir paketlari</button>
+            <button type="button" class="tpl-filter" data-filter="tickets" role="tab" aria-selected="false">Tickets</button>
+            <button type="button" class="tpl-filter" data-filter="id-cards" role="tab" aria-selected="false">ID cards</button>
+          </div>
+
+          <div class="tpl-search-wrap">
+            <label class="tpl-search-label">
+              <span class="tpl-sr">Search templates</span>
+              <input
+                type="text"
+                class="tpl-search"
+                data-search
+                placeholder="Shablonlarni izlash (masalan: sertifikat, bejik)"
+                aria-label="Shablonlarni izlash"
+              />
+              <button type="button" class="tpl-search-btn" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="M21 21l-4.3-4.3"></path>
+                </svg>
+              </button>
+            </label>
+          </div>
+
+          <div class="tpl-toolbar-meta" aria-live="polite">
+            <span data-template-count>60 templates</span>
+            <select class="tpl-sort" data-sort aria-label="Sort templates">
+              <option value="popular">Popular</option>
+              <option value="az">A-Z</option>
+              <option value="premium">Premium first</option>
+            </select>
+            <button type="button" class="tpl-clear" data-clear>Clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEMPLATE GRID -->
+    <section class="tpl-grid-section">
+      <div class="container">
+        <div class="tpl-grid" data-templates-grid>
+          <!-- Example card: JS will render actual cards. This static example illustrates new metadata badges -->
+          <article class="tpl-card card">
+            <img src="templates/example-cert.png" alt="Sertifikat namunasi" />
+            <div class="tpl-card-body">
+              <h3>Sertifikat - Rasmiy dizayn</h3>
+              <div class="meta">
+                <span class="badge free">Free</span>
+                <span class="badge printable">Print-ready</span>
+                <span class="badge online">Online</span>
+              </div>
+              <div class="tpl-card-actions">
+                <a class="btn btn-outline" href="editor.html">Preview</a>
+                <a class="btn btn-primary" href="editor.html">Use template</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="tpl-empty" data-empty hidden>
+          <h3>No templates found</h3>
+          <p>Try another category or search term.</p>
+        </div>
+        <div class="tpl-loadmore">
+          <button type="button" class="tpl-loadmore-btn" data-load-more>Load more</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PREVIEW MODAL -->
+  <div class="tpl-modal" data-modal hidden aria-hidden="true">
+    <div class="tpl-modal__backdrop" data-modal-close></div>
+    <div class="tpl-modal__dialog" role="dialog" aria-modal="true" aria-label="Template preview">
+      <div class="tpl-modal__header">
+        <div class="tpl-modal__title">
+          <h3 data-modal-title>Template preview</h3>
+          <p data-modal-subtitle>Press Esc to close</p>
+        </div>
+        <div class="tpl-modal__actions">
+          <a class="btn btn-primary tpl-btn-sm" href="editor.html" data-modal-use>Use template</a>
+          <button type="button" class="tpl-modal__close" data-modal-close aria-label="Close preview">✕</button>
+        </div>
+      </div>
+
+      <div class="tpl-modal__body">
+        <div class="tpl-preview">
+          <div class="tpl-preview__paper">
+            <div class="tpl-preview__inner">
+              <div class="tpl-preview__title">EVENT PASS</div>
+              <div class="tpl-preview__sub">for your next event</div>
+              <div class="tpl-preview__name">Attendee Name</div>
+              <div class="tpl-preview__text">Clean, editable event layout.</div>
+              <div class="tpl-preview__footer">
+                <div><span class="tpl-preview__line"></span><span>Signature</span></div>
+                <div><span class="tpl-preview__line"></span><span></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="hp-footer" aria-label="Footer">
+    <div class="hp-footer__inner">
+      <div class="hp-footer__top">
+        <img class="hp-footer__logo" src="logo.png" alt="Gildia" />
+      </div>
+      <div class="hp-footer__bottom">
+        <p class="hp-footer__copy">© 2026 Gildia. All rights reserved.</p>
+        <div class="hp-footer__links">
+          <a href="contact-about-privacy.html#contact" class="hp-footer__link">Contact</a>
+          <a href="contact-about-privacy.html#about" class="hp-footer__link">About Us</a>
+          <a href="contact-about-privacy.html#privacy" class="hp-footer__link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="templates.js"></script>
+</body>
+</html>

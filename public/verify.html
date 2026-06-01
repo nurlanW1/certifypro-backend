@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Verify — Gildia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="home.css?v=22" />
+  <link rel="stylesheet" href="verify.css?v=4" />
+  
+  <!-- Lucide Icons - Beautiful & consistent icon toolkit -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="hp">
+  <!-- NAVBAR -->
+  <header class="nav nav-fullscreen">
+    <div class="nav-inner-full">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="Gildia logo" class="nav-logo-img">
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="templates.html" class="nav-link">Templates</a>
+        <a href="editor.html" class="nav-link">Editor</a>
+        <a href="index.html#pricing" class="nav-link">Pricing</a>
+        <a href="verify.html" class="nav-link is-active">Verify</a>
+        <a href="login.html" class="btn btn-outline">Log in</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="verify-main-split">
+    <!-- Left Panel - ID Input -->
+    <section class="verify-panel verify-panel--id" aria-label="Event asset verification">
+      <div class="verify-panel-content">
+        <div class="verify-panel-header">
+          <div class="verify-panel-icon">
+            <i data-lucide="shield-check" class="lucide-icon"></i>
+          </div>
+          <h1 class="verify-panel-title">Verify asset details</h1>
+          <p class="verify-panel-desc">Enter your design ID to confirm event asset authenticity and view linked event data.</p>
+        </div>
+
+        <form class="verify-panel-form" data-verify-form autocomplete="off">
+          <div class="verify-input-group">
+            <label class="verify-label" for="verify-id-input">Asset ID</label>
+            <div class="verify-input-wrapper">
+              <i data-lucide="shield-check" class="verify-input-icon lucide-icon"></i>
+              <input 
+                class="verify-id-input" 
+                id="verify-id-input"
+                data-verify-input 
+                type="text" 
+                placeholder="Enter asset ID (e.g. ABC123)" 
+                autocomplete="off"
+              />
+              <button type="button" class="verify-clear-btn" data-clear-input aria-label="Clear input">
+                <i data-lucide="x" class="lucide-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="verify-error" data-verify-error hidden tabindex="-1">
+            <i data-lucide="alert-circle" class="verify-error-icon lucide-icon"></i>
+            <span data-error-text></span>
+          </div>
+
+          <button class="verify-submit-btn" type="submit" data-submit-btn>
+            <span class="verify-submit-text">Verify Asset</span>
+            <span class="verify-submit-loader" data-submit-loader hidden>
+              <svg class="verify-spinner" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" stroke-dasharray="32" stroke-dashoffset="32">
+                  <animate attributeName="stroke-dasharray" dur="2s" values="0 32;16 16;0 32;0 32" repeatCount="indefinite"/>
+                  <animate attributeName="stroke-dashoffset" dur="2s" values="0;-16;-32;-32" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+              Verifying...
+            </span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Right Panel - File Upload -->
+    <section class="verify-panel verify-panel--upload" aria-label="Event asset file upload">
+      <div class="verify-panel-content">
+        <div class="verify-panel-header">
+          <div class="verify-panel-icon">
+            <i data-lucide="upload" class="lucide-icon"></i>
+          </div>
+          <h1 class="verify-panel-title">Upload event asset</h1>
+          <p class="verify-panel-desc">Drag and drop your event asset file or click to browse. Supports PDF, PNG, and JPG formats.</p>
+        </div>
+
+        <div class="verify-upload-group">
+          <div class="verify-dropzone" data-dropzone tabindex="0" role="button" aria-label="Upload event asset file">
+            <div class="verify-dropzone-content">
+              <div class="verify-dropzone-icon-bg">
+                <i data-lucide="upload" class="lucide-icon verify-dropzone-bgicon"></i>
+              </div>
+              <div class="verify-dropzone-text">
+                <span class="verify-dropzone-main-text">Drop file here or click to upload</span>
+                <span class="verify-dropzone-sub-text">Supports PDF, PNG, JPG (max 10MB)</span>
+              </div>
+            </div>
+            <input 
+              type="file" 
+              data-file-input 
+              accept=".pdf,.png,.jpg,.jpeg" 
+              class="verify-file-input"
+            />
+            <div class="verify-dropzone-overlay"></div>
+          </div>
+          
+          <div class="verify-filename-display" data-filename-display hidden>
+            <i data-lucide="file" class="verify-file-icon lucide-icon"></i>
+            <span class="verify-filename-text" data-filename></span>
+            <button type="button" class="verify-remove-file" data-remove-file aria-label="Remove file">
+              <i data-lucide="x" class="lucide-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result Card - Full Width -->
+    <div class="verify-result-wrapper" data-result-wrapper hidden>
+      <div class="verify-result-card" data-result-card>
+        <div class="verify-result-header" data-result-header>
+          <div class="verify-result-icon-wrapper" data-result-icon>
+            <i data-lucide="check-circle-2" class="verify-result-icon lucide-icon"></i>
+          </div>
+          <h2 class="verify-result-title" data-status-title></h2>
+          <p class="verify-result-message" data-status-message></p>
+        </div>
+
+        <div class="verify-result-details" data-results-container hidden>
+          <div class="verify-details-grid">
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Recipient</span>
+              <span class="verify-detail-value" data-field="recipient">—</span>
+            </div>
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Asset ID</span>
+              <span class="verify-detail-value" data-field="id">—</span>
+            </div>
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Issue Date</span>
+              <span class="verify-detail-value" data-field="date">—</span>
+            </div>
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Issuer</span>
+              <span class="verify-detail-value" data-field="issuer">—</span>
+            </div>
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Template</span>
+              <span class="verify-detail-value" data-field="template">—</span>
+            </div>
+            <div class="verify-detail-item">
+              <span class="verify-detail-label">Status</span>
+              <span class="verify-detail-value verify-detail-status" data-field="status">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="verify-result-actions" data-actions-container hidden>
+          <button class="verify-action-btn verify-action-btn--primary" type="button" data-copy-btn>
+            <i data-lucide="copy" class="lucide-icon"></i>
+            Copy Details
+          </button>
+          <button class="verify-action-btn verify-action-btn--secondary" type="button" data-download-btn>
+            <i data-lucide="download" class="lucide-icon"></i>
+            Download
+          </button>
+        </div>
+
+        <div class="verify-result-message2" data-message-container hidden>
+          <i data-lucide="check-circle" class="verify-message-icon lucide-icon"></i>
+          <span data-message-text></span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="hp-footer" aria-label="Footer">
+    <div class="hp-footer__inner">
+      <div class="hp-footer__top">
+        <img class="hp-footer__logo" src="logo.png" alt="Gildia" />
+      </div>
+      <div class="hp-footer__bottom">
+        <p class="hp-footer__copy">© 2026 Gildia. All rights reserved.</p>
+        <div class="hp-footer__links">
+          <a href="contact-about-privacy.html#contact" class="hp-footer__link">Contact</a>
+          <a href="contact-about-privacy.html#about" class="hp-footer__link">About Us</a>
+          <a href="contact-about-privacy.html#privacy" class="hp-footer__link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="verify-new.js?v=4"></script>
+  <script src="lucide-init.js"></script>
+</body>
+</html>

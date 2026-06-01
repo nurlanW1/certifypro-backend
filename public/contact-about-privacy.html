@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact, About Us & Privacy Policy – Gildia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Gildia, learn about us, and read our privacy policy." />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="home.css?v=22" />
+  
+  <style>
+    /* Contact/About/Privacy Page - Full Screen Design */
+    body.cap-page {
+      background: #ffffff;
+      color: #0f172a;
+      min-height: 100vh;
+    }
+
+    .cap-main {
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .cap-container {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    /* Navigation tabs - full width */
+    .cap-nav {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: rgba(248, 250, 252, 0.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .cap-nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 3vw, 56px);
+      display: flex;
+      gap: 0;
+      width: 100%;
+    }
+
+    .cap-nav-link {
+      padding: 16px 32px;
+      border-radius: 0;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      color: rgba(15,23,42,0.72);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .cap-nav-link:hover {
+      color: rgba(29, 78, 216, 0.95);
+      background: rgba(37, 99, 235, 0.04);
+    }
+
+    .cap-nav-link.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    /* Content sections - full width */
+    .cap-section {
+      background: transparent;
+      border-radius: 0;
+      padding: clamp(64px, 8vh, 120px) clamp(16px, 3vw, 56px);
+      margin: 0;
+      border: none;
+      box-shadow: none;
+      width: 100%;
+      max-width: 100%;
+      transition: none;
+    }
+
+    .cap-section:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .cap-section:not(:last-child) {
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .cap-section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .cap-section h2 {
+      font-size: clamp(36px, 4vw, 56px);
+      margin: 0 0 24px;
+      color: #0b1220;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .cap-section p {
+      font-size: clamp(16px, 1.2vw, 18px);
+      line-height: 1.75;
+      color: rgba(15, 23, 42, 0.72);
+      margin: 0 0 20px;
+    }
+
+    .cap-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .cap-section h3 {
+      font-size: clamp(22px, 2vw, 28px);
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: #0b1220;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .cap-section h3:first-of-type {
+      margin-top: 32px;
+    }
+
+    .cap-section ul {
+      margin: 24px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .cap-section ul li {
+      font-size: clamp(16px, 1.2vw, 18px);
+      line-height: 1.75;
+      color: rgba(15, 23, 42, 0.72);
+      margin-bottom: 16px;
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .cap-section ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .cap-section ul li:last-child {
+      margin-bottom: 0;
+    }
+
+    .cap-section a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .cap-section a:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Contact info - full width grid */
+    .cap-contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+      width: 100%;
+    }
+
+    .cap-contact-card {
+      background: transparent;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .cap-contact-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(37, 99, 235, 0.3);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    }
+
+    .cap-contact-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      background: linear-gradient(180deg, #2563eb, #1d4ed8);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+    }
+
+    .cap-contact-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(15, 23, 42, 0.56);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .cap-contact-value {
+      font-size: 16px;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .cap-contact-value a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .cap-contact-value a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .cap-section {
+        padding: clamp(48px, 6vh, 80px) clamp(16px, 3vw, 40px);
+      }
+
+      .cap-contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cap-nav-link {
+        padding: 14px 20px;
+        font-size: 14px;
+      }
+
+      .cap-section {
+        padding: clamp(40px, 5vh, 64px) clamp(16px, 2vw, 32px);
+      }
+
+      .cap-contact-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .cap-contact-card {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cap-nav-inner {
+        padding: 0 16px;
+      }
+
+      .cap-nav-link {
+        padding: 12px 16px;
+        font-size: 13px;
+      }
+
+      .cap-section {
+        padding: clamp(32px, 4vh, 48px) 16px;
+      }
+
+      .cap-section h2 {
+        font-size: 28px;
+      }
+
+      .cap-section h3 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body class="cap-page">
+  <!-- Header -->
+  <!-- HEADER -->
+  <header class="nav nav-fullscreen">
+    <div class="nav-inner-full">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="Gildia logo" class="nav-logo-img">
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="templates.html" class="nav-link">Templates</a>
+        <a href="editor.html" class="nav-link">Editor</a>
+        <a href="index.html#pricing" class="nav-link">Pricing</a>
+        <a href="verify.html" class="nav-link">Verify</a>
+        <a href="login.html" class="btn btn-outline">Log in</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="cap-main">
+    <div class="cap-container">
+      <!-- Navigation Tabs -->
+      <nav class="cap-nav" aria-label="Page sections">
+        <div class="cap-nav-inner">
+          <a href="#contact" class="cap-nav-link active" data-section="contact">Contact</a>
+          <a href="#about" class="cap-nav-link" data-section="about">About Us</a>
+          <a href="#privacy" class="cap-nav-link" data-section="privacy">Privacy Policy</a>
+        </div>
+      </nav>
+
+      <!-- Contact Section -->
+      <section class="cap-section" id="contact">
+        <div class="cap-section-inner">
+          <h2>Contact</h2>
+          <p>Have questions, feedback, or need support? We're here to help. Reach out to us through any of the following channels:</p>
+          
+          <div class="cap-contact-grid">
+            <div class="cap-contact-card">
+              <div class="cap-contact-icon">✉</div>
+              <div class="cap-contact-label">Email</div>
+              <div class="cap-contact-value">
+                <a href="mailto:support@gildia.com">support@gildia.com</a>
+              </div>
+            </div>
+
+            <div class="cap-contact-card">
+              <div class="cap-contact-icon">📞</div>
+              <div class="cap-contact-label">Phone</div>
+              <div class="cap-contact-value">
+                <a href="tel:+998901234567">+998 90 123 45 67</a>
+              </div>
+            </div>
+
+            <div class="cap-contact-card">
+              <div class="cap-contact-icon">💬</div>
+              <div class="cap-contact-label">Telegram</div>
+              <div class="cap-contact-value">
+                <a href="https://t.me/gildia_support" target="_blank" rel="noopener">@gildia_support</a>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top: 40px; font-size: 15px; color: rgba(15, 23, 42, 0.62);">
+            We typically respond within 24 hours. For urgent matters, please use the phone number or Telegram.
+          </p>
+        </div>
+      </section>
+
+      <!-- About Us Section -->
+      <section class="cap-section" id="about">
+        <div class="cap-section-inner">
+          <h2>About Us</h2>
+          <p>
+            Gildia is an online platform built for conference and event teams who need official graphics fast.
+            We help organizers create invitations, badges, programs, banners, and social media assets with confidence.
+          </p>
+          <p>
+            Our mission is to make event design accessible for government, corporate, and international meeting projects.
+            Whether you're planning a summit, ceremony, or public forum, Gildia provides clean templates and easy tools
+            to launch polished event materials quickly.
+          </p>
+          <p>
+            We focus on three core principles:
+          </p>
+          <ul>
+            <li><strong>Simplicity:</strong> Intuitive design tools for non-designers</li>
+            <li><strong>Quality:</strong> Official visuals that work in print and online</li>
+            <li><strong>Speed:</strong> Ready-made templates for fast event preparation</li>
+          </ul>
+          <p>
+            Join event managers and organizers who trust Gildia for professional conference and meeting graphics.
+            Start designing today and bring your event identity to life.
+          </p>
+        </div>
+      </section>
+
+      <!-- Privacy Policy Section -->
+      <section class="cap-section" id="privacy">
+        <div class="cap-section-inner">
+          <h2>Privacy Policy</h2>
+          <p>
+            Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect 
+            your information when you use Gildia's services.
+          </p>
+
+          <h3>Information We Collect</h3>
+          <p>
+            We only collect information that is necessary to provide our services effectively. This includes:
+          </p>
+          <ul>
+            <li>Account information (email address, name) when you create an account</li>
+            <li>Event asset data that you create and store on our platform</li>
+            <li>Usage data to improve our services and user experience</li>
+          </ul>
+
+          <h3>How We Use Your Information</h3>
+          <p>
+            We use the information we collect to:
+          </p>
+          <ul>
+            <li>Provide and maintain our event graphics creation and management services</li>
+            <li>Process your requests and transactions</li>
+            <li>Send you important updates about our services</li>
+            <li>Improve our platform and develop new features</li>
+            <li>Ensure the security and integrity of our services</li>
+          </ul>
+
+          <h3>Data Security</h3>
+          <p>
+            We implement industry-standard security measures to protect your data. Your information is stored 
+            securely and is never sold to third parties. We use encryption and secure protocols to safeguard 
+            your data during transmission and storage.
+          </p>
+
+          <h3>Cookies</h3>
+          <p>
+            We use cookies only for essential site functionality, such as maintaining your session and 
+            remembering your preferences. We do not use cookies for tracking or advertising purposes.
+          </p>
+
+          <h3>Your Rights</h3>
+          <p>
+            You have the right to:
+          </p>
+          <ul>
+            <li>Access your personal data at any time</li>
+            <li>Request correction of inaccurate information</li>
+            <li>Request deletion of your data</li>
+            <li>Opt out of non-essential communications</li>
+          </ul>
+
+          <h3>Third-Party Services</h3>
+          <p>
+            We do not share your personal information with third parties except as necessary to provide our 
+            services (such as cloud hosting providers) or as required by law. All third-party service providers 
+            are bound by strict confidentiality agreements.
+          </p>
+
+          <h3>Contact Us</h3>
+          <p>
+            If you have any questions about this Privacy Policy or wish to exercise your rights, please contact 
+            us at <a href="mailto:support@gildia.com">support@gildia.com</a>.
+          </p>
+
+          <p style="margin-top: 40px; font-size: 15px; color: rgba(15, 23, 42, 0.62);">
+            <strong>Last updated:</strong> January 2025
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="hp-footer" aria-label="Footer">
+    <div class="hp-footer__inner">
+      <div class="hp-footer__top">
+        <img class="hp-footer__logo" src="logo.png" alt="Gildia" />
+      </div>
+      <div class="hp-footer__bottom">
+        <p class="hp-footer__copy">© 2026 Gildia. All rights reserved.</p>
+        <div class="hp-footer__links">
+          <a href="contact-about-privacy.html#contact" class="hp-footer__link">Contact</a>
+          <a href="contact-about-privacy.html#about" class="hp-footer__link">About Us</a>
+          <a href="contact-about-privacy.html#privacy" class="hp-footer__link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll and active tab management
+    (function() {
+      const navLinks = document.querySelectorAll('.cap-nav-link');
+      const sections = document.querySelectorAll('.cap-section');
+
+      // Update active tab based on scroll position
+      function updateActiveTab() {
+        const scrollPos = window.scrollY + 200;
+        
+        sections.forEach((section) => {
+          const top = section.offsetTop;
+          const bottom = top + section.offsetHeight;
+          const id = section.id;
+          
+          if (scrollPos >= top && scrollPos < bottom) {
+            navLinks.forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      }
+
+      // Smooth scroll on nav link click
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href').substring(1);
+          const targetSection = document.getElementById(targetId);
+          
+          if (targetSection) {
+            const headerOffset = 80;
+            const elementPosition = targetSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+
+            // Update active state
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Update active tab on scroll
+      window.addEventListener('scroll', updateActiveTab, { passive: true });
+      
+      // Update on page load if hash is present
+      if (window.location.hash) {
+        const hash = window.location.hash.substring(1);
+        const targetSection = document.getElementById(hash);
+        if (targetSection) {
+          setTimeout(() => {
+            const headerOffset = 80;
+            const elementPosition = targetSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+            navLinks.forEach(l => {
+              l.classList.remove('active');
+              if (l.getAttribute('href') === `#${hash}`) {
+                l.classList.add('active');
+              }
+            });
+          }, 100);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

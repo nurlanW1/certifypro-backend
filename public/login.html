@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Log in — Gildia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="home.css?v=22" />
+  <link rel="stylesheet" href="auth.css?v=3" />
+  
+  <!-- Lucide Icons - Beautiful & consistent icon toolkit -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <script src="auth.js" defer></script>
+  <script src="lucide-init.js" defer></script>
+</head>
+<body class="ap ap-login" data-theme="light">
+  <!-- HEADER (hidden on login page) -->
+  <header class="nav nav-fullscreen" style="display: none;">
+    <div class="nav-inner-full">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="Gildia logo" class="nav-logo-img">
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="templates.html" class="nav-link">Templates</a>
+        <a href="editor.html" class="nav-link">Editor</a>
+        <a href="index.html#pricing" class="nav-link">Pricing</a>
+        <a href="verify.html" class="nav-link">Verify</a>
+        <a href="login.html" class="btn btn-outline">Log in</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ap-main ap-main--split">
+    <section class="ap-split" aria-label="Login page">
+      <div class="ap-pane ap-pane--form">
+        <div class="ap-form-wrap">
+          <a class="ap-brand" href="index.html" aria-label="Back to home">
+            <img class="ap-brand__logo" src="logo.png" alt="Gildia logo" />
+          </a>
+          <h1 class="ap-title">Log in</h1>
+          <p class="ap-subtitle">Use your account to access event assets, templates, and designs.</p>
+          <form class="ap-form" method="post" action="#" aria-label="Login form">
+            <div class="ap-social-row">
+              <button type="button" class="ap-social-btn ap-social-btn--google" aria-label="Continue with Google">
+                <span class="ap-social-ico">
+                  <img src="google-color-svgrepo-com.svg" alt="Google" />
+                </span>
+                <span>Google</span>
+              </button>
+              <button type="button" class="ap-social-btn ap-social-btn--facebook" aria-label="Continue with Facebook">
+                <span class="ap-social-ico">
+                  <img src="facebook-svgrepo-com.svg" alt="Facebook" />
+                </span>
+                <span>Facebook</span>
+              </button>
+            </div>
+            <div class="ap-divider">
+              <span>or continue with email</span>
+            </div>
+            <div class="ap-field">
+              <input class="ap-input" id="login-email" name="email" type="email" autocomplete="email" required placeholder=" " />
+              <label class="ap-label" for="login-email">Email</label>
+            </div>
+            <div class="ap-field">
+              <input class="ap-input" id="login-password" name="password" type="password" autocomplete="current-password" required placeholder=" " />
+              <label class="ap-label" for="login-password">Password</label>
+            </div>
+            <button class="ap-btn ap-btn--primary" type="submit">Log in</button>
+            <div class="ap-foot">
+              <span>Don't have an account?</span>
+              <a class="ap-link" href="register.html">Create one</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <aside class="ap-pane ap-pane--visual" aria-label="Visual">
+        <div class="ap-visual ap-visual--dark" aria-hidden="true"></div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="hp-footer" aria-label="Footer">
+    <div class="hp-footer__inner">
+      <div class="hp-footer__top">
+        <img class="hp-footer__logo" src="logo.png" alt="Gildia" />
+      </div>
+      <div class="hp-footer__bottom">
+        <p class="hp-footer__copy">© 2026 Gildia. All rights reserved.</p>
+        <div class="hp-footer__links">
+          <a href="contact-about-privacy.html#contact" class="hp-footer__link">Contact</a>
+          <a href="contact-about-privacy.html#about" class="hp-footer__link">About Us</a>
+          <a href="contact-about-privacy.html#privacy" class="hp-footer__link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

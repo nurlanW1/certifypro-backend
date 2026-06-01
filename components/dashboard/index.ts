@@ -1,0 +1,5 @@
+export { WelcomeSection } from '@/components/dashboard/WelcomeSection'
+export { StatsRow } from '@/components/dashboard/StatsRow'
+export { RecentEvents } from '@/components/dashboard/RecentEvents'
+export { QuickActions } from '@/components/dashboard/QuickActions'
+export { RecentDesigns } from '@/components/dashboard/RecentDesigns'

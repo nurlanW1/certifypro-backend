@@ -1,0 +1,10 @@
+{
+  "name": "Gildia.uz",
+  "short_name": "Gildia",
+  "description": "Konferensiya va tadbir materiallari avtomatlashtirish platformasi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "lang": "uz"
+}
