@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
+const serverActionOrigins = ['localhost:3000']
+if (process.env.VERCEL_URL) {
+  serverActionOrigins.push(process.env.VERCEL_URL)
+}
+if (process.env.NEXT_PUBLIC_APP_URL) {
+  try {
+    serverActionOrigins.push(new URL(process.env.NEXT_PUBLIC_APP_URL).host)
+  } catch {
+    /* ignore invalid URL */
+  }
+}
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -8,7 +20,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    serverActions: { allowedOrigins: ['localhost:3000'] },
+    serverActions: { allowedOrigins: serverActionOrigins },
   },
 }
 module.exports = nextConfig
