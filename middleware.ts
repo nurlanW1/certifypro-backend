@@ -1,17 +1,10 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
-const isPublicRoute = createRouteMatcher([
-  '/',
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/api/export(.*)',
-])
-
-export default clerkMiddleware((auth, request) => {
-  if (!isPublicRoute(request)) {
-    auth().protect()
-  }
-})
+/** Edge middleware — Clerk auth is handled in dashboard layout (server). */
+export function middleware(_request: NextRequest) {
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [

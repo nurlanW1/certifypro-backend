@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ClerkProvider } from '@clerk/nextjs'
 import { AppProviders } from '@/components/AppProviders'
+import { isClerkConfigured } from '@/lib/clerk-config'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -12,18 +12,23 @@ export const metadata: Metadata = {
     'Konferentsiya, seminar, forum va korporativ tadbirlar uchun dizayn materiallarini avtomatik generatsiya qilish.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="uz">
-        <body className={inter.className}>
-          <AppProviders>{children}</AppProviders>
-        </body>
-      </html>
-    </ClerkProvider>
+  const content = (
+    <html lang="uz">
+      <body className={inter.className}>
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
   )
+
+  if (!isClerkConfigured()) {
+    return content
+  }
+
+  const { ClerkProvider } = await import('@clerk/nextjs')
+  return <ClerkProvider>{content}</ClerkProvider>
 }

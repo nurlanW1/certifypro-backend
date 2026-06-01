@@ -1,11 +1,14 @@
 import Link from 'next/link'
-import { SignInButton, SignUpButton } from '@clerk/nextjs'
-import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
+import { AuthButtons } from '@/components/auth/AuthButtons'
+import { isClerkConfigured } from '@/lib/clerk-config'
 
 export default async function HomePage() {
-  const { userId } = auth()
-  if (userId) redirect('/dashboard')
+  if (isClerkConfigured()) {
+    const { auth } = await import('@clerk/nextjs/server')
+    const { userId } = auth()
+    if (userId) redirect('/dashboard')
+  }
 
   return (
     <div className="min-h-screen bg-surface-secondary">
@@ -17,18 +20,19 @@ export default async function HomePage() {
           <span className="font-semibold text-text-primary">Gildia</span>
         </div>
         <div className="flex items-center gap-3">
-          <SignInButton mode="modal">
-            <button type="button" className="gildia-btn-secondary px-4 py-2 text-sm">
-              Kirish
-            </button>
-          </SignInButton>
-          <SignUpButton mode="modal">
-            <button type="button" className="gildia-btn-primary px-4 py-2 text-sm">
-              Bepul boshlash
-            </button>
-          </SignUpButton>
+          <AuthButtons />
         </div>
       </nav>
+
+      {!isClerkConfigured() && (
+        <div className="border-b border-amber-200 bg-amber-50 px-6 py-2 text-center text-sm text-amber-900">
+          Dev rejim: Clerk kalitlari yo&apos;q —{' '}
+          <Link href="/dashboard" className="font-medium underline">
+            Dashboard
+          </Link>
+          ga o&apos;tishingiz mumkin.
+        </div>
+      )}
 
       <section className="mx-auto max-w-4xl px-6 py-24 text-center">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brand-50 px-4 py-1.5 text-sm font-medium text-brand-600">
@@ -44,11 +48,7 @@ export default async function HomePage() {
           boshqa 20+ dizayn materiali avtomatik tayyorlanadi.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <SignUpButton mode="modal">
-            <button type="button" className="gildia-btn-primary px-8 py-3 text-base">
-              Bepul boshlash →
-            </button>
-          </SignUpButton>
+          <AuthButtons size="hero" />
           <Link href="/templates" className="gildia-btn-secondary px-8 py-3 text-base">
             Shablonlarni ko&apos;rish
           </Link>

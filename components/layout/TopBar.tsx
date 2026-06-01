@@ -1,7 +1,7 @@
 'use client'
 
 import { Menu, Bell, Search } from 'lucide-react'
-import { UserButton } from '@clerk/nextjs'
+import { UserMenu } from '@/components/auth/UserMenu'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
@@ -65,7 +65,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         >
           <Bell className="h-5 w-5" />
         </button>
-        <UserButton afterSignOutUrl="/" />
+        <UserMenu />
       </div>
     </header>
   )

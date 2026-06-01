@@ -1,7 +1,10 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
+import { isClerkConfigured } from '@/lib/clerk-config'
 
 export async function getOrCreateDbUser() {
+  if (!isClerkConfigured()) return null
+
   const { userId } = auth()
   if (!userId) return null
 
