@@ -1,100 +1,57 @@
 # Gildia — Deploy (Vercel + Railway)
 
-Yangi platforma **repo root** dagi Next.js 14 ilovasi (`app/`, `components/`).  
-Eski sayt ikkita joydan chiqishi mumkin — ikkalasini ham to‘g‘rilang.
+## gildia.uz da eski sayt chiqsa
 
-## Muammo sabablari
+Eski dizayn (`Gildia.uz`, `Legacy + Studio editor`) — **frontend-legacy** (Next 16).  
+Yangi dizayn (`Gildia`, dashboard, wizard) — **frontend/** (Next 14).
 
-| Joy | Nima chiqadi | Sabab |
-|-----|----------------|-------|
-| **Vercel** `Root Directory = frontend` (eski) | Next 16 + Prisma xato | Endi `frontend/` faqat deploy ko‘prigi — root dan build qiladi |
-| **Vercel** avtomatik deploy yo‘q | Git ulanishi uzilgan yoki noto‘g‘ri branch | Dashboard sozlamasi |
-| **Railway** (backend) + domen shu yerga | Eski HTML (`public/`) | `backend/server.js` legacy static serve qiladi |
-| **gildia.uz** DNS | Railway yoki eski Vercel project | DNS noto‘g‘ri target |
-
-GitHub repoda yangi kod: [nurlanW1/certifypro-backend](https://github.com/nurlanW1/certifypro-backend) — branch **`main`**.
+| Tekshirish | To‘g‘ri |
+|------------|--------|
+| Vercel → Settings → **Root Directory** | **`frontend`** (frontend-legacy emas!) |
+| Production deployment | Oxirgi **muvaffaqiyatli** build (Redeploy + Clear cache) |
+| Domains | `gildia.uz` shu loyihada |
+| DNS | Vercel ga (Railway emas) |
 
 ---
 
-## 1. Vercel (asosiy sayt — yangi Gildia)
+## 1. Vercel
 
-1. [Vercel Dashboard](https://vercel.com) → loyiha (masalan `certifypro-puce` yoki `gildia`)
-2. **Settings → General → Root Directory**
-   - **Tavsiya:** bo‘sh / **`.`** (repository root)
-   - Agar **`frontend`** qolsa ham ishlaydi — `frontend/vercel.json` root dagi yangi ilovani build qiladi
-3. **Settings → Git**
-   - Repository: `nurlanW1/certifypro-backend`
-   - Production Branch: **`main`**
-   - **Auto Deploy**: yoqilgan
-   - Agar deploy bo‘lmasa: **Disconnect** → qayta **Connect** qiling
-4. **Settings → Environment Variables** (Production + Preview):
-
+1. [Vercel Dashboard](https://vercel.com) → loyiha
+2. **Root Directory:** `frontend`
+3. **Git:** `nurlanW1/certifypro-backend`, branch `main`
+4. **Environment Variables:**
    ```
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_... yoki pk_test_...
-   CLERK_SECRET_KEY=sk_live_... yoki sk_test_...
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+   CLERK_SECRET_KEY=sk_...
    DATABASE_URL=postgresql://...
    NEXT_PUBLIC_APP_URL=https://gildia.uz
    ```
+5. **Deployments → Redeploy** → **Clear build cache**
 
-5. **Deployments → Redeploy** → **Clear build cache** bilan qayta build
-6. **Settings → Domains** → `gildia.uz` shu Vercel loyihasiga ulangan bo‘lsin
+Build logida: `Next.js 14.2.5`, route `/dashboard`, `/events/new`.
 
-Build buyruqi (root `vercel.json`):
+Agar Root Directory **bo‘sh (root)** bo‘lsa — root `vercel.json` `cd frontend && ...` ishlatadi.
+
+---
+
+## 2. Railway (faqat API)
+
+- **Root Directory:** `backend`
+- **gildia.uz** DNS Railway ga bo‘lmasin (eski `public/` HTML chiqadi)
+
+---
+
+## 3. Lokal
 
 ```bash
-npx prisma generate && npm run build
-```
-
----
-
-## 2. Railway (faqat API — eski frontend emas)
-
-Railway **faqat backend API** uchun. Sayt UI Vercelda.
-
-1. Railway → service → **Root Directory**: `backend`
-2. O‘zgaruvchilar:
-   ```
-   FRONTEND_URL=https://gildia.uz
-   CORS_ORIGIN=https://gildia.uz
-   ```
-3. **gildia.uz** DNS Railway URL ga emas, **Vercel** ga yo‘naltirilsin
-
-Agar domen to‘g‘ridan-to‘g‘ri Railway ga ulangan bo‘lsa, foydalanuvchi `public/` dagi **eski HTML** ni ko‘radi.
-
----
-
-## 3. DNS (gildia.uz)
-
-| Type | Name | Qiymat |
-|------|------|--------|
-| A / CNAME | `@` | Vercel (dashboard ko‘rsatadi) |
-| CNAME | `www` | Vercel yoki redirect |
-
-Railway URL faqat `api.gildia.uz` kabi subdomain uchun ishlatiladi (ixtiyoriy).
-
----
-
-## 4. Lokal tekshiruv
-
-```bash
-cd D:\Gildia
-rm -rf .next
+cd frontend
 npm install
-npm run build
+cp ../.env.local.example .env.local
 npm run dev
 ```
 
-http://localhost:3000
+Yoki repo root: `npm run dev`
 
 ---
 
-## 5. Qaysi papkani deploy qilmaslik kerak
-
-| Papka | Holat |
-|-------|--------|
-| `frontend/` | Vercel deploy ko‘prigi (Root Directory = frontend bo‘lsa) |
-| `frontend-legacy/` | Eski Next 16 loyiha — ishlatilmaydi |
-| `public/` | Legacy HTML — faqat backend orqali, asosiy UI emas |
-| `certifypro-backend/` | Keraksiz nested qoldiq — o‘chirilgan |
-
-Yangi UI: root `app/`, `components/`, `package.json` (`name: gildia`).
+Repo: [github.com/nurlanW1/certifypro-backend](https://github.com/nurlanW1/certifypro-backend)

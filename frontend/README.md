@@ -1,12 +1,14 @@
-# Vercel deploy bridge
+# Gildia — Next.js 14 (production)
 
-Vercel loyihasida **Root Directory = `frontend`** bo‘lsa ham, build **repository root** dagi yangi Gildia (Next.js 14) dan o‘tadi.
+Bu papka **gildia.uz** uchun asosiy ilova.
 
-- `vercel.json` — `cd .. && npm run build`
-- Asosiy kod: `../app`, `../components`, `../prisma`
+Vercel: **Root Directory = `frontend`**
 
-Eski Next 16 loyiha: [`../frontend-legacy/`](../frontend-legacy/)
+```bash
+npm install
+npm run dev
+```
 
-Lokal ish: repo root da `npm run dev` (bu papkada emas).
+Lokal: http://localhost:3000
 
-[../DEPLOY.md](../DEPLOY.md)
+Eski sayt (`Legacy + Studio editor`): [`../frontend-legacy/`](../frontend-legacy/) — deploy qilinmaydi.

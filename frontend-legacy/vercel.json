@@ -1,0 +1,3 @@
+{
+  "buildCommand": "echo 'ERROR: Vercel Root Directory must be frontend (new app), not frontend-legacy. See DEPLOY.md' && exit 1"
+}
