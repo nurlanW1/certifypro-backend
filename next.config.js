@@ -11,7 +11,12 @@ if (process.env.NEXT_PUBLIC_APP_URL) {
   }
 }
 
+/** Vercel Root Directory = frontend: build output must live in frontend/.next */
+const distDir =
+  process.env.VERCEL_FRONTEND_BRIDGE === '1' ? 'frontend/.next' : '.next'
+
 const nextConfig = {
+  distDir,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.supabase.co' },
