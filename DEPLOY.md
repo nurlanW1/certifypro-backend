@@ -7,7 +7,7 @@ Eski sayt ikkita joydan chiqishi mumkin — ikkalasini ham to‘g‘rilang.
 
 | Joy | Nima chiqadi | Sabab |
 |-----|----------------|-------|
-| **Vercel** `Root Directory = frontend` | Eski Next 16 / boshqa UI | Noto‘g‘ri papka build qilinadi |
+| **Vercel** `Root Directory = frontend` (eski) | Next 16 + Prisma xato | Endi `frontend/` faqat deploy ko‘prigi — root dan build qiladi |
 | **Vercel** avtomatik deploy yo‘q | Git ulanishi uzilgan yoki noto‘g‘ri branch | Dashboard sozlamasi |
 | **Railway** (backend) + domen shu yerga | Eski HTML (`public/`) | `backend/server.js` legacy static serve qiladi |
 | **gildia.uz** DNS | Railway yoki eski Vercel project | DNS noto‘g‘ri target |
@@ -20,8 +20,8 @@ GitHub repoda yangi kod: [nurlanW1/certifypro-backend](https://github.com/nurlan
 
 1. [Vercel Dashboard](https://vercel.com) → loyiha (masalan `certifypro-puce` yoki `gildia`)
 2. **Settings → General → Root Directory**
-   - **`frontend` emas**
-   - Bo‘sh qoldiring yoki **`.`** (repository root)
+   - **Tavsiya:** bo‘sh / **`.`** (repository root)
+   - Agar **`frontend`** qolsa ham ishlaydi — `frontend/vercel.json` root dagi yangi ilovani build qiladi
 3. **Settings → Git**
    - Repository: `nurlanW1/certifypro-backend`
    - Production Branch: **`main`**
@@ -92,7 +92,8 @@ http://localhost:3000
 
 | Papka | Holat |
 |-------|--------|
-| `frontend/` | Eski alohida Next loyiha — **production deploy qilmang** |
+| `frontend/` | Vercel deploy ko‘prigi (Root Directory = frontend bo‘lsa) |
+| `frontend-legacy/` | Eski Next 16 loyiha — ishlatilmaydi |
 | `public/` | Legacy HTML — faqat backend orqali, asosiy UI emas |
 | `certifypro-backend/` | Keraksiz nested qoldiq — o‘chirilgan |
 

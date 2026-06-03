@@ -1,23 +1,7 @@
-# Gildia — Tadbir dizayn platformasi
+# Gildia
 
-Konferentsiya va tadbirlar uchun materiallar — **Next.js 14** + Clerk + Prisma.
+Tadbir dizayn platformasi (Next.js 14). Deploy: [DEPLOY.md](./DEPLOY.md)
 
-**Deploy:** [DEPLOY.md](./DEPLOY.md) | **GitHub:** [certifypro-backend](https://github.com/nurlanW1/certifypro-backend)
-
-## Lokal
-
-```bash
-npm install
-cp .env.local.example .env.local
-npm run dev
-```
-
-http://localhost:3000
-
-## Muhim
-
-- **Vercel Root Directory:** `.` (root) — `frontend` emas
-- **Railway:** faqat `backend/` — domen Railway ga bo'lsa eski `public/` HTML chiqadi
-- Yangi UI: `app/`, `components/` (repo root)
-
-Batafsil: [DEPLOY.md](./DEPLOY.md)
+- Lokal: `npm run dev` → http://localhost:3000
+- GitHub: https://github.com/nurlanW1/certifypro-backend
+- Vercel Root `frontend` bo'lsa ham yangi build `frontend/vercel.json` orqali root dan o'tadi

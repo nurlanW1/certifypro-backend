@@ -1,10 +1,12 @@
-# ⚠️ Eski frontend — production deploy qilmang
+# Vercel deploy bridge
 
-Bu papka alohida Next.js 16 loyihasi (migratsiya davri).  
-**Asosiy Gildia** endi **repository root** da (`/app`, `/components`).
+Vercel loyihasida **Root Directory = `frontend`** bo‘lsa ham, build **repository root** dagi yangi Gildia (Next.js 14) dan o‘tadi.
 
-Vercel **Root Directory** ni `frontend` qilib qo‘ygan bo‘lsa, saytda eski versiya chiqadi.
+- `vercel.json` — `cd .. && npm run build`
+- Asosiy kod: `../app`, `../components`, `../prisma`
 
-**To‘g‘ri sozlama:** Vercel → Settings → Root Directory → **bo‘sh / `.`**
+Eski Next 16 loyiha: [`../frontend-legacy/`](../frontend-legacy/)
+
+Lokal ish: repo root da `npm run dev` (bu papkada emas).
 
 [../DEPLOY.md](../DEPLOY.md)
