@@ -1,0 +1,12 @@
+# Railway — repo root dan Next.js (frontend/) deploy
+# Dashboard: Root Directory bo'sh yoki "/" — build avval frontend deps o'rnatadi.
+[build]
+builder = "nixpacks"
+buildCommand = "npm ci --prefix frontend && npm run build --prefix frontend"
+
+[deploy]
+startCommand = "npm run start --prefix frontend"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 120
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5

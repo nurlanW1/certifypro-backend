@@ -34,7 +34,21 @@ Agar Root Directory **bo‘sh (root)** bo‘lsa — root `vercel.json` `cd front
 
 ---
 
-## 2. Railway (faqat API)
+## 2. Railway
+
+### Next.js (`frontend/`) — repo root dan deploy
+
+Agar Railway **repo root** (`certifypro-backend`) dan build qilsa, `next: not found` xatosini oldini olish uchun root `package.json` avval `npm ci --prefix frontend` ishga tushiradi (`railway.toml` ham shu buyruqni ishlatadi).
+
+| Sozlama | Qiymat |
+|---------|--------|
+| Root Directory | `/` (root) yoki **`frontend`** (tavsiya) |
+| Build | `npm ci --prefix frontend && npm run build --prefix frontend` |
+| Start | `npm run start --prefix frontend` |
+
+**Tavsiya:** Root Directory = **`frontend`** — oddiyroq (`npm run build` to‘g‘ridan-to‘g‘ri ishlaydi).
+
+### Eski Express API (`backend/`)
 
 - **Root Directory:** `backend`
 - **gildia.uz** DNS Railway ga bo‘lmasin (eski `public/` HTML chiqadi)

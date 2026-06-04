@@ -4,11 +4,16 @@
   "private": true,
   "description": "Gildia monorepo — Next.js app lives in frontend/",
   "scripts": {
-    "dev": "npm run dev --prefix frontend",
+    "install:frontend": "npm ci --prefix frontend",
+    "prebuild": "npm run install:frontend",
     "build": "npm run build --prefix frontend",
     "start": "npm run start --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
     "lint": "npm run lint --prefix frontend",
     "db:push": "npm run db:push --prefix frontend",
     "db:studio": "npm run db:studio --prefix frontend"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
