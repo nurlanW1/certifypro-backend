@@ -39,13 +39,43 @@ export interface EventFormData {
   accentColor: string
   logoUrl?: string
   participantCount?: number
+  brandingKit?: BrandingKitId
+}
+
+export type MaterialStatus = 'PENDING' | 'IN_PROGRESS' | 'READY'
+
+export type BrandingKitId = 'CLASSIC' | 'MODERN' | 'ACADEMIC' | 'CORPORATE'
+
+export const BRANDING_KIT_LABELS: Record<BrandingKitId, string> = {
+  CLASSIC: 'Klassik',
+  MODERN: 'Zamonaviy',
+  ACADEMIC: 'Ilmiy',
+  CORPORATE: 'Korporativ',
+}
+
+export interface EventMaterial {
+  id: string
+  category: MaterialCategory
+  status: MaterialStatus
+  designId?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Event extends EventFormData {
   id: string
   userId: string
+  brandingKit?: BrandingKitId
   createdAt: string
   updatedAt: string
+  materialCount?: number
+  materials?: EventMaterial[]
+}
+
+export const MATERIAL_STATUS_LABELS: Record<MaterialStatus, string> = {
+  PENDING: 'Kutilmoqda',
+  IN_PROGRESS: 'Jarayonda',
+  READY: 'Tayyor',
 }
 
 export const EVENT_TYPE_LABELS: Record<EventType, string> = {

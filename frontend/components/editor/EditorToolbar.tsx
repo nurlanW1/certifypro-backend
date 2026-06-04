@@ -46,7 +46,12 @@ export function EditorToolbar() {
     pushHistory,
     layersOpen,
     setLayersOpen,
+    assetMode,
   } = useEditorStore()
+
+  const visibleTools = assetMode
+    ? TOOLS.filter((t) => ['select', 'text', 'image'].includes(t.id))
+    : TOOLS
 
   const runTool = (tool: ActiveTool) => {
     setActiveTool(tool)
@@ -95,7 +100,7 @@ export function EditorToolbar() {
     <Tooltip.Provider delayDuration={300}>
       <aside className="flex w-[52px] shrink-0 flex-col items-center border-r border-border bg-surface py-2">
         <div className="flex flex-col gap-1">
-          {TOOLS.map(({ id, icon: Icon, label, shortcut }) => (
+          {visibleTools.map(({ id, icon: Icon, label, shortcut }) => (
             <Tooltip.Root key={id}>
               <Tooltip.Trigger asChild>
                 <button

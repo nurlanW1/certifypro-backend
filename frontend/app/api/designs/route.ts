@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { getOrCreateDbUser } from '@/lib/auth'
+import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import type { Design, DesignCanvasData } from '@/types/design'
 
@@ -46,25 +47,26 @@ export async function GET(request: NextRequest) {
         where: { userId: user.id },
         orderBy: { updatedAt: 'desc' },
         take: 8,
+        include: { event: { select: { name: true } } },
       })
 
-      if (designs.length > 0) {
-        return NextResponse.json({
-          designs: designs.map((d) => ({
-            id: d.id,
-            name: d.name,
-            eventName: 'Tadbir',
-            templateId: d.templateId,
-            updatedAt: d.updatedAt.toISOString(),
-          })),
-        })
+      return NextResponse.json({
+        designs: designs.map((d) => ({
+          id: d.id,
+          name: d.name,
+          eventName: d.event?.name ?? 'Shaxsiy dizayn',
+          templateId: d.templateId,
+          updatedAt: d.updatedAt.toISOString(),
+        })),
+      })
+    } catch (error) {
+      console.error('Designs list error:', error)
+      if (allowDevMocks()) {
+        const { MOCK_RECENT_DESIGNS } = await import('@/lib/mock-designs')
+        return NextResponse.json({ designs: MOCK_RECENT_DESIGNS })
       }
-    } catch {
-      // fall through
+      return NextResponse.json({ error: 'Server error' }, { status: 500 })
     }
-
-    const { MOCK_RECENT_DESIGNS } = await import('@/lib/mock-designs')
-    return NextResponse.json({ designs: MOCK_RECENT_DESIGNS })
   }
 
   try {
@@ -82,24 +84,9 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ design: mapDesign(design) })
-  } catch {
-    return NextResponse.json({
-      design: {
-        id,
-        userId: 'local',
-        templateId: 'tpl-cert-1',
-        name: 'Nomsiz dizayn',
-        canvasData: {
-          version: '1.0',
-          width: 800,
-          height: 600,
-          objects: [],
-          background: '#FFFFFF',
-        },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } satisfies Design,
-    })
+  } catch (error) {
+    console.error('Design get error:', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
 
@@ -118,24 +105,33 @@ export async function PUT(request: Request) {
       eventId?: string
     }
 
-    const design = await prisma.design.upsert({
-      where: { id: body.id },
-      create: {
-        id: body.id,
-        userId: user.id,
-        templateId: body.templateId ?? 'tpl-cert-1',
-        eventId: body.eventId ?? null,
-        name: body.name,
-        canvasData: toJsonValue(body.canvasData),
-      },
-      update: {
-        name: body.name,
-        canvasData: toJsonValue(body.canvasData),
-      },
+    const existing = await prisma.design.findFirst({
+      where: { id: body.id, userId: user.id },
     })
 
+    const design = existing
+      ? await prisma.design.update({
+          where: { id: body.id },
+          data: {
+            name: body.name,
+            canvasData: toJsonValue(body.canvasData),
+            ...(body.eventId !== undefined ? { eventId: body.eventId } : {}),
+          },
+        })
+      : await prisma.design.create({
+          data: {
+            id: body.id,
+            userId: user.id,
+            templateId: body.templateId ?? 'tpl-cert-1',
+            eventId: body.eventId ?? null,
+            name: body.name,
+            canvasData: toJsonValue(body.canvasData),
+          },
+        })
+
     return NextResponse.json({ design: mapDesign(design) })
-  } catch {
-    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('Design put error:', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

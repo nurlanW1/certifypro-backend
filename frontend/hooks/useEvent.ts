@@ -1,60 +1,32 @@
 'use client'
 
-import { useCallback, useState } from 'react'
-import toast from 'react-hot-toast'
-import { useEventStore } from '@/store/eventStore'
-import type { Event, EventFormData, MaterialCategory } from '@/types/event'
+import { useEffect, useState } from 'react'
+import type { Event } from '@/types/event'
 
-export function useEvent() {
-  const store = useEventStore()
+export function useEvent(eventId: string) {
+  const [event, setEvent] = useState<Event | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchEvents = useCallback(async () => {
-    store.setLoading(true)
+  useEffect(() => {
+    if (!eventId) return
+    setLoading(true)
     setError(null)
-    try {
-      const res = await fetch('/api/events')
-      if (!res.ok) throw new Error('Tadbirlarni yuklab bo‘lmadi')
-      const data = (await res.json()) as { events: Event[] }
-      store.setEvents(data.events)
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Xatolik yuz berdi'
-      setError(message)
-      toast.error(message)
-    } finally {
-      store.setLoading(false)
-    }
-  }, [store])
+    void fetch(`/api/events/${eventId}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = (await res.json().catch(() => ({}))) as { error?: string }
+          throw new Error(body.error ?? 'Tadbir yuklanmadi')
+        }
+        return res.json() as Promise<{ event: Event }>
+      })
+      .then((data) => setEvent(data.event))
+      .catch((e: unknown) => {
+        setEvent(null)
+        setError(e instanceof Error ? e.message : 'Xatolik')
+      })
+      .finally(() => setLoading(false))
+  }, [eventId])
 
-  const createEvent = useCallback(
-    async (form: EventFormData, selectedMaterials?: MaterialCategory[]) => {
-      store.setLoading(true)
-      setError(null)
-      try {
-        const res = await fetch('/api/events', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            formData: form,
-            selectedMaterials: selectedMaterials ?? store.selectedMaterials,
-          }),
-        })
-        if (!res.ok) throw new Error('Tadbir yaratib bo‘lmadi')
-        const data = (await res.json()) as { event: Event }
-        store.addEvent(data.event)
-        toast.success('Tadbir yaratildi')
-        return data.event
-      } catch (e) {
-        const message = e instanceof Error ? e.message : 'Xatolik yuz berdi'
-        setError(message)
-        toast.error(message)
-        return null
-      } finally {
-        store.setLoading(false)
-      }
-    },
-    [store]
-  )
-
-  return { ...store, error, fetchEvents, createEvent }
+  return { event, loading, error }
 }

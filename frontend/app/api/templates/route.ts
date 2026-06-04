@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import { MOCK_TEMPLATES } from '@/lib/mock-templates'
 import { filterTemplates, findMockTemplate } from '@/lib/filter-templates'
 import type { Template } from '@/types/template'
 import type { MaterialCategory, EventType } from '@/types/event'
 import type { TemplateSortOption } from '@/lib/filter-templates'
+import { resolveTemplatePreviewUrl } from '@/lib/templates/preview-url'
 
 function mapTemplate(record: {
   id: string
@@ -26,7 +28,7 @@ function mapTemplate(record: {
     category: record.category,
     eventType: record.eventType,
     isPremium: record.isPremium,
-    previewUrl: record.previewUrl,
+    previewUrl: resolveTemplatePreviewUrl(record.id, record.previewUrl),
     tags: record.tags,
     createdAt: record.createdAt.toISOString(),
   }
@@ -42,9 +44,12 @@ export async function GET(req: NextRequest) {
       if (template) {
         return NextResponse.json({ template: mapTemplate(template) })
       }
-    } catch {
-      const mock = findMockTemplate(id)
-      if (mock) return NextResponse.json({ template: mock })
+    } catch (error) {
+      console.error('Template get error:', error)
+      if (allowDevMocks()) {
+        const mock = findMockTemplate(id)
+        if (mock) return NextResponse.json({ template: mock })
+      }
     }
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
@@ -73,8 +78,15 @@ export async function GET(req: NextRequest) {
       )
       return NextResponse.json({ templates: filtered, total: filtered.length })
     }
-  } catch {
-    // fall through to mock
+  } catch (error) {
+    console.error('Templates list error:', error)
+    if (!allowDevMocks()) {
+      return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    }
+  }
+
+  if (!allowDevMocks()) {
+    return NextResponse.json({ templates: [], total: 0 })
   }
 
   const templates = filterTemplates(MOCK_TEMPLATES, {

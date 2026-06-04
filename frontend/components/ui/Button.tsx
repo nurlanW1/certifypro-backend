@@ -16,9 +16,9 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: 'gildia-btn-primary',
   secondary: 'gildia-btn-secondary',
   ghost:
-    'text-text-secondary hover:bg-brand-50 rounded-lg px-4 py-2.5 text-sm font-medium transition-all',
+    'rounded-sm px-4 py-2.5 text-sm font-semibold text-text-secondary transition-all hover:bg-surface-tertiary',
   danger:
-    'bg-danger text-text-inverse rounded-lg px-4 py-2.5 text-sm font-medium hover:opacity-90 transition-all',
+    'rounded-sm border-2 border-danger-dark bg-danger px-4 py-2.5 text-sm font-semibold text-text-inverse shadow-brutal-sm transition-all hover:opacity-90',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

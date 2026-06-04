@@ -56,9 +56,9 @@ export function RecentDesigns() {
               href={`/editor/${design.id}`}
               className="group overflow-hidden rounded-xl border border-border transition-all duration-150 hover:border-brand-200 hover:shadow-md"
             >
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-brand-50 to-brand-100">
+              <div className="relative aspect-[4/3] bg-gradient-to-br from-accent-100 to-brand-100">
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-150 group-hover:opacity-100">
-                  <span className="rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-medium text-text-inverse">
+                  <span className="rounded-sm border-2 border-text-primary bg-accent-500 px-3 py-1.5 text-xs font-bold text-text-primary">
                     Tahrirlash
                   </span>
                 </div>

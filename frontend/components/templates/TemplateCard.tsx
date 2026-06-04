@@ -12,9 +12,10 @@ interface TemplateCardProps {
   template: MockTemplate
   onSelect: (id: string) => void
   onPreview: (id: string) => void
+  isSelecting?: boolean
 }
 
-export function TemplateCard({ template, onSelect, onPreview }: TemplateCardProps) {
+export function TemplateCard({ template, onSelect, onPreview, isSelecting }: TemplateCardProps) {
   const [imageError, setImageError] = useState(false)
   const showPlaceholder = !template.previewUrl || imageError
   const categoryLabel =
@@ -30,7 +31,7 @@ export function TemplateCard({ template, onSelect, onPreview }: TemplateCardProp
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-secondary">
         {showPlaceholder ? (
           <div
-            className="absolute inset-0 bg-gradient-to-br from-brand-50 to-brand-100"
+            className="absolute inset-0 bg-gradient-to-br from-surface-secondary to-accent-100"
             aria-hidden
           />
         ) : (
@@ -81,11 +82,12 @@ export function TemplateCard({ template, onSelect, onPreview }: TemplateCardProp
           </button>
           <button
             type="button"
+            disabled={isSelecting}
             onClick={() => onSelect(template.id)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-2 text-xs font-medium text-text-inverse shadow-sm transition-all duration-150 hover:bg-brand-800"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-2 text-xs font-medium text-text-inverse shadow-sm transition-all duration-150 hover:bg-brand-800 disabled:opacity-60"
           >
             <Zap className="h-4 w-4" />
-            Tanlash
+            {isSelecting ? '...' : 'Tanlash'}
           </button>
         </div>
       </div>

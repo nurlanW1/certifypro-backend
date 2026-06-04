@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import type { Event, EventFormData, MaterialCategory } from '@/types/event'
+import type { BrandingKitId, Event, EventFormData, MaterialCategory } from '@/types/event'
 import {
   ALL_WIZARD_MATERIAL_CATEGORIES,
   DEFAULT_SELECTED_MATERIALS,
@@ -38,6 +38,9 @@ interface EventStore {
   selectAllMaterials: () => void
   clearMaterials: () => void
 
+  brandingKit: BrandingKitId | null
+  setBrandingKit: (kit: BrandingKitId) => void
+
   resetWizard: () => void
 }
 
@@ -68,7 +71,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
 
   currentStep: 1,
   setStep: (step) => set({ currentStep: step }),
-  nextStep: () => set((s) => ({ currentStep: Math.min(s.currentStep + 1, 3) })),
+  nextStep: () => set((s) => ({ currentStep: Math.min(s.currentStep + 1, 6) })),
   prevStep: () => set((s) => ({ currentStep: Math.max(s.currentStep - 1, 1) })),
 
   formData: { ...defaultFormData },
@@ -86,11 +89,15 @@ export const useEventStore = create<EventStore>((set, get) => ({
     set({ selectedMaterials: [...ALL_WIZARD_MATERIAL_CATEGORIES] }),
   clearMaterials: () => set({ selectedMaterials: [] }),
 
+  brandingKit: 'CLASSIC',
+  setBrandingKit: (brandingKit) => set({ brandingKit }),
+
   resetWizard: () =>
     set({
       currentStep: 1,
       formData: { ...defaultFormData },
       selectedMaterials: [...DEFAULT_SELECTED_MATERIALS],
+      brandingKit: 'CLASSIC',
     }),
 }))
 

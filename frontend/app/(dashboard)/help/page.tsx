@@ -6,13 +6,15 @@ export default function HelpPage() {
         <div>
           <h2 className="font-medium text-text-primary">Yangi tadbir qanday yaratiladi?</h2>
           <p className="mt-1 text-sm text-text-muted">
-            Chap menyu → Yangi tadbir. 3 bosqichli wizard orqali ma&apos;lumotlarni kiriting.
+            Chap menyu → Yangi tadbir. 6 bosqichli wizard: tadbir ma&apos;lumotlari, brending,
+            materiallar, brending to&apos;plami, ko&apos;rib chiqish va ishga tushirish.
           </p>
         </div>
         <div>
           <h2 className="font-medium text-text-primary">Shablonni qanday tahrirlash mumkin?</h2>
           <p className="mt-1 text-sm text-text-muted">
-            Shablonlar bo&apos;limidan tanlang va muharrirda oching.
+            Avval tadbir yarating, Materiallar bo&apos;limidan shablon tanlang va muharrirda
+            tahrirlang.
           </p>
         </div>
         <div>

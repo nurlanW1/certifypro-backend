@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { fabric } from 'fabric'
 import { serializeCanvas } from '@/lib/editor/fabric-utils'
+import type { EventVariableContext } from '@/lib/editor/variables'
 
 export type ActiveTool = 'select' | 'text' | 'image' | 'rect' | 'circle' | 'line'
 
@@ -40,6 +41,19 @@ interface EditorStore {
 
   layersOpen: boolean
   setLayersOpen: (open: boolean) => void
+
+  assetMode: boolean
+  setAssetMode: (on: boolean) => void
+  printPreview: boolean
+  setPrintPreview: (on: boolean) => void
+  eventContext: EventVariableContext | null
+  setEventContext: (ctx: EventVariableContext | null) => void
+  previewParticipantName: string
+  setPreviewParticipantName: (name: string) => void
+
+  templateId: string | null
+  templateSvg: string | null
+  setTemplateMeta: (templateId: string | null, svg: string | null) => void
 
   history: string[]
   historyIndex: number
@@ -86,6 +100,20 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   layersOpen: false,
   setLayersOpen: (layersOpen) => set({ layersOpen }),
+
+  assetMode: false,
+  setAssetMode: (assetMode) => set({ assetMode }),
+  printPreview: false,
+  setPrintPreview: (printPreview) => set({ printPreview }),
+  eventContext: null,
+  setEventContext: (eventContext) => set({ eventContext }),
+  previewParticipantName: '',
+  setPreviewParticipantName: (previewParticipantName) =>
+    set({ previewParticipantName }),
+
+  templateId: null,
+  templateSvg: null,
+  setTemplateMeta: (templateId, templateSvg) => set({ templateId, templateSvg }),
 
   history: [],
   historyIndex: -1,
@@ -145,14 +173,17 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     })
 
     try {
-      const res = await fetch(`/api/designs/${designId}`)
+      const res = await fetch(`/api/designs/${designId}?includeTemplate=1`)
       if (res.ok) {
         const data = (await res.json()) as {
-          design: { name: string; canvasData: object | null }
+          design: { name: string; canvasData: object | null; templateId: string }
+          template?: { svgContent: string }
         }
         set({
           designName: data.design.name,
           canvasData: data.design.canvasData,
+          templateId: data.design.templateId,
+          templateSvg: data.template?.svgContent ?? null,
         })
         return
       }
@@ -160,22 +191,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       // fallback
     }
 
-    try {
-      const fallback = await fetch(`/api/designs?id=${designId}`)
-      if (fallback.ok) {
-        const data = (await fallback.json()) as {
-          design: { name: string; canvasData: object | null }
-        }
-        set({
-          designName: data.design.name,
-          canvasData: data.design.canvasData,
-        })
-      }
-    } catch {
-      set({
-        canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
-      })
-    }
+    set({
+      canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
+    })
   },
 
   reset: () =>
@@ -192,6 +210,12 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       saveStatus: 'idle',
       lastSaved: null,
       layersOpen: false,
+      assetMode: false,
+      printPreview: false,
+      eventContext: null,
+      previewParticipantName: '',
+      templateId: null,
+      templateSvg: null,
       history: [],
       historyIndex: -1,
     }),

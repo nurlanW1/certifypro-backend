@@ -6,6 +6,7 @@ import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 import { useEditorStore } from '@/store/editorStore'
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '@/lib/editor/constants'
 import { isFabricCanvasJson, serializeCanvas } from '@/lib/editor/fabric-utils'
+import { loadSvgOntoCanvas } from '@/lib/editor/svg-to-fabric'
 import { EditorLayersPanel } from '@/components/editor/EditorLayersPanel'
 
 export function EditorCanvas() {
@@ -24,6 +25,7 @@ export function EditorCanvas() {
     pushHistory,
     setDirty,
     syncFromCanvas,
+    printPreview,
   } = useEditorStore()
 
   useEffect(() => {
@@ -87,14 +89,25 @@ export function EditorCanvas() {
 
     hydratingRef.current = true
     fabricCanvas.loadFromJSON(canvasData as object, () => {
-      fabricCanvas.renderAll()
-      hydratingRef.current = false
-      const snapshot = serializeCanvas(fabricCanvas)
-      useEditorStore.setState({
-        history: [snapshot],
-        historyIndex: 0,
-        canvasReady: true,
-      })
+      const trySvg = async () => {
+        const objs = fabricCanvas.getObjects()
+        const { templateSvg } = useEditorStore.getState()
+        if (objs.length === 0 && templateSvg) {
+          const loaded = await loadSvgOntoCanvas(fabricCanvas, templateSvg)
+          if (loaded) {
+            useEditorStore.getState().setDirty(true)
+          }
+        }
+        fabricCanvas.renderAll()
+        hydratingRef.current = false
+        const snapshot = serializeCanvas(fabricCanvas)
+        useEditorStore.setState({
+          history: [snapshot],
+          historyIndex: 0,
+          canvasReady: true,
+        })
+      }
+      void trySvg()
     })
   }, [canvasData, canvasReady, setCanvasReady])
 
@@ -109,7 +122,13 @@ export function EditorCanvas() {
           className="shadow-lg transition-transform duration-150"
           style={{ transform: `scale(${zoom})`, transformOrigin: 'center center' }}
         >
-          <div className="rounded-sm border border-border bg-surface">
+          <div className="relative rounded-sm border border-border bg-surface">
+            {printPreview && (
+              <div
+                className="pointer-events-none absolute inset-2 rounded border border-dashed border-brand-400/60"
+                aria-hidden
+              />
+            )}
             <canvas ref={canvasRef} />
           </div>
         </div>

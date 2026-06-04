@@ -1,10 +1,10 @@
-import type { EventType, MaterialCategory } from '@/types/event'
+import type { BrandingKitId, EventType, MaterialCategory } from '@/types/event'
 
 export interface WizardStepConfig {
   id: number
   title: string
   description: string
-  icon: 'Calendar' | 'Palette' | 'Layout'
+  icon: 'Calendar' | 'Palette' | 'Layout' | 'Package' | 'ClipboardList' | 'Rocket'
 }
 
 export const WIZARD_STEPS: WizardStepConfig[] = [
@@ -23,8 +23,65 @@ export const WIZARD_STEPS: WizardStepConfig[] = [
   {
     id: 3,
     title: 'Materiallar',
-    description: 'Kerakli dizaynlarni tanlang',
+    description: 'Kerakli turlarni tanlang',
     icon: 'Layout',
+  },
+  {
+    id: 4,
+    title: 'Brending to‘plami',
+    description: 'Umumiy uslubni tanlang',
+    icon: 'Package',
+  },
+  {
+    id: 5,
+    title: 'Ko‘rib chiqish',
+    description: 'Xulosani tekshiring',
+    icon: 'ClipboardList',
+  },
+  {
+    id: 6,
+    title: 'Ishga tushirish',
+    description: 'Tadbir markazini yarating',
+    icon: 'Rocket',
+  },
+]
+
+export interface BrandingKitOption {
+  id: BrandingKitId
+  label: string
+  description: string
+  primaryColor: string
+  accentColor: string
+}
+
+export const BRANDING_KIT_OPTIONS: BrandingKitOption[] = [
+  {
+    id: 'CLASSIC',
+    label: 'Klassik',
+    description: 'Rasmiy konferentsiyalar uchun',
+    primaryColor: '#059669',
+    accentColor: '#134E4A',
+  },
+  {
+    id: 'MODERN',
+    label: 'Zamonaviy',
+    description: 'Minimal va zamonaviy',
+    primaryColor: '#0F766E',
+    accentColor: '#134E4A',
+  },
+  {
+    id: 'ACADEMIC',
+    label: 'Ilmiy',
+    description: 'Ilmiy tadbirlar va universitetlar',
+    primaryColor: '#1E40AF',
+    accentColor: '#1E3A8A',
+  },
+  {
+    id: 'CORPORATE',
+    label: 'Korporativ',
+    description: 'Biznes va korporativ tadbirlar',
+    primaryColor: '#374151',
+    accentColor: '#111827',
   },
 ]
 
@@ -93,7 +150,7 @@ export interface PresetColor {
 }
 
 export const PRESET_COLORS: PresetColor[] = [
-  { name: 'Binafsha', value: '#534AB7', swatchClass: 'bg-brand-600' },
+  { name: 'Zumrad', value: '#059669', swatchClass: 'bg-brand-600' },
   { name: "Ko'k", value: '#2563EB', swatchClass: 'bg-blue-600' },
   { name: 'Yashil', value: '#059669', swatchClass: 'bg-emerald-600' },
   { name: "To'q yashil", value: '#0F766E', swatchClass: 'bg-teal-700' },

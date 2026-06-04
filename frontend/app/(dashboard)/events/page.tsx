@@ -84,7 +84,11 @@ export default function EventsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <EventCard
+              key={event.id}
+              event={event}
+              materialCount={event.materialCount ?? 0}
+            />
           ))}
         </div>
       )}

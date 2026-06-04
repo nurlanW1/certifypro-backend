@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { formatDate } from '@/lib/utils'
 import { EditorTopBar } from '@/components/editor/EditorTopBar'
 import { EditorToolbar } from '@/components/editor/EditorToolbar'
 import { EditorCanvas } from '@/components/editor/EditorCanvas'
@@ -29,13 +31,50 @@ const SHORTCUTS: Record<string, ActiveTool | 'undo' | 'redo' | 'save'> = {
 }
 
 export function EditorLayout({ designId }: EditorLayoutProps) {
-  const { initEditor, fabricCanvas, undo, redo, designName, setSaveStatus, setLastSaved, setDirty } =
-    useEditorStore()
+  const searchParams = useSearchParams()
+  const eventId = searchParams.get('eventId')
+  const assetParam = searchParams.get('asset') === '1'
+
+  const {
+    initEditor,
+    fabricCanvas,
+    undo,
+    redo,
+    designName,
+    setSaveStatus,
+    setLastSaved,
+    setDirty,
+    setAssetMode,
+    setEventContext,
+  } = useEditorStore()
 
   useEffect(() => {
     void initEditor(designId)
     return () => useEditorStore.getState().reset()
   }, [designId, initEditor])
+
+  useEffect(() => {
+    setAssetMode(assetParam)
+  }, [assetParam, setAssetMode])
+
+  useEffect(() => {
+    if (!eventId) {
+      setEventContext(null)
+      return
+    }
+    void fetch(`/api/events/${eventId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { event?: { name: string; organization: string; location: string; date: string } } | null) => {
+        if (!d?.event) return
+        setEventContext({
+          eventName: d.event.name,
+          organization: d.event.organization,
+          location: d.event.location,
+          date: d.event.date ? formatDate(d.event.date) : '',
+        })
+      })
+      .catch(() => setEventContext(null))
+  }, [eventId, setEventContext])
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -67,6 +106,8 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
 
       const key = e.key.toLowerCase()
       const tool = SHORTCUTS[key]
+      const { assetMode } = useEditorStore.getState()
+      if (assetMode && tool && ['rect', 'circle', 'line'].includes(tool)) return
       if (tool && tool !== 'undo' && tool !== 'redo' && tool !== 'save') {
         useEditorStore.getState().setActiveTool(tool)
         const canvas = useEditorStore.getState().fabricCanvas
@@ -118,7 +159,9 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <EditorToolbar />
         <EditorCanvas />
-        <EditorProperties />
+        <Suspense fallback={<aside className="hidden w-60 md:block" />}>
+          <EditorProperties />
+        </Suspense>
       </div>
     </div>
   )

@@ -26,7 +26,7 @@ export function EventCard({ event, materialCount = 0 }: EventCardProps) {
             <h3 className="font-semibold text-text-primary transition-colors group-hover:text-brand-600">
               {event.name}
             </h3>
-            <span className="shrink-0 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium text-brand-800">
+            <span className="gildia-badge shrink-0">
               {EVENT_TYPE_LABELS[event.type]}
             </span>
           </div>

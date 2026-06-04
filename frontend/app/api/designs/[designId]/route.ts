@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Prisma } from '@prisma/client'
 import { getOrCreateDbUser } from '@/lib/auth'
+import { syncMaterialStatusFromCanvas } from '@/lib/event-design'
 import { prisma } from '@/lib/prisma'
 import type { Design } from '@/types/design'
 
@@ -29,15 +30,33 @@ function mapDesign(record: {
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { designId: string } }
 ) {
   const { designId } = params
+  const includeTemplate = req.nextUrl.searchParams.get('includeTemplate') === '1'
 
   try {
     const user = await getOrCreateDbUser()
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (includeTemplate) {
+      const design = await prisma.design.findFirst({
+        where: { id: designId, userId: user.id },
+        include: { template: { select: { svgContent: true, name: true } } },
+      })
+      if (!design) {
+        return NextResponse.json({ error: 'Not found' }, { status: 404 })
+      }
+      return NextResponse.json({
+        design: mapDesign(design),
+        template: {
+          svgContent: design.template.svgContent,
+          name: design.template.name,
+        },
+      })
     }
 
     const design = await prisma.design.findFirst({
@@ -49,24 +68,9 @@ export async function GET(
     }
 
     return NextResponse.json({ design: mapDesign(design) })
-  } catch {
-    return NextResponse.json({
-      design: {
-        id: designId,
-        userId: 'local',
-        templateId: 'cert-001',
-        name: 'Nomsiz dizayn',
-        canvasData: {
-          version: '5.3.0',
-          width: 794,
-          height: 1123,
-          objects: [],
-          background: '#ffffff',
-        },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } satisfies Design,
-    })
+  } catch (error) {
+    console.error('Design get error:', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
 
@@ -85,29 +89,45 @@ export async function PATCH(
     const body = (await req.json()) as {
       canvasData?: unknown
       name?: string
+      templateId?: string
+      eventId?: string
     }
 
     const canvasJson = body.canvasData
       ? (JSON.parse(JSON.stringify(body.canvasData)) as Prisma.InputJsonValue)
       : undefined
 
-    const design = await prisma.design.upsert({
-      where: { id: designId },
-      create: {
-        id: designId,
-        userId: user.id,
-        templateId: 'cert-001',
-        name: body.name ?? 'Nomsiz dizayn',
-        canvasData: canvasJson ?? { version: '5.3.0', objects: [] },
-      },
-      update: {
-        ...(body.name ? { name: body.name } : {}),
-        ...(canvasJson !== undefined ? { canvasData: canvasJson } : {}),
-      },
+    const existing = await prisma.design.findFirst({
+      where: { id: designId, userId: user.id },
     })
 
+    const design = existing
+      ? await prisma.design.update({
+          where: { id: designId },
+          data: {
+            ...(body.name ? { name: body.name } : {}),
+            ...(canvasJson !== undefined ? { canvasData: canvasJson } : {}),
+            ...(body.eventId !== undefined ? { eventId: body.eventId } : {}),
+          },
+        })
+      : await prisma.design.create({
+          data: {
+            id: designId,
+            userId: user.id,
+            templateId: body.templateId ?? 'cert-001',
+            eventId: body.eventId ?? null,
+            name: body.name ?? 'Nomsiz dizayn',
+            canvasData: canvasJson ?? { version: '5.3.0', objects: [] },
+          },
+        })
+
+    if (canvasJson !== undefined) {
+      await syncMaterialStatusFromCanvas(designId, user.id, body.canvasData)
+    }
+
     return NextResponse.json({ design: mapDesign(design) })
-  } catch {
-    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('Design patch error:', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

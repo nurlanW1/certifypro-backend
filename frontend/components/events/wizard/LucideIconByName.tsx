@@ -28,6 +28,9 @@ import {
   Upload,
   Trash2,
   Crown,
+  Package,
+  ClipboardList,
+  Rocket,
   type LucideIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -60,6 +63,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Upload,
   Trash2,
   Crown,
+  Package,
+  ClipboardList,
+  Rocket,
 }
 
 interface LucideIconByNameProps {

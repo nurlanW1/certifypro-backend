@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   ArrowLeft,
   Save,
@@ -29,6 +29,8 @@ interface EditorTopBarProps {
 
 export function EditorTopBar({ designId }: EditorTopBarProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const eventId = searchParams.get('eventId')
   const [editingName, setEditingName] = useState(false)
 
   const {
@@ -44,6 +46,9 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
     canUndo,
     canRedo,
     setDirty,
+    printPreview,
+    setPrintPreview,
+    assetMode,
   } = useEditorStore()
 
   const handleSave = async () => {
@@ -68,7 +73,9 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
     <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-surface px-3 md:px-4">
       <button
         type="button"
-        onClick={() => router.back()}
+        onClick={() =>
+          eventId ? router.push(`/events/${eventId}/materials`) : router.back()
+        }
         className="flex items-center gap-1 rounded-lg p-2 text-sm text-text-secondary transition-all duration-150 hover:bg-brand-50 hover:text-text-primary"
       >
         <ArrowLeft className="h-4 w-4" />
@@ -123,14 +130,19 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
           <span className="hidden text-xs text-warning md:inline">Saqlanmagan</span>
         )}
 
-        <button
-          type="button"
-          className="hidden rounded-lg p-2 text-text-muted hover:bg-brand-50 md:inline-flex"
-          aria-label="Ko'rinish"
-          onClick={() => toast('Ko\'rinish rejimi tez orada')}
-        >
-          <Eye className="h-4 w-4" />
-        </button>
+        {assetMode && (
+          <button
+            type="button"
+            className={cn(
+              'hidden rounded-lg p-2 md:inline-flex',
+              printPreview ? 'bg-brand-50 text-brand-600' : 'text-text-muted hover:bg-brand-50'
+            )}
+            aria-label="Chop etish ko‘rinishi"
+            onClick={() => setPrintPreview(!printPreview)}
+          >
+            <Eye className="h-4 w-4" />
+          </button>
+        )}
 
         <button
           type="button"
@@ -172,7 +184,13 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-primary outline-none hover:bg-brand-50"
                 onSelect={() => {
-                  if (fabricCanvas) void exportToPNG(fabricCanvas, filename)
+                  if (!fabricCanvas) return
+                  void exportToPNG(fabricCanvas, filename, {
+                    designId,
+                    eventId,
+                  }).then((ok) => {
+                    if (!ok) toast.error('Eksport limiti yoki xatolik')
+                  })
                 }}
               >
                 <FileImage className="h-4 w-4 text-text-muted" />
@@ -181,7 +199,13 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-primary outline-none hover:bg-brand-50"
                 onSelect={() => {
-                  if (fabricCanvas) void exportToPDF(fabricCanvas, filename)
+                  if (!fabricCanvas) return
+                  void exportToPDF(fabricCanvas, filename, {
+                    designId,
+                    eventId,
+                  }).then((ok) => {
+                    if (!ok) toast.error('Eksport limiti yoki xatolik')
+                  })
                 }}
               >
                 <FileText className="h-4 w-4 text-text-muted" />

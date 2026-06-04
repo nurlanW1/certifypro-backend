@@ -1,14 +1,17 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import { TemplateCard } from '@/components/templates/TemplateCard'
 import { TemplatePreviewModal } from '@/components/templates/TemplatePreviewModal'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useTemplateStore } from '@/store/templateStore'
+import { startTemplateDesignForEvent } from '@/lib/start-template-design'
 import type { MockTemplate } from '@/lib/mock-templates'
+import type { MaterialCategory } from '@/types/event'
 import type { TemplateSortOption } from '@/lib/filter-templates'
 
 const SORT_OPTIONS: { value: TemplateSortOption; label: string }[] = [
@@ -20,6 +23,8 @@ const SORT_OPTIONS: { value: TemplateSortOption; label: string }[] = [
 interface TemplateGridProps {
   templates: MockTemplate[]
   isLoading?: boolean
+  eventId?: string
+  materialCategory?: MaterialCategory
 }
 
 function TemplateCardSkeleton() {
@@ -34,8 +39,14 @@ function TemplateCardSkeleton() {
   )
 }
 
-export function TemplateGrid({ templates, isLoading }: TemplateGridProps) {
+export function TemplateGrid({
+  templates,
+  isLoading,
+  eventId,
+  materialCategory,
+}: TemplateGridProps) {
   const router = useRouter()
+  const [selectingId, setSelectingId] = useState<string | null>(null)
   const {
     sortBy,
     setSortBy,
@@ -49,8 +60,22 @@ export function TemplateGrid({ templates, isLoading }: TemplateGridProps) {
     [templates, previewTemplateId]
   )
 
-  const handleSelect = (id: string) => {
+  const handleSelect = async (id: string) => {
     setSelectedTemplate(id)
+
+    if (eventId && materialCategory) {
+      setSelectingId(id)
+      const result = await startTemplateDesignForEvent(eventId, materialCategory, id)
+      setSelectingId(null)
+      if ('error' in result) {
+        toast.error(result.error)
+        return
+      }
+      toast.success('Dizayn yaratildi')
+      router.push(`/editor/${result.designId}?eventId=${eventId}&asset=1`)
+      return
+    }
+
     router.push(`/templates/${id}`)
   }
 
@@ -103,6 +128,7 @@ export function TemplateGrid({ templates, isLoading }: TemplateGridProps) {
               template={template}
               onSelect={handleSelect}
               onPreview={setPreviewTemplate}
+              isSelecting={selectingId === template.id}
             />
           ))}
         </div>
