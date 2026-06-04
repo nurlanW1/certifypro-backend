@@ -33,11 +33,11 @@ export function TopBar({ onMenuClick }: TopBarProps) {
   const title = resolvePageTitle(pathname)
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-4 border-b-2 border-text-primary/10 bg-surface/90 px-4 backdrop-blur-sm md:px-6">
+    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-border bg-surface/80 px-4 backdrop-blur-md md:px-6">
       <button
         type="button"
         onClick={onMenuClick}
-        className="rounded-sm border-2 border-transparent p-2 text-text-muted transition-all hover:border-text-primary/20 hover:bg-surface-secondary md:hidden"
+        className="rounded-xl p-2 text-text-muted transition-colors hover:bg-brand-50 hover:text-brand-700 md:hidden"
         aria-label="Menyu"
       >
         <Menu className="h-5 w-5" />

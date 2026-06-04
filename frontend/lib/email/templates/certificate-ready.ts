@@ -20,11 +20,11 @@ Havola 30 kun amal qiladi.
   const html = `<!DOCTYPE html>
 <html lang="uz">
 <body style="font-family:system-ui,sans-serif;line-height:1.5;color:#1a1a2e;max-width:520px;margin:0 auto;padding:24px">
-  <h1 style="color:#059669;font-size:20px">Sertifikat tayyor</h1>
+  <h1 style="color:#2563EB;font-size:20px">Sertifikat tayyor</h1>
   <p>Salom, <strong>${escapeHtml(params.participantName)}</strong>!</p>
   <p><strong>${escapeHtml(params.eventName)}</strong> tadbiridagi sertifikatingizni yuklab olishingiz mumkin.</p>
   <p style="margin:24px 0">
-    <a href="${params.claimUrl}" style="background:#059669;color:#fff;padding:12px 20px;border-radius:4px;text-decoration:none;display:inline-block;border:2px solid #1C1917">
+    <a href="${params.claimUrl}" style="background:#2563EB;color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;display:inline-block">
       Sertifikatni yuklab olish
     </a>
   </p>

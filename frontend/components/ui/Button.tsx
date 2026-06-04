@@ -18,7 +18,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ghost:
     'rounded-sm px-4 py-2.5 text-sm font-semibold text-text-secondary transition-all hover:bg-surface-tertiary',
   danger:
-    'rounded-sm border-2 border-danger-dark bg-danger px-4 py-2.5 text-sm font-semibold text-text-inverse shadow-brutal-sm transition-all hover:opacity-90',
+    'rounded-xl bg-danger px-4 py-2.5 text-sm font-semibold text-text-inverse shadow-sm transition-all hover:opacity-90',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

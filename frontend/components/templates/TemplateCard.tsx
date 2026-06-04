@@ -31,7 +31,7 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-secondary">
         {showPlaceholder ? (
           <div
-            className="absolute inset-0 bg-gradient-to-br from-surface-secondary to-accent-100"
+            className="absolute inset-0 bg-gradient-to-br from-brand-50 to-brand-100"
             aria-hidden
           />
         ) : (

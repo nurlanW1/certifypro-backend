@@ -20,11 +20,11 @@ Muddati: ${dateStr}
   const html = `<!DOCTYPE html>
 <html lang="uz">
 <body style="font-family:system-ui,sans-serif;line-height:1.5;color:#1a1a2e;max-width:520px;margin:0 auto;padding:24px">
-  <h1 style="color:#059669;font-size:20px">Agentlik taklifi</h1>
+  <h1 style="color:#2563EB;font-size:20px">Agentlik taklifi</h1>
   <p>Sizni <strong>${escapeHtml(params.organizationName)}</strong> agentligiga
   <strong>${escapeHtml(params.role)}</strong> sifatida qo‘shilishga taklif qilishdi.</p>
   <p style="margin:24px 0">
-    <a href="${params.acceptUrl}" style="background:#059669;color:#fff;padding:12px 20px;border-radius:4px;text-decoration:none;display:inline-block;border:2px solid #1C1917">
+    <a href="${params.acceptUrl}" style="background:#2563EB;color:#fff;padding:12px 20px;border-radius:10px;text-decoration:none;display:inline-block">
       Taklifni qabul qilish
     </a>
   </p>

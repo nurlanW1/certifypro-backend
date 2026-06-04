@@ -32,7 +32,7 @@ export async function GET(
     const qrDataUrl = await QRCode.toDataURL(claimUrl, {
       width: 280,
       margin: 2,
-      color: { dark: '#134E4A', light: '#ffffff' },
+      color: { dark: '#1E40AF', light: '#ffffff' },
     })
 
     return NextResponse.json({

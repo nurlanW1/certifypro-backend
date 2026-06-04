@@ -5,8 +5,8 @@ export function buildBrandedTemplateSvg(options: {
   primary?: string
   accent?: string
 }): string {
-  const primary = options.primary ?? '#059669'
-  const accent = options.accent ?? '#134E4A'
+  const primary = options.primary ?? '#2563EB'
+  const accent = options.accent ?? '#1E40AF'
   return `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
   <rect width="800" height="600" fill="#f8f7ff"/>
   <rect x="40" y="40" width="720" height="520" rx="12" fill="none" stroke="${primary}" stroke-width="4"/>

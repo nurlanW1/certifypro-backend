@@ -6,7 +6,7 @@ import {
   Download,
   Users,
   ArrowRight,
-  Zap,
+  Sparkles,
 } from 'lucide-react'
 import { AuthButtons } from '@/components/auth/AuthButtons'
 import { isClerkConfigured } from '@/lib/clerk-config'
@@ -14,22 +14,22 @@ import { isProduction } from '@/lib/env'
 
 const JOURNEY = [
   {
-    step: '01',
+    step: '1',
     title: 'Tadbir yarating',
     desc: 'Nom, sana, joy, brend ranglari — bir marta.',
   },
   {
-    step: '02',
+    step: '2',
     title: 'Materiallarni tanlang',
     desc: 'Sertifikat, nishon, poster va boshqa turlar ro‘yxatga qo‘shiladi.',
   },
   {
-    step: '03',
+    step: '3',
     title: 'Har birini dizayn qiling',
     desc: 'Tadbir markazidan shablon tanlang, muharrirda tahrirlang.',
   },
   {
-    step: '04',
+    step: '4',
     title: 'Eksport qiling',
     desc: 'PNG va PDF — chop etishga tayyor.',
   },
@@ -46,43 +46,45 @@ export default async function HomePage() {
 
   return (
     <div className="gildia-page-mesh min-h-screen">
-      <nav className="sticky top-0 z-20 border-b-2 border-text-primary/10 bg-surface/80 px-6 py-4 backdrop-blur-md">
+      <nav className="sticky top-0 z-20 border-b border-border/80 bg-surface/70 px-6 py-4 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm border-2 border-text-primary bg-accent-500 shadow-brutal-sm">
-              <span className="font-display text-lg font-extrabold text-text-primary">G</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient shadow-sm">
+              <span className="font-display text-lg font-bold text-text-inverse">G</span>
             </div>
-            <span className="font-display text-xl font-bold tracking-tight text-text-primary">
-              Gildia
-            </span>
+            <span className="font-display text-xl font-bold text-text-primary">Gildia</span>
           </Link>
           <AuthButtons />
         </div>
       </nav>
 
       {showDevBanner && (
-        <div className="border-b-2 border-accent-600/30 bg-accent-100 px-6 py-2 text-center text-sm font-medium text-accent-800">
+        <div className="border-b border-brand-200 bg-brand-50 px-6 py-2 text-center text-sm text-brand-800">
           Dev rejim: Clerk kalitlari yo&apos;q — faqat mahalliy sinov uchun.
         </div>
       )}
 
-      <section className="relative mx-auto max-w-6xl px-6 pb-20 pt-16 md:pt-24">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
+      <section className="relative mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
+        <div className="pointer-events-none absolute left-1/2 top-8 h-64 w-[90%] -translate-x-1/2 rounded-full bg-brand-400/20 blur-3xl" />
+        <div className="relative grid items-center gap-14 lg:grid-cols-2">
           <div>
             <span className="gildia-badge mb-6 inline-flex gap-1.5">
-              <Zap className="h-3.5 w-3.5" />
+              <Sparkles className="h-3.5 w-3.5 text-brand-600" />
               Event Media OS
             </span>
-            <h1 className="font-display text-4xl font-extrabold leading-[1.05] text-text-primary md:text-5xl lg:text-6xl">
-              Bitta tadbir.
+            <h1 className="font-display text-4xl font-extrabold leading-tight text-text-primary md:text-5xl lg:text-[3.25rem]">
+              Bitta tadbir —
               <br />
-              <span className="text-brand-600">Hammasi</span> bir joyda.
+              <span className="bg-brand-gradient bg-clip-text text-transparent">
+                barcha materiallar
+              </span>{' '}
+              bir joyda
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-text-muted">
               Shablon do‘koni emas. Avval tadbir yarating, keyin sertifikat, nishon va boshqa
               materiallarni shu loyiha ichida boshqaring.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <AuthButtons size="hero" />
               <Link
                 href="/events/new"
@@ -94,34 +96,35 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative hidden lg:block">
-            <div className="absolute -right-4 -top-4 h-full w-full rounded-md border-2 border-text-primary bg-accent-400/40" />
-            <div className="relative gildia-card overflow-hidden p-8">
-              <div className="space-y-4">
+          <div className="relative">
+            <div className="gildia-card overflow-hidden p-6 shadow-glow md:p-8">
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand-600">
+                Tadbir markazi
+              </p>
+              <ul className="mt-4 space-y-3">
                 {['Sertifikat', 'Nishon', 'Poster', 'Press devor'].map((label, i) => (
-                  <div
+                  <li
                     key={label}
-                    className="flex items-center gap-4 rounded-sm border-2 border-border bg-surface-secondary px-4 py-3"
-                    style={{ marginLeft: `${i * 12}px` }}
+                    className="flex items-center gap-4 rounded-xl border border-border bg-surface-secondary/80 px-4 py-3"
                   >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-brand-600 font-display text-xs font-bold text-text-inverse">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-100 font-display text-sm font-bold text-brand-800">
                       {i + 1}
                     </span>
                     <span className="font-medium text-text-primary">{label}</span>
-                    <span className="ml-auto text-xs font-semibold uppercase text-brand-600">
+                    <span className="ml-auto rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-700">
                       Tayyor
                     </span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-y-2 border-text-primary/10 bg-surface px-6 py-16">
+      <section className="border-y border-border bg-surface/60 px-6 py-16 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-display text-center text-2xl font-bold text-text-primary md:text-3xl">
+          <h2 className="text-center font-display text-2xl font-bold text-text-primary md:text-3xl">
             Qanday ishlaydi
           </h2>
           <p className="mx-auto mt-2 max-w-md text-center text-sm text-text-muted">
@@ -129,11 +132,11 @@ export default async function HomePage() {
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {JOURNEY.map((item) => (
-              <article key={item.step} className="gildia-card group p-5 transition-transform hover:-translate-y-0.5">
-                <span className="font-display text-3xl font-extrabold text-accent-500">
+              <article key={item.step} className="gildia-card p-6">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient font-display text-sm font-bold text-text-inverse">
                   {item.step}
                 </span>
-                <h3 className="mt-3 font-display text-lg font-bold text-text-primary">
+                <h3 className="mt-4 font-display text-lg font-bold text-text-primary">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-text-muted">{item.desc}</p>
@@ -162,11 +165,8 @@ export default async function HomePage() {
               desc: 'Har bir dizayn uchun PNG va PDF.',
             },
           ].map((f) => (
-            <div
-              key={f.title}
-              className="gildia-card-soft flex flex-col border-2 border-text-primary/15 p-6"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-sm border-2 border-text-primary bg-brand-50">
+            <div key={f.title} className="gildia-card flex flex-col p-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50">
                 <f.icon className="h-6 w-6 text-brand-600" />
               </div>
               <h3 className="mt-5 font-display text-lg font-bold text-text-primary">{f.title}</h3>
@@ -176,12 +176,12 @@ export default async function HomePage() {
         </div>
         <p className="mt-12 text-center text-sm text-text-muted">
           Shablon katalogi mavjud — lekin asosiy yo‘l har doim{' '}
-          <strong className="font-semibold text-text-primary">tadbir → materiallar</strong>.
+          <strong className="font-semibold text-brand-700">tadbir → materiallar</strong>.
         </p>
         <div className="mt-6 flex justify-center">
           <Link
             href="/sign-up"
-            className="inline-flex items-center gap-2 rounded-sm border-2 border-text-primary bg-accent-500 px-5 py-2.5 text-sm font-bold text-text-primary shadow-brutal-sm transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+            className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-6 py-2.5 text-sm font-semibold text-text-inverse shadow-sm transition-all hover:shadow-md"
           >
             Bepul boshlash
             <ArrowRight className="h-4 w-4" />

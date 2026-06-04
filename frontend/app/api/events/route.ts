@@ -55,8 +55,8 @@ export async function POST(req: NextRequest) {
         location: body.location ?? '',
         organization: body.organization ?? '',
         language: body.language ?? 'uz',
-        primaryColor: body.primaryColor ?? '#059669',
-        accentColor: body.accentColor ?? '#134E4A',
+        primaryColor: body.primaryColor ?? '#2563EB',
+        accentColor: body.accentColor ?? '#1E40AF',
         logoUrl: body.logoUrl,
         participantCount: body.participantCount,
       } as EventFormData)
@@ -100,8 +100,8 @@ export async function POST(req: NextRequest) {
         organization: formData.organization || null,
         language: formData.language || 'uz',
         participantCount: formData.participantCount ?? null,
-        primaryColor: formData.primaryColor || '#059669',
-        accentColor: formData.accentColor || '#134E4A',
+        primaryColor: formData.primaryColor || '#2563EB',
+        accentColor: formData.accentColor || '#1E40AF',
         logoUrl: formData.logoUrl ?? null,
         brandingKit: brandingKit ?? null,
         materials: {

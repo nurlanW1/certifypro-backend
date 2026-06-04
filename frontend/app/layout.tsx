@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
-import { Outfit, Source_Sans_3 } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import { AppProviders } from '@/components/AppProviders'
 import { isClerkConfigured } from '@/lib/clerk-config'
 import './globals.css'
 
-const display = Outfit({
-  subsets: ['latin'],
-  variable: '--font-display',
-  weight: ['500', '600', '700', '800'],
-})
-
-const sans = Source_Sans_3({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800'],
+})
+
+const display = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['600', '700', '800'],
 })
 
 export const metadata: Metadata = {
@@ -29,7 +29,7 @@ export default async function RootLayout({
 }) {
   const content = (
     <html lang="uz">
-      <body className={`${sans.variable} ${display.variable} font-sans antialiased`}>
+      <body className={`${jakarta.variable} ${display.variable} font-sans antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

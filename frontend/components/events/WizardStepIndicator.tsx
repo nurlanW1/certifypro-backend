@@ -12,7 +12,7 @@ interface WizardStepIndicatorProps {
 export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
   return (
     <nav aria-label="Wizard bosqichlari" className="mb-8">
-      <ol className="flex items-center justify-between gap-1">
+      <ol className="flex items-center justify-between">
         {WIZARD_STEPS.map((step, index) => {
           const isCompleted = currentStep > step.id
           const isActive = currentStep === step.id
@@ -23,13 +23,12 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
               <div className="flex flex-col items-center gap-2">
                 <div
                   className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-sm border-2 text-sm font-bold transition-all duration-150',
-                    isActive &&
-                      'border-text-primary bg-accent-500 text-text-primary shadow-brutal-sm',
-                    isCompleted && 'border-text-primary bg-brand-600 text-text-inverse',
+                    'flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all duration-150',
+                    isActive && 'bg-brand-gradient text-text-inverse shadow-sm ring-4 ring-brand-100',
+                    isCompleted && 'bg-brand-600 text-text-inverse',
                     !isActive &&
                       !isCompleted &&
-                      'border-border bg-surface text-text-muted'
+                      'border border-border bg-surface text-text-muted'
                   )}
                 >
                   {isCompleted ? (
@@ -41,7 +40,7 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
                 <div className="hidden text-center sm:block">
                   <p
                     className={cn(
-                      'font-display text-xs font-bold',
+                      'text-xs font-semibold',
                       isActive ? 'text-brand-800' : 'text-text-muted'
                     )}
                   >
@@ -55,8 +54,8 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
               {!isLast && (
                 <div
                   className={cn(
-                    'mx-1 h-1 flex-1 border-t-2 border-dashed transition-colors duration-150 sm:mx-3',
-                    isCompleted ? 'border-brand-600' : 'border-border'
+                    'mx-2 h-0.5 flex-1 transition-colors duration-150 sm:mx-4',
+                    isCompleted ? 'bg-brand-400' : 'bg-border'
                   )}
                   aria-hidden
                 />

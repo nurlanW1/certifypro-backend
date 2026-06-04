@@ -59,8 +59,8 @@ export const BRANDING_KIT_OPTIONS: BrandingKitOption[] = [
     id: 'CLASSIC',
     label: 'Klassik',
     description: 'Rasmiy konferentsiyalar uchun',
-    primaryColor: '#059669',
-    accentColor: '#134E4A',
+    primaryColor: '#2563EB',
+    accentColor: '#1E40AF',
   },
   {
     id: 'MODERN',
@@ -150,8 +150,8 @@ export interface PresetColor {
 }
 
 export const PRESET_COLORS: PresetColor[] = [
-  { name: 'Zumrad', value: '#059669', swatchClass: 'bg-brand-600' },
-  { name: "Ko'k", value: '#2563EB', swatchClass: 'bg-blue-600' },
+  { name: "Ko'k", value: '#2563EB', swatchClass: 'bg-brand-600' },
+  { name: 'Moviy', value: '#0EA5E9', swatchClass: 'bg-sky-500' },
   { name: 'Yashil', value: '#059669', swatchClass: 'bg-emerald-600' },
   { name: "To'q yashil", value: '#0F766E', swatchClass: 'bg-teal-700' },
   { name: 'Qizil', value: '#DC2626', swatchClass: 'bg-red-600' },
