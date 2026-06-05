@@ -2,26 +2,36 @@
 
 import { createContext, useContext } from 'react'
 
-export type ClerkConfig = {
-  enabled: boolean
-  publishableKey: string | null
+type ClerkConfigValue = {
+  /** Publishable key present — Clerk UI can render. */
+  publishable: boolean
+  /** Publishable + secret — full auth, no guest API user. */
+  authenticated: boolean
 }
 
-const ClerkConfigContext = createContext<ClerkConfig>({
-  enabled: false,
-  publishableKey: null,
+const ClerkConfigContext = createContext<ClerkConfigValue>({
+  publishable: false,
+  authenticated: false,
 })
 
 export function ClerkConfigProvider({
-  value,
+  publishable,
+  authenticated,
   children,
-}: {
-  value: ClerkConfig
-  children: React.ReactNode
-}) {
-  return <ClerkConfigContext.Provider value={value}>{children}</ClerkConfigContext.Provider>
+}: ClerkConfigValue & { children: React.ReactNode }) {
+  return (
+    <ClerkConfigContext.Provider value={{ publishable, authenticated }}>
+      {children}
+    </ClerkConfigContext.Provider>
+  )
 }
 
+/** Clerk publishable key is configured (sign-in UI available). */
+export function useClerkPublishable(): boolean {
+  return useContext(ClerkConfigContext).publishable
+}
+
+/** Full Clerk auth (both keys) — replaces guest mode. */
 export function useClerkEnabled(): boolean {
-  return useContext(ClerkConfigContext).enabled
+  return useContext(ClerkConfigContext).authenticated
 }

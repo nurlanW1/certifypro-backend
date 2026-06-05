@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
+import { useClerkPublishable } from '@/components/auth/ClerkConfigContext'
 
 const UserMenuClerk = dynamic(
   () => import('./UserMenuClerk').then((m) => m.UserMenuClerk),
@@ -9,7 +9,7 @@ const UserMenuClerk = dynamic(
 )
 
 export function UserMenu() {
-  if (!useClerkEnabled()) {
+  if (!useClerkPublishable()) {
     return (
       <div
         className="flex h-8 w-8 items-center justify-center rounded-full border border-divide bg-subtle text-xs font-semibold text-text-secondary"

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { ClerkSetupNotice } from '@/components/auth/ClerkSetupNotice'
-import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
+import { useClerkPublishable } from '@/components/auth/ClerkConfigContext'
 
 const SignIn = dynamic(
   () => import('@clerk/nextjs').then((m) => m.SignIn),
@@ -12,7 +12,7 @@ const SignIn = dynamic(
 export default function SignInPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-secondary p-4">
-      {useClerkEnabled() ? <SignIn /> : <ClerkSetupNotice />}
+      {useClerkPublishable() ? <SignIn /> : <ClerkSetupNotice />}
     </div>
   )
 }

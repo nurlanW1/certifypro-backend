@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Menu, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
+import { useClerkPublishable } from '@/components/auth/ClerkConfigContext'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 
@@ -19,7 +19,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const clerk = useClerkEnabled()
+  const clerk = useClerkPublishable()
 
   const LINKS = [
     { href: '/templates' as const, label: t('templates') },
@@ -71,10 +71,10 @@ export function Navbar() {
               <NavbarAuth variant="desktop" />
             ) : (
               <>
-                <Link href="/dashboard" className="btn-ghost btn-sm text-text-secondary">
+                <Link href="/sign-in" className="btn-ghost btn-sm text-text-secondary">
                   {t('login')}
                 </Link>
-                <Link href="/events/new" className="btn-primary btn-sm">
+                <Link href="/sign-up" className="btn-primary btn-sm">
                   {t('signup')}
                 </Link>
               </>
@@ -119,14 +119,14 @@ export function Navbar() {
               ) : (
                 <>
                   <Link
-                    href="/dashboard"
+                    href="/sign-in"
                     className="btn-secondary btn-lg w-full text-center"
                     onClick={() => setOpen(false)}
                   >
                     {t('login')}
                   </Link>
                   <Link
-                    href="/events/new"
+                    href="/sign-up"
                     className="btn-primary btn-lg w-full text-center"
                     onClick={() => setOpen(false)}
                   >
