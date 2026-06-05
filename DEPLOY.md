@@ -18,7 +18,7 @@ Yangi dizayn (`Gildia`, dashboard, wizard) — **frontend/** (Next 14).
 
 1. [Vercel Dashboard](https://vercel.com) → loyiha
 2. **Root Directory:** `frontend`
-3. **Git:** `nurlanW1/certifypro-backend`, branch `main`
+3. **Git:** `nurlanW1/gildia`, branch `main`
 4. **Environment Variables:**
    ```
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
@@ -38,7 +38,7 @@ Agar Root Directory **bo‘sh (root)** bo‘lsa — root `vercel.json` `cd front
 
 ### Next.js (`frontend/`) — repo root dan deploy
 
-Agar Railway **repo root** (`certifypro-backend`) dan build qilsa, `next: not found` xatosini oldini olish uchun root `package.json` avval `npm ci --prefix frontend` ishga tushiradi (`railway.toml` ham shu buyruqni ishlatadi).
+Agar Railway **repo root** (`gildia`) dan build qilsa, `next: not found` xatosini oldini olish uchun root `package.json` avval `npm ci --prefix frontend` ishga tushiradi (`railway.toml` ham shu buyruqni ishlatadi).
 
 | Sozlama | Qiymat |
 |---------|--------|
@@ -116,4 +116,5 @@ Yoki repo root: `npm run dev`
 
 ---
 
-Repo: [github.com/nurlanW1/certifypro-backend](https://github.com/nurlanW1/certifypro-backend)
+Repo: [github.com/nurlanW1/gildia](https://github.com/nurlanW1/gildia)
+

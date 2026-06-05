@@ -1,6 +1,15 @@
 import { MOCK_TEMPLATES, type MockTemplate } from '@/lib/mock-templates'
+import type { Template } from '@/types/template'
 
-export type FilterableTemplate = MockTemplate
+export type FilterableTemplate = Template & {
+  description: string
+  popularity: number
+  style?: string
+  assetType?: string
+  isPrintable?: boolean
+  isOnlineReady?: boolean
+  sizeLabel?: string
+}
 import type { EventType, MaterialCategory } from '@/types/event'
 
 export type TemplateSortOption = 'new' | 'popular' | 'free'
@@ -67,7 +76,13 @@ export function filterTemplates(
 }
 
 const MOCK_ID_ALIASES: Record<string, string> = {
-  'invite-001': 'inv-001',
+  'cert-001': 'minimalistic-certificate-001',
+  'cert-002': 'classic-certificate-001',
+  'cert-003': 'hi-tech-certificate-001',
+  'badge-001': 'minimalistic-badge-bejik-003',
+  'inv-001': 'minimalistic-invitation-002',
+  'invite-001': 'minimalistic-invitation-002',
+  'flyer-001': 'minimalistic-flyer-004',
 }
 
 export function findMockTemplate(id: string): MockTemplate | undefined {

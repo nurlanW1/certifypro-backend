@@ -15,6 +15,7 @@ import {
   FileImage,
   FileText,
   Link2,
+  Printer,
   Loader2,
   Check,
   X,
@@ -71,6 +72,12 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
       toast.error('Saqlab bo‘lmadi')
       window.setTimeout(() => setSaveStatus('idle'), 2000)
     }
+  }
+
+  const handlePrintDraft = () => {
+    setPrintPreview(true)
+    toast('Print Draft: free rejada watermark bilan tasdiqlash uchun')
+    window.setTimeout(() => window.print(), 150)
   }
 
   const filename = designName.replace(/\s+/g, '-').toLowerCase() || 'gildia-design'
@@ -155,6 +162,16 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
 
         <button
           type="button"
+          onClick={handlePrintDraft}
+          className="btn-accent btn-sm inline-flex items-center gap-1.5"
+          aria-label="Print Draft"
+        >
+          <Printer className="h-4 w-4" />
+          <span className="hidden sm:inline">Print Draft</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => void handleSave()}
           disabled={saveStatus === 'saving'}
           className={cn(
@@ -206,6 +223,13 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 {t('downloadPNG')}
               </DropdownMenu.Item>
               <DropdownMenu.Item
+                disabled
+                className="flex cursor-not-allowed items-center gap-2 rounded px-3 py-2 text-sm text-text-disabled outline-none"
+              >
+                <FileImage className="h-4 w-4 text-text-muted" />
+                JPG export · TODO
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
                 onSelect={() => {
                   if (!fabricCanvas) return
@@ -229,6 +253,13 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
               >
                 <FileText className="h-4 w-4 text-text-muted" />
                 {t('downloadSVG')}
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                disabled
+                className="flex cursor-not-allowed items-center gap-2 rounded px-3 py-2 text-sm text-text-disabled outline-none"
+              >
+                <FileText className="h-4 w-4 text-text-muted" />
+                ZIP bulk export · TODO
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"

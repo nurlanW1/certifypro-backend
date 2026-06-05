@@ -25,6 +25,7 @@ const CATEGORY_IDS = [
 ] as const
 
 const STYLE_IDS = ['ALL', 'MINIMALIST', 'CLASSIC', 'HITECH'] as const
+const CHANNELS = ['Printable', 'Online', 'QR-ready'] as const
 
 function priceFilterToPremium(priceType: PriceFilterType): string | null {
   if (priceType === 'FREE') return 'false'
@@ -167,6 +168,28 @@ export function TemplatesPageClient() {
       </aside>
 
       <div className="min-w-0 flex-1 p-6 lg:p-10 xl:p-14">
+        <div className="mb-8 rounded border border-divide bg-ink p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="label-caps mb-2">Event package templates</p>
+              <h1 className="mb-2 text-2xl font-semibold tracking-tight text-text-primary">
+                {t('title')}
+              </h1>
+              <p className="max-w-2xl text-sm text-text-secondary">
+                Certificate, bejik, invitation, flyer, speaker card, sponsor banner, roll-up,
+                press-wall va social media materiallari bir xil branding kit bilan tanlanadi.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {CHANNELS.map((channel) => (
+                <span key={channel} className="tag tag-default">
+                  {channel}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="mb-6 flex items-center gap-3">
           <div className="relative max-w-xs flex-1">
             <Search

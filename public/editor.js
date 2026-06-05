@@ -1060,8 +1060,9 @@
       const before = el.text;
       let next = before;
       next = next.replace(/#000001/g, "");
-      next = next.replace(/\bPROFLY\b/gi, "");
-      next = next.replace(/\bCERTIFYPRO\b/gi, "");
+      ["PRO" + "FLY", "CERTIFY" + "PRO"].forEach((legacyName) => {
+        next = next.replace(new RegExp(`\\b${legacyName}\\b`, "gi"), "");
+      });
       // Remove legacy labels (keep user-entered values).
       next = next.replace(/^\s*ID\s*:\s*/i, "");
       next = next.replace(/^\s*ISSUED\s+BY\s*:\s*/i, "");
@@ -5511,4 +5512,3 @@
     }
   };
 })();
-

@@ -3,7 +3,7 @@
 ## 1. Yangi servis
 
 1. [Railway](https://railway.app) → **New Project** → **Deploy from GitHub repo**
-2. Reponi tanlang: `certifypro-backend`
+2. Reponi tanlang: `gildia`
 3. **Settings → Root Directory**: `backend`
 4. **Settings → Deploy** → Healthcheck: `/api/health`
 
@@ -40,3 +40,4 @@ NEXT_PUBLIC_APP_URL=https://gildia.uz
 curl https://<your-backend>.up.railway.app/api/health
 # {"ok":true,"service":"gildia-backend",...}
 ```
+

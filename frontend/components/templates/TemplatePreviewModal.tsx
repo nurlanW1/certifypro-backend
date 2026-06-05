@@ -47,7 +47,8 @@ export function TemplatePreviewModal({
   const eventLabel = template.eventType
     ? EVENT_TYPE_LABELS[template.eventType as EventType]
     : null
-  const showPlaceholder = !template.previewUrl || imageError
+  const previewSrc = template.previewUrl || `/api/templates/${template.id}/preview`
+  const showPlaceholder = imageError
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -65,7 +66,7 @@ export function TemplatePreviewModal({
               <div className="absolute inset-0 bg-gradient-to-br from-brand-50 to-brand-100" />
             ) : (
               <Image
-                src={template.previewUrl}
+                src={previewSrc}
                 alt={template.name}
                 fill
                 className="object-contain p-4"
@@ -126,7 +127,7 @@ export function TemplatePreviewModal({
                 className="flex-1"
                 onClick={() => {
                   if (showPlaceholder) return
-                  window.open(template.previewUrl, '_blank')
+                  window.open(previewSrc, '_blank')
                 }}
               >
                 <Download className="h-4 w-4" />

@@ -1,16 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import {
   ArrowRight,
+  BadgeCheck,
   CalendarPlus,
-  Clock,
-  Download,
+  Crown,
+  FileArchive,
+  FileSpreadsheet,
+  FolderKanban,
+  ImageUp,
   Layout,
-  Layers,
-  Zap,
+  Printer,
+  QrCode,
+  ReceiptText,
+  Users,
 } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import { EventCardSkeleton } from '@/components/ui/Skeleton'
@@ -21,8 +27,63 @@ interface Analytics {
   usage: { eventsCount: number; designsCount: number; exportsCount: number }
 }
 
+const COPY = {
+  uz: {
+    title: 'Event media markazi',
+    subtitle:
+      'Tadbirlar, material paketlari, Excel ro‘yxatlar, QR kodlar, print draftlar va final eksportlar bir joyda.',
+    createPackage: 'Create Event Package',
+    templates: 'Paket shablonlari',
+    readiness: 'Event readiness',
+    missing: 'Yetishmaydi',
+    missingItems: ['Sponsor banner', 'Speaker cards', 'Registration QR', 'Final print exports'],
+    myEvents: 'My Events',
+    recentDesigns: 'Recent Designs',
+    participantLists: 'Participant Lists',
+    generatedFiles: 'Generated Files',
+    uploadedAssets: 'Uploaded Assets',
+    qrCodes: 'QR Codes',
+    printDrafts: 'Print Drafts',
+    premiumStatus: 'Premium Status',
+    paymentHistory: 'Payment History',
+    packageFlow: 'Package workflow',
+    empty: 'Hali tadbir yo‘q.',
+    createFirst: 'Birinchi event package yarating',
+    open: 'Ochish',
+    active: 'Faol',
+    designs: 'ta dizayn',
+  },
+  ru: {
+    title: 'Центр event media',
+    subtitle:
+      'Мероприятия, пакеты материалов, Excel списки, QR-коды, print drafts и финальные экспорты в одном месте.',
+    createPackage: 'Create Event Package',
+    templates: 'Шаблоны пакетов',
+    readiness: 'Event readiness',
+    missing: 'Не хватает',
+    missingItems: ['Sponsor banner', 'Speaker cards', 'Registration QR', 'Final print exports'],
+    myEvents: 'My Events',
+    recentDesigns: 'Recent Designs',
+    participantLists: 'Participant Lists',
+    generatedFiles: 'Generated Files',
+    uploadedAssets: 'Uploaded Assets',
+    qrCodes: 'QR Codes',
+    printDrafts: 'Print Drafts',
+    premiumStatus: 'Premium Status',
+    paymentHistory: 'Payment History',
+    packageFlow: 'Package workflow',
+    empty: 'Мероприятий пока нет.',
+    createFirst: 'Создать первый event package',
+    open: 'Открыть',
+    active: 'Активно',
+    designs: 'дизайнов',
+  },
+}
+
 export default function DashboardPage() {
   const t = useTranslations('dashboard')
+  const locale = useLocale()
+  const copy = COPY[locale as 'uz' | 'ru'] ?? COPY.uz
   const [events, setEvents] = useState<Event[]>([])
   const [analytics, setAnalytics] = useState<Analytics | null>(null)
   const [loading, setLoading] = useState(true)
@@ -39,66 +100,54 @@ export default function DashboardPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const recent = events.slice(0, 3)
+  const recent = events.slice(0, 4)
   const usage = analytics?.usage
+  const readiness = useMemo(() => Math.min(92, 48 + events.length * 8), [events.length])
 
-  const stats = [
-    {
-      label: t('totalEvents'),
-      value: usage ? String(usage.eventsCount) : String(events.length),
-      trend: `${events.length}`,
-      icon: CalendarPlus,
-    },
-    {
-      label: t('totalDesigns'),
-      value: usage ? String(usage.designsCount) : '—',
-      trend: t('allTime'),
-      icon: Layout,
-    },
-    {
-      label: t('exports'),
-      value: usage ? String(usage.exportsCount) : '—',
-      trend: t('thisMonth'),
-      icon: Download,
-    },
-    {
-      label: 'Tejangan vaqt',
-      value: '24h',
-      trend: 'taxminan',
-      icon: Clock,
-    },
+  const commandStats = [
+    { label: copy.myEvents, value: usage ? usage.eventsCount : events.length, icon: FolderKanban },
+    { label: copy.recentDesigns, value: usage?.designsCount ?? 0, icon: Layout },
+    { label: copy.generatedFiles, value: usage?.exportsCount ?? 0, icon: FileArchive },
+    { label: copy.printDrafts, value: Math.max(1, events.length * 2), icon: Printer },
+  ]
+
+  const workspaceSections = [
+    { label: copy.participantLists, value: 'CSV/XLSX', icon: FileSpreadsheet, href: '/events' },
+    { label: copy.uploadedAssets, value: 'logos, stamps', icon: ImageUp, href: '/brand-kit' },
+    { label: copy.qrCodes, value: 'verification', icon: QrCode, href: '/events' },
+    { label: copy.premiumStatus, value: 'Free', icon: Crown, href: '/upgrade' },
+    { label: copy.paymentHistory, value: 'Click, Payme', icon: ReceiptText, href: '/settings/billing' },
+    { label: 'Speaker & Sponsor', value: 'concept ready', icon: Users, href: '/agency' },
   ]
 
   return (
     <div className="space-y-8">
-      <div className="flex items-start justify-between gap-8 border-b border-divide pb-8">
+      <div className="flex flex-col gap-6 border-b border-divide pb-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="label-caps mb-2">Xush kelibsiz</p>
+          <p className="label-caps mb-2">{t('welcome')}</p>
           <h1 className="mb-3 text-3xl font-semibold tracking-tight text-text-primary">
-            Bugun nima qilamiz?
+            {copy.title}
           </h1>
-          <p className="max-w-md text-sm text-text-secondary">
-            Yangi tadbir yarating yoki mavjud dizaynlaringizni davom ettiring.
-          </p>
+          <p className="max-w-2xl text-sm text-text-secondary">{copy.subtitle}</p>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           <Link href="/templates" className="btn-secondary btn-md inline-flex items-center gap-2">
             <Layout size={14} />
-            Shablonlar
+            {copy.templates}
           </Link>
           <Link href="/events/new" className="btn-primary btn-md inline-flex items-center gap-2">
             <CalendarPlus size={14} />
-            Yangi tadbir
+            {copy.createPackage}
           </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-px rounded border border-divide bg-divide lg:grid-cols-4">
-        {stats.map(({ label, value, trend, icon: Icon }) => (
+        {commandStats.map(({ label, value, icon: Icon }) => (
           <div key={label} className="bg-canvas p-6 transition-colors hover:bg-subtle">
             <div className="mb-4 flex items-start justify-between">
               <Icon size={16} className="text-text-disabled" />
-              <span className="text-xs text-text-disabled">{trend}</span>
+              <span className="text-xs text-text-disabled">live</span>
             </div>
             <div className="mb-1 text-3xl font-semibold tracking-tight text-text-primary">
               {value}
@@ -108,37 +157,19 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
-        <div className="overflow-hidden rounded border border-divide xl:col-span-2">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1.15fr_0.85fr]">
+        <section className="overflow-hidden rounded border border-divide bg-canvas">
           <div className="flex items-center justify-between border-b border-divide px-5 py-4">
-            <p className="text-sm font-semibold text-text-primary">So&apos;nggi tadbirlar</p>
+            <div>
+              <p className="text-sm font-semibold text-text-primary">{copy.myEvents}</p>
+              <p className="text-xs text-text-disabled">{copy.packageFlow}</p>
+            </div>
             <Link
               href="/events"
               className="flex items-center gap-1 text-xs text-text-disabled transition-colors hover:text-text-secondary"
             >
-              Barchasini ko&apos;rish <ArrowRight size={11} />
+              {t('viewAll')} <ArrowRight size={11} />
             </Link>
-          </div>
-
-          <div className="grid grid-cols-12 border-b border-divide bg-subtle px-5 py-2.5">
-            {['Tadbir', 'Uslub', 'Sana', 'Status', ''].map((h, i) => (
-              <div
-                key={h}
-                className={`label-caps ${
-                  i === 0
-                    ? 'col-span-5'
-                    : i === 1
-                      ? 'col-span-2'
-                      : i === 2
-                        ? 'col-span-2'
-                        : i === 3
-                          ? 'col-span-2'
-                          : 'col-span-1'
-                }`}
-              >
-                {h}
-              </div>
-            ))}
           </div>
 
           {loading ? (
@@ -148,9 +179,9 @@ export default function DashboardPage() {
             </>
           ) : recent.length === 0 ? (
             <div className="px-5 py-12 text-center text-sm text-text-tertiary">
-              Hali tadbir yo&apos;q.{' '}
+              {copy.empty}{' '}
               <Link href="/events/new" className="text-accent hover:text-accent-hover">
-                Birinchi tadbirni yarating
+                {copy.createFirst}
               </Link>
             </div>
           ) : (
@@ -158,29 +189,29 @@ export default function DashboardPage() {
               <Link
                 key={event.id}
                 href={`/events/${event.id}`}
-                className="group grid grid-cols-12 items-center border-b border-divide px-5 py-4 transition-colors last:border-0 hover:bg-subtle"
+                className="group grid grid-cols-12 items-center gap-3 border-b border-divide px-5 py-4 transition-colors last:border-0 hover:bg-subtle"
               >
-                <div className="col-span-5 flex min-w-0 items-center gap-3">
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-divide bg-subtle text-xs font-semibold text-text-tertiary">
+                <div className="col-span-12 flex min-w-0 items-center gap-3 md:col-span-5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-divide bg-subtle text-xs font-semibold text-text-tertiary">
                     {event.name.charAt(0)}
                   </div>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-text-primary">{event.name}</p>
                     <p className="text-xs text-text-disabled">
-                      {event.materialCount ?? 0} ta dizayn
+                      {event.materialCount ?? 0} {copy.designs}
                     </p>
                   </div>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-4 md:col-span-2">
                   <span className="tag tag-default">{EVENT_TYPE_LABELS[event.type]}</span>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-4 md:col-span-2">
                   <span className="text-xs text-text-secondary">
-                    {event.date ? formatDate(event.date) : '—'}
+                    {event.date ? formatDate(event.date) : 'No date'}
                   </span>
                 </div>
-                <div className="col-span-2">
-                  <span className="tag tag-ok">Faol</span>
+                <div className="col-span-3 md:col-span-2">
+                  <span className="tag tag-ok">{copy.active}</span>
                 </div>
                 <div className="col-span-1 flex justify-end">
                   <ArrowRight
@@ -191,66 +222,54 @@ export default function DashboardPage() {
               </Link>
             ))
           )}
-        </div>
+        </section>
 
-        <div className="space-y-4">
-          <div className="overflow-hidden rounded border border-divide">
-            <div className="border-b border-divide px-5 py-4">
-              <p className="text-sm font-semibold text-text-primary">Tezkor harakatlar</p>
+        <aside className="space-y-4">
+          <section className="rounded border border-divide bg-ink p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{copy.readiness}</p>
+                <p className="text-xs text-text-disabled">{copy.missing}</p>
+              </div>
+              <span className="text-2xl font-semibold text-text-primary">{readiness}%</span>
             </div>
-            <div className="divide-y divide-divide">
-              {[
-                { icon: CalendarPlus, label: 'Yangi tadbir', desc: 'Noldan boshlash', href: '/events/new' },
-                { icon: Layout, label: 'Shablon tanlash', desc: '48+ dizayn', href: '/templates' },
-                { icon: Layers, label: 'Brand Kit', desc: 'Rang va font', href: '/settings' },
-                { icon: Zap, label: 'AI bilan yozish', desc: 'Matn generatsiya', href: '/events/new' },
-              ].map(({ icon: Icon, label, desc, href }) => (
+            <div className="mb-4 h-2 overflow-hidden rounded-full bg-subtle">
+              <div className="h-full rounded-full bg-accent" style={{ width: `${readiness}%` }} />
+            </div>
+            <div className="space-y-2">
+              {copy.missingItems.map((item) => (
+                <div key={item} className="flex items-center gap-2 text-xs text-text-secondary">
+                  <BadgeCheck className="h-3.5 w-3.5 text-text-disabled" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="overflow-hidden rounded border border-divide">
+            <div className="border-b border-divide px-5 py-4">
+              <p className="text-sm font-semibold text-text-primary">Workspace modules</p>
+            </div>
+            <div className="grid grid-cols-1 divide-y divide-divide">
+              {workspaceSections.map(({ label, value, icon: Icon, href }) => (
                 <Link
                   key={label}
                   href={href}
                   className="group flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-subtle"
                 >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-divide bg-subtle transition-all group-hover:border-accent-border group-hover:bg-accent-dim">
-                    <Icon
-                      size={13}
-                      className="text-text-tertiary transition-colors group-hover:text-accent"
-                    />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded border border-divide bg-subtle">
+                    <Icon className="h-4 w-4 text-accent" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-text-primary">{label}</p>
-                    <p className="text-xs text-text-disabled">{desc}</p>
+                    <p className="text-xs text-text-disabled">{value}</p>
                   </div>
-                  <ArrowRight
-                    size={12}
-                    className="shrink-0 text-text-disabled transition-colors group-hover:text-text-tertiary"
-                  />
+                  <ArrowRight className="h-3.5 w-3.5 text-text-disabled group-hover:text-text-tertiary" />
                 </Link>
               ))}
             </div>
-          </div>
-
-          <div className="rounded border border-divide p-5">
-            <p className="label-caps mb-3">Aktiv uslub</p>
-            <div className="grid grid-cols-3 gap-px rounded border border-divide bg-divide">
-              {[
-                { id: 'MIN', label: 'Minimal', dot: 'bg-text-primary' },
-                { id: 'CLS', label: 'Klassik', dot: 'bg-warn' },
-                { id: 'HIT', label: 'Hi-Tech', dot: 'bg-accent', active: true },
-              ].map(({ id, label, dot, active }) => (
-                <button
-                  key={id}
-                  type="button"
-                  className={`bg-canvas py-2.5 text-xs font-medium transition-colors hover:bg-subtle ${
-                    active ? 'text-text-primary' : 'text-text-disabled'
-                  }`}
-                >
-                  <div className={`mx-auto mb-1.5 h-1.5 w-1.5 rounded-full ${dot}`} />
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+          </section>
+        </aside>
       </div>
     </div>
   )

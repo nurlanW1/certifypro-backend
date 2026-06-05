@@ -3,6 +3,7 @@ import { LandingCta } from '@/components/landing/LandingCta'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingFeatures } from '@/components/landing/LandingFeatures'
 import { LandingHero } from '@/components/landing/LandingHero'
+import { LandingOperatingSystem } from '@/components/landing/LandingOperatingSystem'
 import { LandingPricing } from '@/components/landing/LandingPricing'
 import { LandingShowcase } from '@/components/landing/LandingShowcase'
 import { Footer } from '@/components/layout/Footer'
@@ -33,6 +34,7 @@ export default async function HomePage({
       <Navbar />
       <main>
         <LandingHero />
+        <LandingOperatingSystem />
         <LandingShowcase />
         <LandingFeatures />
         <LandingPricing />

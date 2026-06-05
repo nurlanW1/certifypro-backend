@@ -8,7 +8,7 @@ Asosiy domen **gildia.uz** odatda **Vercel** da qoladi; Railway faqat qo‘shimc
 ## 1. Railway loyihasi
 
 1. [railway.app](https://railway.app) → **New Project** → **GitHub Repo**
-2. Repo: `nurlanW1/certifypro-backend`
+2. Repo: `nurlanW1/gildia`
 3. Branch: `main`
 
 ---
@@ -54,7 +54,7 @@ CLERK_SECRET_KEY=sk_live_...
 NEXT_PUBLIC_APP_URL=https://YOUR-APP.up.railway.app
 ```
 
-> `NEXT_PUBLIC_APP_URL` — Railway bergan domen (masalan `https://certifypro-backend-production.up.railway.app`).  
+> `NEXT_PUBLIC_APP_URL` — Railway bergan domen (masalan `https://gildia-production.up.railway.app`).  
 > Keyin custom domain ulasangiz, shu o‘zgaruvchini yangilang.
 
 ### To‘lovlar (ixtiyoriy)
@@ -175,3 +175,4 @@ Brauzer: `https://YOUR-APP.up.railway.app` — Gildia bosh sahifasi.
 ---
 
 Oxirgi push: `Fix Railway build: install frontend deps before next build` (`4c6cb42`).
+

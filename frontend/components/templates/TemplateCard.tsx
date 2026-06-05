@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Eye, Zap, Lock } from 'lucide-react'
+import { Eye, Zap, Lock, Printer, Globe2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { useMaterialLabel } from '@/hooks/useMaterialLabel'
@@ -90,17 +90,33 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
           </div>
         )}
 
+        <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+          {template.isPrintable && (
+            <span className="inline-flex items-center gap-1 rounded bg-canvas/90 px-1.5 py-1 text-[10px] font-medium text-text-secondary">
+              <Printer size={10} />
+              print
+            </span>
+          )}
+          {template.isOnlineReady && (
+            <span className="inline-flex items-center gap-1 rounded bg-canvas/90 px-1.5 py-1 text-[10px] font-medium text-text-secondary">
+              <Globe2 size={10} />
+              online
+            </span>
+          )}
+        </div>
+
         {hovered && (
-          <div className="absolute inset-0 flex items-center justify-center gap-2 bg-canvas/80 backdrop-blur-[1px]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-canvas/85 px-3 backdrop-blur-[1px]">
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
                 onPreview(template.id)
               }}
-              className="btn-secondary btn-icon-sm"
+              className="btn-secondary btn-sm w-full"
             >
               <Eye size={12} />
+              {t('preview')}
             </button>
             <button
               type="button"
@@ -109,9 +125,10 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
                 e.stopPropagation()
                 onSelect(template.id)
               }}
-              className="btn-primary btn-icon-sm"
+              className="btn-primary btn-sm w-full"
             >
               <Zap size={12} />
+              {isSelecting ? '...' : t('select')}
             </button>
           </div>
         )}
@@ -121,7 +138,10 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
         <p className="truncate text-sm text-text-secondary">
           {template.nameUz ?? template.name}
         </p>
-        <p className="mt-0.5 truncate text-xs text-text-tertiary">{categoryLabel}</p>
+        <div className="mt-1 flex items-center justify-between gap-2">
+          <p className="truncate text-xs text-text-tertiary">{categoryLabel}</p>
+          <p className="truncate text-xs text-text-disabled">{template.assetType}</p>
+        </div>
       </div>
     </article>
   )

@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { Search } from 'lucide-react'
+import { nanoid } from 'nanoid'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import { TemplateCard } from '@/components/templates/TemplateCard'
@@ -67,7 +68,22 @@ export function TemplateGrid({
       return
     }
 
-    router.push(`/templates/${id}`)
+    const designId = nanoid()
+    setSelectingId(id)
+    try {
+      await fetch(`/api/designs/${designId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          templateId: id,
+          name: templates.find((template) => template.id === id)?.nameUz ?? 'Gildia starter template',
+          canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
+        }),
+      })
+    } finally {
+      setSelectingId(null)
+      router.push(`/editor/${designId}?templateId=${id}`)
+    }
   }
 
   if (isLoading) {

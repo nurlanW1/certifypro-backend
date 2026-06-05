@@ -151,7 +151,7 @@ export function EditorVariablesPanel({ eventId }: EditorVariablesPanelProps) {
                 objects?: Record<string, unknown>[]
               }
               const fitted = autoFitTextInCanvasJson(json, {
-                targetSubstrings: ['{{participantName}}', previewParticipantName],
+                targetSubstrings: ['{{participantName}}', '{{full_name}}', previewParticipantName],
               })
               fabricCanvas.loadFromJSON(fitted, () => {
                 fabricCanvas.renderAll()
