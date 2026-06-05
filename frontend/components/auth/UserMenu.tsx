@@ -13,9 +13,9 @@ export function UserMenu() {
     return (
       <div
         className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700"
-        title="Dev rejim — Clerk sozlanmagan"
+        title="Mehmon rejimi"
       >
-        D
+        M
       </div>
     )
   }

@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { AuthButtons } from '@/components/auth/AuthButtons'
 import { isClerkConfigured } from '@/lib/clerk-config'
-import { isProduction } from '@/lib/env'
+import { isGuestMode } from '@/lib/env'
 
 const JOURNEY = [
   {
@@ -42,7 +42,7 @@ export default async function HomePage() {
     if (userId) redirect('/dashboard')
   }
 
-  const showDevBanner = !isClerkConfigured() && !isProduction()
+  const showDevBanner = isGuestMode()
 
   return (
     <div className="gildia-page-mesh min-h-screen">
@@ -60,7 +60,7 @@ export default async function HomePage() {
 
       {showDevBanner && (
         <div className="border-b border-brand-200 bg-brand-50 px-6 py-2 text-center text-sm text-brand-800">
-          Dev rejim: Clerk kalitlari yo&apos;q — faqat mahalliy sinov uchun.
+          Mehmon rejimi: Clerk hali ulanmagan — saytni sinab ko‘rishingiz mumkin.
         </div>
       )}
 
