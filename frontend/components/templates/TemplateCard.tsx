@@ -1,146 +1,98 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
-import { Eye, Zap, Lock, Printer, Globe2 } from 'lucide-react'
+import { Eye, Globe2, Lock, Printer, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
-import { useMaterialLabel } from '@/hooks/useMaterialLabel'
-import type { MaterialCategory } from '@/types/event'
 import type { MockTemplate } from '@/lib/mock-templates'
+import type { StarterTemplate } from '@/lib/templates/types'
 
-type TemplateStyle = 'MINIMALIST' | 'CLASSIC' | 'HITECH'
+type CardTemplate = MockTemplate | StarterTemplate
 
-const styleDot: Record<TemplateStyle, string> = {
-  MINIMALIST: 'bg-white',
-  CLASSIC: 'bg-amber-400',
-  HITECH: 'bg-accent',
+function titleOf(template: CardTemplate) {
+  return 'name' in template ? template.nameUz ?? template.name : template.title
 }
 
-const previewBg: Record<TemplateStyle, string> = {
-  MINIMALIST: '#FAFAFA',
-  CLASSIC: '#FDFAF5',
-  HITECH: '#0F0F0F',
+function previewOf(template: CardTemplate) {
+  return 'previewUrl' in template ? template.previewUrl || `/api/templates/${template.id}/preview` : template.thumbnail
 }
 
-function inferStyle(template: MockTemplate): TemplateStyle {
-  const tags = template.tags.join(' ').toLowerCase()
-  if (tags.includes('klassik') || tags.includes('classic')) return 'CLASSIC'
-  if (tags.includes('minimal') || tags.includes('zamonaviy')) return 'MINIMALIST'
-  return 'HITECH'
+function categoryOf(template: CardTemplate) {
+  return 'materialCategory' in template ? template.category : template.category
+}
+
+function styleOf(template: CardTemplate) {
+  const style = 'style' in template ? String(template.style) : ''
+  if (style.includes('classic')) return 'classic'
+  if (style.includes('hitech')) return 'hitech'
+  return 'minimalistic'
 }
 
 interface TemplateCardProps {
-  template: MockTemplate
+  template: CardTemplate
   onSelect: (id: string) => void
   onPreview: (id: string) => void
   isSelecting?: boolean
 }
 
 export function TemplateCard({ template, onSelect, onPreview, isSelecting }: TemplateCardProps) {
-  const t = useTranslations('templates')
-  const materialLabel = useMaterialLabel()
-  const [imageError, setImageError] = useState(false)
-  const [hovered, setHovered] = useState(false)
-  const previewSrc = template.previewUrl || `/api/templates/${template.id}/preview`
-  const showPlaceholder = imageError
-  const style = inferStyle(template)
-  const categoryLabel = materialLabel(template.category as MaterialCategory)
+  const style = styleOf(template)
+  const previewSrc = previewOf(template)
+  const title = titleOf(template)
 
   return (
-    <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group relative cursor-pointer overflow-hidden rounded border border-divide transition-all duration-150 hover:border-text-disabled"
-    >
-      <div
-        className="relative aspect-[3/4]"
-        style={{ background: showPlaceholder ? previewBg[style] : undefined }}
-      >
-        {!showPlaceholder && (
-          <Image
-            src={previewSrc}
-            alt={template.nameUz ?? template.name}
-            fill
-            className={cn(
-              'object-contain p-2 transition-all duration-150',
-              template.isPremium && 'blur-[2px] group-hover:blur-0'
-            )}
-            sizes="(max-width: 640px) 50vw, 25vw"
-            unoptimized
-            onError={() => setImageError(true)}
-          />
-        )}
+    <article className="group overflow-hidden rounded border border-divide bg-surface transition-all hover:border-text-disabled hover:shadow-sm">
+      <div className={cn('relative aspect-[3/4]', style === 'hitech' ? 'bg-[#07111f]' : style === 'classic' ? 'bg-[#fffaf0]' : 'bg-white')}>
+        <Image
+          src={previewSrc}
+          alt={title}
+          fill
+          className={cn('object-contain p-2 transition-all', template.isPremium && 'blur-[2px] group-hover:blur-0')}
+          sizes="(max-width: 640px) 50vw, 25vw"
+          unoptimized
+        />
 
-        <div className={cn('absolute left-2 top-2 h-1.5 w-1.5 rounded-full', styleDot[style])} />
-
-        {template.isPremium ? (
-          <div className="absolute right-2 top-2">
-            <span className="tag tag-accent px-1.5 py-0.5 text-xs">PRO</span>
-          </div>
-        ) : (
-          <div className="absolute right-2 top-2">
-            <span className="tag tag-ok px-1.5 py-0.5 text-xs">{t('free')}</span>
-          </div>
-        )}
-
-        {template.isPremium && !hovered && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas/40">
-            <Lock className="h-6 w-6 text-text-tertiary" />
-          </div>
-        )}
-
-        <div className="absolute bottom-2 left-2 flex flex-wrap gap-1.5">
+        <div className="absolute left-2 top-2 flex gap-1.5">
           {template.isPrintable && (
             <span className="inline-flex items-center gap-1 rounded bg-canvas/90 px-1.5 py-1 text-[10px] font-medium text-text-secondary">
-              <Printer size={10} />
+              <Printer className="h-2.5 w-2.5" />
               print
             </span>
           )}
           {template.isOnlineReady && (
             <span className="inline-flex items-center gap-1 rounded bg-canvas/90 px-1.5 py-1 text-[10px] font-medium text-text-secondary">
-              <Globe2 size={10} />
+              <Globe2 className="h-2.5 w-2.5" />
               online
             </span>
           )}
         </div>
 
-        {hovered && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-canvas/85 px-3 backdrop-blur-[1px]">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onPreview(template.id)
-              }}
-              className="btn-secondary btn-sm w-full"
-            >
-              <Eye size={12} />
-              {t('preview')}
-            </button>
-            <button
-              type="button"
-              disabled={isSelecting}
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelect(template.id)
-              }}
-              className="btn-primary btn-sm w-full"
-            >
-              <Zap size={12} />
-              {isSelecting ? '...' : t('select')}
-            </button>
+        <span className={cn('absolute right-2 top-2 rounded px-1.5 py-0.5 text-xs font-semibold', template.isPremium ? 'bg-accent text-text-inverse' : 'bg-success-light text-success-dark')}>
+          {template.isPremium ? 'PRO' : 'Free'}
+        </span>
+
+        {template.isPremium && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas/35 group-hover:hidden">
+            <Lock className="h-6 w-6 text-text-tertiary" />
           </div>
         )}
+
+        <div className="absolute inset-0 hidden flex-col items-center justify-center gap-2 bg-canvas/85 px-3 backdrop-blur-[1px] group-hover:flex">
+          <button type="button" onClick={() => onPreview(template.id)} className="btn-secondary btn-sm w-full">
+            <Eye className="h-3 w-3" />
+            Preview
+          </button>
+          <button type="button" disabled={isSelecting} onClick={() => onSelect(template.id)} className="btn-primary btn-sm w-full">
+            <Zap className="h-3 w-3" />
+            {isSelecting ? 'Opening...' : 'Use Template'}
+          </button>
+        </div>
       </div>
 
-      <div className="border-t border-divide bg-ink px-3 py-2.5">
-        <p className="truncate text-sm text-text-secondary">
-          {template.nameUz ?? template.name}
-        </p>
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <p className="truncate text-xs text-text-tertiary">{categoryLabel}</p>
-          <p className="truncate text-xs text-text-disabled">{template.assetType}</p>
+      <div className="border-t border-divide px-3 py-2.5">
+        <h3 className="truncate text-sm font-medium text-text-primary">{title}</h3>
+        <div className="mt-1 flex items-center justify-between gap-2 text-xs text-text-muted">
+          <span className="truncate">{categoryOf(template)}</span>
+          {'sizeLabel' in template ? <span className="truncate">{template.sizeLabel}</span> : <span className="truncate">{template.size.label}</span>}
         </div>
       </div>
     </article>

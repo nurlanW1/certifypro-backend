@@ -1,4 +1,4 @@
-import type { StarterTemplate, TemplateElement } from './templateTypes'
+import type { StarterTemplate, TemplateElement } from './types'
 
 function esc(value: string): string {
   return value
@@ -8,7 +8,7 @@ function esc(value: string): string {
     .replace(/"/g, '&quot;')
 }
 
-function renderPlaceholderLabel(element: Extract<TemplateElement, { type: 'rectangle' | 'decorativeShape' | 'imagePlaceholder' | 'qrPlaceholder' | 'logoPlaceholder' | 'signaturePlaceholder' | 'stampPlaceholder' }>) {
+function renderPlaceholderLabel(element: Extract<TemplateElement, { width: number }>) {
   if (!element.label) return ''
   const cx = element.x + element.width / 2
   const cy = element.y + element.height / 2
@@ -21,6 +21,7 @@ function renderElement(element: TemplateElement): string {
       const anchor = element.align ?? 'start'
       return `<text x="${element.x}" y="${element.y}" text-anchor="${anchor}" font-family="${esc(element.fontFamily ?? 'Arial, sans-serif')}" font-size="${element.fontSize}" fill="${element.fill}" font-weight="${element.fontWeight ?? '400'}">${esc(element.text)}</text>`
     }
+    case 'rect':
     case 'rectangle':
     case 'decorativeShape':
     case 'imagePlaceholder':
@@ -54,7 +55,7 @@ function renderElement(element: TemplateElement): string {
 }
 
 function renderStylePattern(template: StarterTemplate): string {
-  if (template.style === 'HITECH_SCIENCE') {
+  if (template.style === 'hitech-science') {
     return `<defs>
       <pattern id="${template.id}-grid" width="42" height="42" patternUnits="userSpaceOnUse">
         <path d="M 42 0 L 0 0 0 42" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.14"/>
@@ -62,7 +63,7 @@ function renderStylePattern(template: StarterTemplate): string {
     </defs>
     <rect width="${template.size.width}" height="${template.size.height}" fill="url(#${template.id}-grid)" opacity="0.9"/>`
   }
-  if (template.style === 'CLASSIC') {
+  if (template.style === 'classic') {
     return `<rect x="18" y="18" width="${template.size.width - 36}" height="${template.size.height - 36}" fill="none" stroke="#b88a2a" stroke-width="2"/>
     <rect x="32" y="32" width="${template.size.width - 64}" height="${template.size.height - 64}" fill="none" stroke="#b88a2a" stroke-width="1" opacity="0.55"/>`
   }

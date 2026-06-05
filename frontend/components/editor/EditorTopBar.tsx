@@ -227,7 +227,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 className="flex cursor-not-allowed items-center gap-2 rounded px-3 py-2 text-sm text-text-disabled outline-none"
               >
                 <FileImage className="h-4 w-4 text-text-muted" />
-                JPG export · TODO
+                JPG export · Coming soon
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
@@ -259,7 +259,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 className="flex cursor-not-allowed items-center gap-2 rounded px-3 py-2 text-sm text-text-disabled outline-none"
               >
                 <FileText className="h-4 w-4 text-text-muted" />
-                ZIP bulk export · TODO
+                ZIP bulk export · Coming soon
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"

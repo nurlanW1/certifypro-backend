@@ -13,7 +13,9 @@ export interface TemplateSvgInput {
 export function generateTemplateSvg(input: TemplateSvgInput): string {
   const starter =
     findStarterTemplate(input.id) ??
-    STARTER_TEMPLATES.find((template) => template.category === input.category)
+    STARTER_TEMPLATES.find(
+      (template) => template.category === input.category || template.materialCategory === input.category
+    )
 
   if (starter) {
     return renderStarterTemplateSvg(starter)

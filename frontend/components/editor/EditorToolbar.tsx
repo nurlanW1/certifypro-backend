@@ -15,6 +15,12 @@ import {
   Signature,
   Stamp,
   Upload,
+  Download,
+  FileArchive,
+  FileImage,
+  FileText,
+  ZoomIn,
+  ZoomOut,
 } from 'lucide-react'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { useEditorStore, type ActiveTool } from '@/store/editorStore'
@@ -27,6 +33,7 @@ import {
   loadImageToCanvas,
 } from '@/lib/editor/fabric-utils'
 import { resizeImage } from '@/lib/editor/imageProcessor'
+import { PrintDraftButton } from '@/components/editor/PrintDraftButton'
 
 const TOOLS: {
   id: ActiveTool
@@ -45,7 +52,25 @@ const TOOLS: {
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 
-export function EditorToolbar() {
+interface TemplateEditorToolbarProps {
+  mode?: 'fabric' | 'event-template'
+  zoom?: number
+  onZoomIn?: () => void
+  onZoomOut?: () => void
+  onExportPNG?: () => void
+  onExportSVG?: () => void
+  onPrintDraft?: () => void
+}
+
+export function EditorToolbar({
+  mode = 'fabric',
+  zoom = 1,
+  onZoomIn,
+  onZoomOut,
+  onExportPNG,
+  onExportSVG,
+  onPrintDraft,
+}: TemplateEditorToolbarProps = {}) {
   const fileRef = useRef<HTMLInputElement>(null)
   const {
     activeTool,
@@ -56,6 +81,44 @@ export function EditorToolbar() {
     setLayersOpen,
     assetMode,
   } = useEditorStore()
+
+  if (mode === 'event-template') {
+    return (
+      <div className="flex min-h-14 flex-wrap items-center justify-between gap-3 border-b border-divide bg-surface px-4 py-2">
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={onZoomOut} className="btn-secondary btn-sm" aria-label="Zoom out">
+            <ZoomOut className="h-4 w-4" />
+          </button>
+          <span className="min-w-14 text-center text-xs font-semibold text-text-secondary">
+            {Math.round(zoom * 100)}%
+          </span>
+          <button type="button" onClick={onZoomIn} className="btn-secondary btn-sm" aria-label="Zoom in">
+            <ZoomIn className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <PrintDraftButton onPrint={onPrintDraft} />
+          <button type="button" onClick={onExportPNG} className="btn-secondary btn-sm">
+            <FileImage className="h-4 w-4" />
+            PNG
+          </button>
+          <button type="button" className="btn-secondary btn-sm" disabled title="Coming soon">
+            <FileText className="h-4 w-4" />
+            PDF Coming soon
+          </button>
+          <button type="button" onClick={onExportSVG} className="btn-secondary btn-sm">
+            <Download className="h-4 w-4" />
+            SVG
+          </button>
+          <button type="button" className="btn-secondary btn-sm" disabled title="Coming soon">
+            <FileArchive className="h-4 w-4" />
+            ZIP Coming soon
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const visibleTools = assetMode
     ? TOOLS.filter((t) => ['select', 'text', 'image', 'pen'].includes(t.id))

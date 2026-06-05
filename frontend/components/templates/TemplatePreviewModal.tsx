@@ -1,97 +1,61 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
-import { X, Zap, Download, Crown } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/Button'
+import { Crown, Download, X, Zap } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 import type { MockTemplate } from '@/lib/mock-templates'
-import { MATERIAL_LABELS, EVENT_TYPE_LABELS } from '@/types/event'
-import type { EventType, MaterialCategory } from '@/types/event'
+import type { StarterTemplate } from '@/lib/templates/types'
+
+type PreviewTemplate = MockTemplate | StarterTemplate
 
 interface TemplatePreviewModalProps {
-  template: MockTemplate | null
+  template: PreviewTemplate | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onSelect: (id: string) => void
 }
 
-export function TemplatePreviewModal({
-  template,
-  open,
-  onOpenChange,
-  onSelect,
-}: TemplatePreviewModalProps) {
-  const router = useRouter()
-  const [imageError, setImageError] = useState(false)
+function titleOf(template: PreviewTemplate) {
+  return 'name' in template ? template.nameUz ?? template.name : template.title
+}
 
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden'
-      setImageError(false)
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [open, template?.id])
+function descriptionOf(template: PreviewTemplate) {
+  return template.description
+}
 
+function previewOf(template: PreviewTemplate) {
+  return 'previewUrl' in template ? template.previewUrl || `/api/templates/${template.id}/preview` : template.thumbnail
+}
+
+export function TemplatePreviewModal({ template, open, onOpenChange, onSelect }: TemplatePreviewModalProps) {
   if (!template) return null
 
-  const categoryLabel =
-    MATERIAL_LABELS[template.category as MaterialCategory] ?? template.category
-  const eventLabel = template.eventType
-    ? EVENT_TYPE_LABELS[template.eventType as EventType]
-    : null
-  const previewSrc = template.previewUrl || `/api/templates/${template.id}/preview`
-  const showPlaceholder = imageError
+  const title = titleOf(template)
+  const previewSrc = previewOf(template)
+  const category = 'materialCategory' in template ? template.category : template.category
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-sm" />
-        <Dialog.Content
-          className={cn(
-            'fixed left-1/2 top-1/2 z-50 flex max-h-[90vh] w-[95vw] max-w-5xl -translate-x-1/2 -translate-y-1/2',
-            'flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-lg',
-            'focus:outline-none md:flex-row md:max-h-[80vh]'
-          )}
-        >
-          <div className="relative aspect-[4/3] w-full shrink-0 bg-surface-secondary md:aspect-auto md:w-[55%]">
-            {showPlaceholder ? (
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-50 to-brand-100" />
-            ) : (
-              <Image
-                src={previewSrc}
-                alt={template.name}
-                fill
-                className="object-contain p-4"
-                unoptimized
-                onError={() => setImageError(true)}
-              />
-            )}
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex max-h-[88vh] w-[95vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded border border-border bg-surface shadow-lg focus:outline-none md:flex-row">
+          <div className="relative aspect-[4/3] w-full shrink-0 bg-surface-secondary md:aspect-auto md:w-[56%]">
+            <Image src={previewSrc} alt={title} fill className="object-contain p-4" unoptimized />
           </div>
 
           <div className="flex flex-1 flex-col overflow-y-auto p-6">
             <div className="mb-4 flex items-start justify-between gap-4">
-              <Dialog.Title className="text-xl font-semibold text-text-primary">
-                {template.nameUz ?? template.name}
-              </Dialog.Title>
-              <Dialog.Close
-                className="rounded-lg p-2 text-text-muted hover:bg-brand-50"
-                aria-label="Yopish"
-              >
+              <Dialog.Title className="text-xl font-semibold text-text-primary">{title}</Dialog.Title>
+              <Dialog.Close className="rounded p-2 text-text-muted hover:bg-subtle" aria-label="Close preview">
                 <X className="h-5 w-5" />
               </Dialog.Close>
             </div>
 
             <div className="mb-4 flex flex-wrap gap-2">
-              <Badge>{categoryLabel}</Badge>
-              {eventLabel && <Badge variant="default">{eventLabel}</Badge>}
+              <Badge>{category}</Badge>
+              <Badge>{template.isPrintable ? 'Printable' : 'Online'}</Badge>
               {template.isPremium && (
                 <Badge variant="premium">
                   <Crown className="mr-1 h-3 w-3" />
@@ -101,15 +65,8 @@ export function TemplatePreviewModal({
             </div>
 
             <Dialog.Description className="mb-6 text-sm leading-relaxed text-text-muted">
-              {template.description}
+              {descriptionOf(template)}
             </Dialog.Description>
-
-            {template.isPremium && (
-              <div className="mb-6 rounded-xl border border-warning/30 bg-warning-light px-4 py-3 text-sm text-warning-dark">
-                Bu shablon PRO rejada mavjud. Barcha premium funksiyalardan foydalanish uchun
-                rejangizni yangilang.
-              </div>
-            )}
 
             <div className="mt-auto flex flex-col gap-3 sm:flex-row">
               <Button
@@ -120,30 +77,13 @@ export function TemplatePreviewModal({
                 }}
               >
                 <Zap className="h-4 w-4" />
-                Bu shablonni tanlash
+                Use Template
               </Button>
-              <Button
-                variant="secondary"
-                className="flex-1"
-                onClick={() => {
-                  if (showPlaceholder) return
-                  window.open(previewSrc, '_blank')
-                }}
-              >
+              <Button variant="secondary" className="flex-1" onClick={() => window.open(previewSrc, '_blank')}>
                 <Download className="h-4 w-4" />
-                Preview yuklab olish
+                Open SVG Preview
               </Button>
             </div>
-
-            {template.isPremium && (
-              <Button
-                variant="ghost"
-                className="mt-3 w-full"
-                onClick={() => router.push('/dashboard')}
-              >
-                Pro rejimga o&apos;tish
-              </Button>
-            )}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

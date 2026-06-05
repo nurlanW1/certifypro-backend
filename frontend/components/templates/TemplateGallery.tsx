@@ -1,145 +1,143 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { SlidersHorizontal } from 'lucide-react'
-import { TemplateSearch } from '@/components/templates/TemplateSearch'
-import { CategoryTabs } from '@/components/templates/CategoryTabs'
-import {
-  FilterSidebarDesktop,
-  FilterSidebarMobile,
-} from '@/components/templates/FilterSidebar'
-import { TemplateGrid } from '@/components/templates/TemplateGrid'
-import { EventTemplateBanner } from '@/components/templates/EventTemplateBanner'
-import { useTemplateStore } from '@/store/templateStore'
-import { getCategoryCounts } from '@/lib/mock-templates'
-import type { MockTemplate } from '@/lib/mock-templates'
-import type { MaterialCategory } from '@/types/event'
-import type { PriceFilterType } from '@/lib/filter-templates'
-
-function priceFilterToPremium(priceType: PriceFilterType): string | null {
-  if (priceType === 'FREE') return 'false'
-  if (priceType === 'PREMIUM') return 'true'
-  return null
-}
+import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, SlidersHorizontal } from 'lucide-react'
+import { TemplateCard } from '@/components/templates/TemplateCard'
+import { TemplatePreviewModal } from '@/components/templates/TemplatePreviewModal'
+import { STARTER_TEMPLATES } from '@/lib/templates/starterTemplates'
+import { TEMPLATE_CATEGORIES, TEMPLATE_STYLES, filterStarterTemplates } from '@/lib/templates/templateUtils'
+import type { StarterTemplate, TemplateCategory, TemplateStyle } from '@/lib/templates/types'
 
 export function TemplateGallery() {
-  const searchParams = useSearchParams()
-  const eventId = searchParams.get('eventId')
-  const categoryParam = searchParams.get('category') as MaterialCategory | null
+  const router = useRouter()
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState<TemplateCategory | 'all'>('all')
+  const [style, setStyle] = useState<TemplateStyle | 'all'>('all')
+  const [price, setPrice] = useState<'all' | 'free' | 'premium'>('all')
+  const [previewId, setPreviewId] = useState<string | null>(null)
 
-  const [templates, setTemplates] = useState<MockTemplate[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [eventName, setEventName] = useState('')
-  const categoryCounts = useMemo(() => getCategoryCounts(), [])
+  const templates = useMemo(
+    () => filterStarterTemplates({ search, category, style, price }),
+    [search, category, style, price]
+  )
 
-  const {
-    searchQuery,
-    activeCategory,
-    sortBy,
-    filters,
-    mobileFiltersOpen,
-    setMobileFiltersOpen,
-    setActiveCategory,
-  } = useTemplateStore()
+  const previewTemplate = useMemo<StarterTemplate | null>(
+    () => STARTER_TEMPLATES.find((template) => template.id === previewId) ?? null,
+    [previewId]
+  )
 
-  useEffect(() => {
-    if (categoryParam) {
-      setActiveCategory(categoryParam)
-    }
-  }, [categoryParam, setActiveCategory])
-
-  useEffect(() => {
-    if (!eventId) return
-    void fetch(`/api/events/${eventId}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { event?: { name: string } } | null) => {
-        if (d?.event?.name) setEventName(d.event.name)
-      })
-      .catch(() => {})
-  }, [eventId])
-
-  const fetchTemplates = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      const params = new URLSearchParams()
-      const category =
-        eventId && categoryParam ? categoryParam : activeCategory !== 'ALL' ? activeCategory : null
-      if (category) params.set('category', category)
-      if (searchQuery) params.set('search', searchQuery)
-      const premium = priceFilterToPremium(filters.priceType)
-      if (premium) params.set('premium', premium)
-      if (filters.materialTypes.length > 0) {
-        params.set('materialTypes', filters.materialTypes.join(','))
-      }
-      if (filters.eventTypes.length > 0) {
-        params.set('eventTypes', filters.eventTypes.join(','))
-      }
-      params.set('sort', sortBy)
-
-      const res = await fetch(`/api/templates?${params.toString()}`)
-      const data = (await res.json()) as { templates: MockTemplate[] }
-      setTemplates(data.templates)
-    } catch {
-      setTemplates([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [activeCategory, searchQuery, filters, sortBy, eventId, categoryParam])
-
-  useEffect(() => {
-    void fetchTemplates()
-  }, [fetchTemplates])
+  const useTemplate = (templateId: string) => {
+    router.push(`/editor/${templateId}`)
+  }
 
   return (
-    <div className="space-y-6">
-      {eventId && categoryParam && eventName && (
-        <EventTemplateBanner
-          eventId={eventId}
-          eventName={eventName}
-          category={categoryParam}
-        />
-      )}
-
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-text-primary">
-            {eventId ? 'Shablon tanlash' : 'Shablon katalogi'}
-          </h1>
-          <p className="mt-1 text-sm text-text-muted">
-            {eventId
-              ? 'Tanlangan shablon tadbir materialiga bog‘lanadi'
-              : 'Tadbir markazidan ochish tavsiya etiladi'}
-          </p>
+    <div className="min-h-screen bg-canvas">
+      <div className="border-b border-divide bg-surface px-4 py-5 md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="label-caps mb-2">Event Media Operating System</p>
+            <h1 className="text-2xl font-semibold text-text-primary">Template Gallery</h1>
+            <p className="mt-2 max-w-2xl text-sm text-text-muted">
+              Real starter templates for certificates, invitations, badges, banners, press walls,
+              QR registration cards, and social media assets.
+            </p>
+          </div>
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search templates"
+              className="input py-2 pl-9 text-sm"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <TemplateSearch className="flex-1 sm:flex-none" />
-          <button
-            type="button"
-            onClick={() => setMobileFiltersOpen(true)}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium text-text-primary transition-all duration-150 hover:border-brand-200 hover:bg-brand-50 lg:hidden"
-          >
+      </div>
+
+      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 md:px-8">
+        <aside className="hidden w-64 shrink-0 space-y-6 rounded border border-divide bg-surface p-4 lg:block">
+          <div className="flex items-center gap-2 text-sm font-semibold text-text-primary">
             <SlidersHorizontal className="h-4 w-4" />
-            Filtr
-          </button>
-        </div>
+            Filters
+          </div>
+
+          <div>
+            <p className="label-caps mb-3">Category</p>
+            <div className="space-y-1">
+              {(['all', ...TEMPLATE_CATEGORIES] as const).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setCategory(item)}
+                  className={`w-full rounded px-3 py-2 text-left text-sm ${category === item ? 'bg-subtle font-medium text-text-primary' : 'text-text-muted hover:bg-subtle'}`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="label-caps mb-3">Style</p>
+            <div className="space-y-1">
+              {(['all', ...TEMPLATE_STYLES] as const).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setStyle(item)}
+                  className={`w-full rounded px-3 py-2 text-left text-sm ${style === item ? 'bg-subtle font-medium text-text-primary' : 'text-text-muted hover:bg-subtle'}`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="label-caps mb-3">Price</p>
+            <div className="space-y-1">
+              {(['all', 'free', 'premium'] as const).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setPrice(item)}
+                  className={`w-full rounded px-3 py-2 text-left text-sm ${price === item ? 'bg-subtle font-medium text-text-primary' : 'text-text-muted hover:bg-subtle'}`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        <main className="min-w-0 flex-1">
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-text-muted">{templates.length} templates</p>
+            <p className="text-sm text-text-muted">{STARTER_TEMPLATES.length} starter templates total</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {templates.map((template) => (
+              <TemplateCard
+                key={template.id}
+                template={template}
+                onPreview={setPreviewId}
+                onSelect={useTemplate}
+              />
+            ))}
+          </div>
+        </main>
       </div>
 
-      <div className="flex gap-6">
-        <FilterSidebarDesktop />
-
-        <div className="min-w-0 flex-1 space-y-4">
-          {!eventId && <CategoryTabs counts={categoryCounts} />}
-          <TemplateGrid
-            templates={templates}
-            isLoading={isLoading}
-            eventId={eventId ?? undefined}
-            materialCategory={categoryParam ?? undefined}
-          />
-        </div>
-      </div>
-
-      <FilterSidebarMobile open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen} />
+      <TemplatePreviewModal
+        template={previewTemplate}
+        open={Boolean(previewTemplate)}
+        onOpenChange={(open) => {
+          if (!open) setPreviewId(null)
+        }}
+        onSelect={useTemplate}
+      />
     </div>
   )
 }

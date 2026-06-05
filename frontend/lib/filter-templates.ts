@@ -77,12 +77,13 @@ export function filterTemplates(
 
 const MOCK_ID_ALIASES: Record<string, string> = {
   'cert-001': 'minimalistic-certificate-001',
-  'cert-002': 'classic-certificate-001',
-  'cert-003': 'hi-tech-certificate-001',
-  'badge-001': 'minimalistic-badge-bejik-003',
+  'cert-002': 'classic-certificate-005',
+  'cert-003': 'hitech-science-certificate-009',
+  'badge-001': 'minimalistic-badge-003',
   'inv-001': 'minimalistic-invitation-002',
   'invite-001': 'minimalistic-invitation-002',
   'flyer-001': 'minimalistic-flyer-004',
+  'rollup-001': 'rollup-banner-015',
 }
 
 export function findMockTemplate(id: string): MockTemplate | undefined {
