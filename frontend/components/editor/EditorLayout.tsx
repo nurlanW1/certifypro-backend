@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { formatDate } from '@/lib/utils'
 import { WorkspaceLayout } from '@/components/workspace/WorkspaceLayout'
+import { useEditorShortcuts } from '@/hooks/useEditorShortcuts'
 import { useEditorStore, type ActiveTool } from '@/store/editorStore'
 import { AUTO_SAVE_INTERVAL_MS } from '@/lib/editor/constants'
 import { saveDesign } from '@/lib/export'
@@ -25,6 +26,7 @@ const SHORTCUTS: Record<string, ActiveTool | 'undo' | 'redo' | 'save'> = {
   r: 'rect',
   c: 'circle',
   l: 'line',
+  p: 'pen',
 }
 
 export function EditorLayout({ designId }: EditorLayoutProps) {
@@ -45,6 +47,8 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
     setAssetMode,
     setEventContext,
   } = useEditorStore()
+
+  useEditorShortcuts(fabricCanvas)
 
   useEffect(() => {
     void initEditor(designId, { templateId: templateIdParam })

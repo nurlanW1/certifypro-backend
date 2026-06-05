@@ -1,14 +1,8 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import createMiddleware from 'next-intl/middleware'
+import { routing } from './i18n/routing'
 
-/** Edge middleware — Clerk auth is handled in dashboard layout (server). */
-export function middleware(_request: NextRequest) {
-  return NextResponse.next()
-}
+export default createMiddleware(routing)
 
 export const config = {
-  matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
-  ],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 }

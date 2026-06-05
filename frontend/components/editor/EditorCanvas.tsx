@@ -4,9 +4,15 @@ import { useEffect, useRef } from 'react'
 import { fabric } from 'fabric'
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 import { useEditorStore } from '@/store/editorStore'
+import {
+  createProfessionalCanvas,
+  enableAlignmentGuides,
+  enableSnapToGrid,
+} from '@/lib/editor/fabricConfig'
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '@/lib/editor/constants'
 import { isFabricCanvasJson, serializeCanvas } from '@/lib/editor/fabric-utils'
 import { loadSvgOntoCanvas } from '@/lib/editor/svg-to-fabric'
+import { enableFreehandDrawing } from '@/lib/editor/freehand'
 
 export function EditorCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -25,18 +31,19 @@ export function EditorCanvas() {
     setDirty,
     syncFromCanvas,
     printPreview,
+    activeTool,
   } = useEditorStore()
 
   useEffect(() => {
     if (!canvasRef.current || initializedRef.current) return
 
-    const fabricCanvas = new fabric.Canvas(canvasRef.current, {
-      width: CANVAS_WIDTH,
-      height: CANVAS_HEIGHT,
-      backgroundColor: '#ffffff',
-      preserveObjectStacking: true,
-      selection: true,
-    })
+    const fabricCanvas = createProfessionalCanvas(
+      canvasRef.current,
+      CANVAS_WIDTH,
+      CANVAS_HEIGHT
+    )
+    enableSnapToGrid(fabricCanvas)
+    enableAlignmentGuides(fabricCanvas)
 
     initializedRef.current = true
     setFabricCanvas(fabricCanvas)
@@ -110,12 +117,40 @@ export function EditorCanvas() {
     })
   }, [canvasData, canvasReady, setCanvasReady])
 
+  useEffect(() => {
+    const { fabricCanvas } = useEditorStore.getState()
+    if (!fabricCanvas) return
+
+    if (activeTool === 'pen') {
+      fabricCanvas.selection = false
+      fabricCanvas.defaultCursor = 'crosshair'
+      fabricCanvas.hoverCursor = 'crosshair'
+      const cleanup = enableFreehandDrawing(fabricCanvas, {
+        onStrokeComplete: () => {
+          setDirty(true)
+          syncFromCanvas()
+          pushHistory()
+        },
+      })
+      return () => {
+        cleanup()
+        fabricCanvas.selection = true
+        fabricCanvas.defaultCursor = 'default'
+        fabricCanvas.hoverCursor = 'move'
+      }
+    }
+
+    fabricCanvas.selection = true
+    fabricCanvas.defaultCursor = 'default'
+    fabricCanvas.hoverCursor = 'move'
+  }, [activeTool, pushHistory, setDirty, syncFromCanvas])
+
   const handleZoomIn = () => setZoom(Math.min(zoom + 0.1, 3))
   const handleZoomOut = () => setZoom(Math.max(zoom - 0.1, 0.3))
   const handleFitScreen = () => setZoom(0.75)
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas">
+    <div className="relative flex flex-1 flex-col overflow-hidden bg-workspace-canvas">
       <div className="flex flex-1 items-center justify-center overflow-auto p-6 md:p-10">
         <div
           className="shadow-lg transition-transform duration-150"

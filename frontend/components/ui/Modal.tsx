@@ -28,7 +28,7 @@ export function Modal({
         <Dialog.Content
           className={cn(
             'fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
-            'gildia-card p-6 shadow-lg focus:outline-none',
+            'rounded-xl border border-border bg-ink p-6 shadow-lg focus:outline-none',
             className
           )}
         >
@@ -38,7 +38,7 @@ export function Modal({
                 {title}
               </Dialog.Title>
               {description && (
-                <Dialog.Description className="mt-1 text-sm text-text-muted">
+                <Dialog.Description className="mt-1 text-sm text-text-tertiary">
                   {description}
                 </Dialog.Description>
               )}

@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
 import {
   ArrowLeft,
   Save,
@@ -21,6 +23,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import toast from 'react-hot-toast'
 import { useEditorStore } from '@/store/editorStore'
 import { exportToPNG, exportToPDF, saveDesign, copyCanvasPreviewLink } from '@/lib/export'
+import { exportCanvasSVG } from '@/lib/editor/canvas-export'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
@@ -29,6 +32,8 @@ interface EditorTopBarProps {
 }
 
 export function EditorTopBar({ designId }: EditorTopBarProps) {
+  const t = useTranslations('workspace')
+  const tc = useTranslations('common')
   const router = useRouter()
   const searchParams = useSearchParams()
   const eventId = searchParams.get('eventId')
@@ -80,7 +85,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
         className="btn-ghost btn-icon-sm"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span className="hidden sm:inline">Orqaga</span>
+        <span className="hidden sm:inline">{t('back')}</span>
       </button>
 
       {editingName ? (
@@ -129,7 +134,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
       <div className="ml-auto flex items-center gap-1">
         <ThemeToggle />
         {isDirty && saveStatus === 'idle' && (
-          <span className="hidden text-xs text-warning md:inline">Saqlanmagan</span>
+          <span className="hidden text-xs text-warning md:inline">{t('unsaved')}</span>
         )}
 
         {assetMode && (
@@ -163,12 +168,12 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
           {saveStatus === 'idle' && <Save className="h-4 w-4" />}
           <span className="hidden sm:inline">
             {saveStatus === 'saving'
-              ? 'Saqlanmoqda...'
+              ? t('saving')
               : saveStatus === 'saved'
-                ? 'Saqlandi'
+                ? t('saved')
                 : saveStatus === 'error'
-                  ? 'Xato'
-                  : 'Saqlash'}
+                  ? tc('error')
+                  : t('save')}
           </span>
         </button>
 
@@ -176,7 +181,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
           <DropdownMenu.Trigger asChild>
             <button type="button" className="btn-primary btn-sm inline-flex items-center gap-1.5">
               <Download className="h-4 w-4" />
-              <span className="hidden sm:inline">Eksport</span>
+              <span className="hidden sm:inline">{t('export')}</span>
               <ChevronDown className="h-3 w-3" />
             </button>
           </DropdownMenu.Trigger>
@@ -198,7 +203,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 }}
               >
                 <FileImage className="h-4 w-4 text-text-muted" />
-                PNG yuklash
+                {t('downloadPNG')}
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
@@ -213,7 +218,17 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 }}
               >
                 <FileText className="h-4 w-4 text-text-muted" />
-                PDF yuklash
+                {t('downloadPDF')}
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
+                onSelect={() => {
+                  if (!fabricCanvas) return
+                  exportCanvasSVG(fabricCanvas, filename)
+                }}
+              >
+                <FileText className="h-4 w-4 text-text-muted" />
+                {t('downloadSVG')}
               </DropdownMenu.Item>
               <DropdownMenu.Item
                 className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"

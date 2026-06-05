@@ -5,7 +5,7 @@ import { fabric } from 'fabric'
 import { serializeCanvas } from '@/lib/editor/fabric-utils'
 import type { EventVariableContext } from '@/lib/editor/variables'
 
-export type ActiveTool = 'select' | 'text' | 'image' | 'rect' | 'circle' | 'line'
+export type ActiveTool = 'select' | 'text' | 'image' | 'rect' | 'circle' | 'line' | 'pen'
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error'
 

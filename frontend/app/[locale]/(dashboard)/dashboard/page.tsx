@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import {
   ArrowRight,
   CalendarPlus,
@@ -21,6 +22,7 @@ interface Analytics {
 }
 
 export default function DashboardPage() {
+  const t = useTranslations('dashboard')
   const [events, setEvents] = useState<Event[]>([])
   const [analytics, setAnalytics] = useState<Analytics | null>(null)
   const [loading, setLoading] = useState(true)
@@ -42,21 +44,21 @@ export default function DashboardPage() {
 
   const stats = [
     {
-      label: 'Jami tadbirlar',
+      label: t('totalEvents'),
       value: usage ? String(usage.eventsCount) : String(events.length),
-      trend: `${events.length} faol`,
+      trend: `${events.length}`,
       icon: CalendarPlus,
     },
     {
-      label: 'Jami dizaynlar',
+      label: t('totalDesigns'),
       value: usage ? String(usage.designsCount) : '—',
-      trend: 'barcha vaqt',
+      trend: t('allTime'),
       icon: Layout,
     },
     {
-      label: 'Eksportlar',
+      label: t('exports'),
       value: usage ? String(usage.exportsCount) : '—',
-      trend: 'bu oy',
+      trend: t('thisMonth'),
       icon: Download,
     },
     {

@@ -1,7 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { Link, usePathname } from '@/i18n/navigation'
 import {
   Calendar,
   CalendarPlus,
@@ -22,18 +22,6 @@ interface Props {
   onToggle: () => void
 }
 
-const NAV_TOP = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/events/new', icon: CalendarPlus, label: 'Yangi tadbir', special: true },
-  { href: '/events', icon: Calendar, label: 'Tadbirlar' },
-  { href: '/templates', icon: Layout, label: 'Shablonlar' },
-  { href: '/brand-kit', icon: Layers, label: 'Brand Kit' },
-]
-
-const NAV_BOTTOM = [
-  { href: '/settings', icon: Settings, label: 'Sozlamalar' },
-  { href: '/upgrade', icon: CreditCard, label: 'Upgrade', pro: true },
-]
 
 function NavLink({
   href,
@@ -57,13 +45,13 @@ function NavLink({
       href={href}
       title={collapsed ? label : undefined}
       className={cn(
-        'group relative flex items-center gap-3 rounded px-3 py-2 text-sm font-medium transition-all duration-100',
+        'group relative flex items-center gap-3 rounded px-3 py-2 text-base font-medium transition-all duration-100',
         collapsed && 'justify-center',
         special
           ? 'border border-divide text-text-primary hover:border-accent-border hover:bg-accent-dim'
           : active
             ? 'bg-subtle text-text-primary'
-            : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+            : 'text-text-tertiary hover:bg-subtle hover:text-text-secondary'
       )}
     >
       <Icon size={15} className="shrink-0 transition-colors" />
@@ -81,7 +69,22 @@ function NavLink({
 }
 
 export function AppSidebar({ collapsed, onToggle }: Props) {
+  const t = useTranslations('nav')
+  const td = useTranslations('dashboard')
   const pathname = usePathname()
+
+  const NAV_TOP = [
+    { href: '/dashboard' as const, icon: LayoutDashboard, label: t('dashboard') },
+    { href: '/events/new' as const, icon: CalendarPlus, label: td('newEvent'), special: true },
+    { href: '/events' as const, icon: Calendar, label: t('events') },
+    { href: '/templates' as const, icon: Layout, label: t('templates') },
+    { href: '/brand-kit' as const, icon: Layers, label: t('brandKit') },
+  ]
+
+  const NAV_BOTTOM = [
+    { href: '/settings' as const, icon: Settings, label: t('settings') },
+    { href: '/upgrade' as const, icon: CreditCard, label: 'Pro', pro: true },
+  ]
 
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard'
@@ -106,8 +109,8 @@ export function AppSidebar({ collapsed, onToggle }: Props) {
         )}
       >
         <Link href="/dashboard" className="group flex min-w-0 items-center gap-2.5">
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-text-primary transition-colors group-hover:bg-accent">
-            <span className="text-xs font-bold leading-none text-canvas">G</span>
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-accent transition-colors group-hover:bg-accent-hover">
+            <span className="text-xs font-bold leading-none text-white">G</span>
           </div>
           {!collapsed && (
             <span className="truncate text-sm font-semibold text-text-primary">ildia</span>

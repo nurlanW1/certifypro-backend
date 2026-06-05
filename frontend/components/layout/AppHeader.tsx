@@ -37,7 +37,7 @@ export function AppHeader({ onMenuClick }: Props) {
   const meta = resolveTitle(pathname)
 
   return (
-    <header className="flex h-[52px] shrink-0 items-center gap-4 border-b border-divide bg-canvas px-6">
+    <header className="flex h-[52px] shrink-0 items-center gap-4 border-b border-divide bg-ink px-6">
       <button
         type="button"
         onClick={onMenuClick}
@@ -48,11 +48,11 @@ export function AppHeader({ onMenuClick }: Props) {
       </button>
 
       <div className="flex min-w-0 items-center gap-3">
-        <h1 className="truncate text-sm font-semibold text-text-primary">{meta.title}</h1>
+        <h1 className="truncate text-md font-semibold text-text-primary">{meta.title}</h1>
         {meta.desc && (
           <>
             <span className="hidden text-divide sm:block">/</span>
-            <span className="hidden truncate text-xs text-text-tertiary sm:block">{meta.desc}</span>
+            <span className="hidden truncate text-sm text-text-tertiary sm:block">{meta.desc}</span>
           </>
         )}
       </div>

@@ -1,23 +1,25 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { Link, usePathname } from '@/i18n/navigation'
 import { Menu, X } from 'lucide-react'
 import { isClerkConfiguredClient } from '@/lib/clerk-config'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
-
-const LINKS = [
-  { href: '/templates', label: 'Shablonlar' },
-  { href: '/upgrade', label: 'Narxlar' },
-  { href: '/help', label: 'Haqida' },
-]
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 
 export function Navbar() {
+  const t = useTranslations('nav')
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const clerk = isClerkConfiguredClient()
+
+  const LINKS = [
+    { href: '/templates' as const, label: t('templates') },
+    { href: '/upgrade' as const, label: t('pricing') },
+    { href: '/about' as const, label: t('about') },
+  ]
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10)
@@ -60,12 +62,13 @@ export function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            <ThemeToggle />
+            <LocaleSwitcher />
+            <ThemeToggle showLabel={false} />
             <Link href={signInHref} className="btn-ghost btn-sm text-text-secondary">
-              Kirish
+              {t('login')}
             </Link>
             <Link href={signUpHref} className="btn-primary btn-sm">
-              Boshlash
+              {t('signup')}
             </Link>
           </div>
 
@@ -73,7 +76,7 @@ export function Navbar() {
             type="button"
             onClick={() => setOpen(!open)}
             className="btn-ghost btn-icon-md text-text-secondary md:hidden"
-            aria-label="Menyu"
+            aria-label="Menu"
           >
             {open ? <X size={16} /> : <Menu size={16} />}
           </button>
@@ -95,14 +98,18 @@ export function Navbar() {
             ))}
             <div className="flex flex-col gap-3 pt-8">
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-text-tertiary">Rejim</span>
+                <span className="text-sm text-text-tertiary">{t('settings')}</span>
+                <LocaleSwitcher />
+              </div>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm text-text-tertiary">Theme</span>
                 <ThemeToggle showLabel />
               </div>
               <Link href={signInHref} className="btn-secondary btn-lg w-full text-center">
-                Kirish
+                {t('login')}
               </Link>
               <Link href={signUpHref} className="btn-primary btn-lg w-full text-center">
-                Boshlash
+                {t('signup')}
               </Link>
             </div>
           </div>

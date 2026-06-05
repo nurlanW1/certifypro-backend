@@ -2,8 +2,8 @@
 
 import { Trash2 } from 'lucide-react'
 import { fabric } from 'fabric'
+import { ImageUploader } from '@/components/editor/ImageUploader'
 import { useEditorStore } from '@/store/editorStore'
-
 export function ImageProperties() {
   const { fabricCanvas, selectedObject, setSelectedObject, pushHistory } = useEditorStore()
   const image = selectedObject instanceof fabric.Image ? selectedObject : null
@@ -24,6 +24,31 @@ export function ImageProperties() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-text-muted">Rasm elementi</p>
+
+      <div>
+        <p className="gildia-label mb-2">Rasmni almashtirish</p>
+        <ImageUploader
+          onUpload={(dataUrl) => {
+            fabric.Image.fromURL(dataUrl, (img) => {
+              if (!img) return
+              img.set({
+                left: image.left,
+                top: image.top,
+                scaleX: image.scaleX,
+                scaleY: image.scaleY,
+                angle: image.angle,
+                opacity: image.opacity,
+              })
+              fabricCanvas.remove(image)
+              fabricCanvas.add(img)
+              fabricCanvas.setActiveObject(img)
+              fabricCanvas.requestRenderAll()
+              setSelectedObject(img)
+              pushHistory()
+            })
+          }}
+        />
+      </div>
 
       <div>
         <label htmlFor="img-opacity" className="gildia-label">

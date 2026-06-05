@@ -1,47 +1,32 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const FAQ = [
-  {
-    q: 'Gildia nima?',
-    a: 'Tadbir materiallarini — sertifikat, nishon, taklifnoma va boshqalarni — bir joyda yaratish platformasi.',
-  },
-  {
-    q: 'Dizayner kerakmi?',
-    a: "Yo'q. Shablon tanlang, ma'lumotlarni kiriting — dizayn avtomatik tayyorlanadi.",
-  },
-  {
-    q: 'Qanday formatda eksport?',
-    a: 'PNG, PDF va SVG. Pro rejimda watermark yo‘q.',
-  },
-  {
-    q: 'Bepul rejimda nima bor?',
-    a: 'Oyiga 5 ta dizayn, 3 uslub va asosiy editor.',
-  },
-]
+const FAQ_KEYS = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6'] as const
 
 export function LandingFaq() {
+  const t = useTranslations('faq')
   const [open, setOpen] = useState<number | null>(0)
 
   return (
     <section className="w-full border-t border-divide bg-canvas">
       <div className="mx-auto max-w-screen-xl px-6 py-24 lg:px-10 xl:px-16">
-        <p className="label-caps mb-3">Savollar</p>
+        <p className="label-caps mb-3">{t('sectionTag')}</p>
         <h2 className="mb-12 text-4xl font-semibold tracking-tight text-text-primary">
-          Ko&apos;p so&apos;raladigan savollar
+          {t('title')}
         </h2>
-        <div className="divide-y divide-divide border border-divide rounded">
-          {FAQ.map((item, i) => (
-            <div key={i} className="bg-canvas">
+        <div className="divide-y divide-divide rounded border border-divide">
+          {FAQ_KEYS.map((key, i) => (
+            <div key={key} className="bg-canvas">
               <button
                 type="button"
                 onClick={() => setOpen(open === i ? null : i)}
                 className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors hover:bg-subtle"
               >
-                <span className="text-sm font-medium text-text-primary">{item.q}</span>
+                <span className="text-sm font-medium text-text-primary">{t(key)}</span>
                 <ChevronDown
                   size={16}
                   className={cn(
@@ -52,7 +37,7 @@ export function LandingFaq() {
               </button>
               {open === i && (
                 <p className="border-t border-divide px-6 py-4 text-sm leading-relaxed text-text-secondary">
-                  {item.a}
+                  {t(key.replace('q', 'a') as 'a1')}
                 </p>
               )}
             </div>
@@ -62,4 +47,3 @@ export function LandingFaq() {
     </section>
   )
 }
-

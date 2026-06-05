@@ -2,18 +2,10 @@
 
 import { Trash2 } from 'lucide-react'
 import { fabric } from 'fabric'
+import { ColorPicker } from '@/components/editor/ColorPicker'
 import { useEditorStore } from '@/store/editorStore'
+import { AVAILABLE_FONTS, loadGoogleFont } from '@/lib/editor/fontLoader'
 import { cn } from '@/lib/utils'
-
-const FONTS = [
-  'Inter',
-  'Roboto',
-  'Open Sans',
-  'Montserrat',
-  'Playfair Display',
-  'Merriweather',
-  'Raleway',
-]
 
 const WEIGHTS = [
   { label: 'Normal', value: 'normal' },
@@ -55,11 +47,14 @@ export function TextProperties() {
           id="font-family"
           className="gildia-input mt-1"
           value={text.fontFamily ?? 'Inter'}
-          onChange={(e) => update({ fontFamily: e.target.value })}
+          onChange={(e) => {
+            const family = e.target.value
+            void loadGoogleFont(family).then(() => update({ fontFamily: family }))
+          }}
         >
-          {FONTS.map((f) => (
-            <option key={f} value={f}>
-              {f}
+          {AVAILABLE_FONTS.map((f) => (
+            <option key={f.name} value={f.name}>
+              {f.name}
             </option>
           ))}
         </select>
@@ -138,18 +133,11 @@ export function TextProperties() {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="text-fill" className="gildia-label">
-          Matn rangi
-        </label>
-        <input
-          id="text-fill"
-          type="color"
-          className="mt-1 h-10 w-full rounded-lg border border-border p-1"
-          value={fill.startsWith('#') ? fill : '#26215C'}
-          onChange={(e) => update({ fill: e.target.value })}
-        />
-      </div>
+      <ColorPicker
+        label="Matn rangi"
+        color={fill.startsWith('#') ? fill : '#26215C'}
+        onChange={(c) => update({ fill: c })}
+      />
 
       <div>
         <label htmlFor="stroke-width" className="gildia-label">
@@ -161,14 +149,12 @@ export function TextProperties() {
           min={0}
           max={10}
           value={strokeWidth}
-          className="mt-2 w-full accent-brand-600"
+          className="mt-2 w-full accent-accent"
           onChange={(e) => update({ strokeWidth: Number(e.target.value) })}
         />
-        <input
-          type="color"
-          className="mt-2 h-8 w-full rounded border border-border p-0.5"
-          value={stroke.startsWith('#') ? stroke : '#26215C'}
-          onChange={(e) => update({ stroke: e.target.value })}
+        <ColorPicker
+          color={stroke.startsWith('#') ? stroke : '#26215C'}
+          onChange={(c) => update({ stroke: c })}
         />
       </div>
 

@@ -9,6 +9,7 @@ import {
   Circle,
   Minus,
   Layers,
+  Pencil,
 } from 'lucide-react'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { useEditorStore, type ActiveTool } from '@/store/editorStore'
@@ -20,6 +21,7 @@ import {
   addDefaultText,
   loadImageToCanvas,
 } from '@/lib/editor/fabric-utils'
+import { resizeImage } from '@/lib/editor/imageProcessor'
 
 const TOOLS: {
   id: ActiveTool
@@ -33,6 +35,7 @@ const TOOLS: {
   { id: 'rect', icon: Square, label: "To'rtburchak", shortcut: 'R' },
   { id: 'circle', icon: Circle, label: 'Doira', shortcut: 'C' },
   { id: 'line', icon: Minus, label: 'Chiziq', shortcut: 'L' },
+  { id: 'pen', icon: Pencil, label: 'Qalam', shortcut: 'P' },
 ]
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
@@ -50,7 +53,7 @@ export function EditorToolbar() {
   } = useEditorStore()
 
   const visibleTools = assetMode
-    ? TOOLS.filter((t) => ['select', 'text', 'image'].includes(t.id))
+    ? TOOLS.filter((t) => ['select', 'text', 'image', 'pen'].includes(t.id))
     : TOOLS
 
   const runTool = (tool: ActiveTool) => {
@@ -77,23 +80,37 @@ export function EditorToolbar() {
       case 'image':
         fileRef.current?.click()
         break
+      case 'pen':
+        break
       default:
         break
     }
   }
 
-  const onImageFile = (file: File) => {
+  const onImageFile = async (file: File) => {
     if (!fabricCanvas) return
-    if (!['image/png', 'image/jpeg', 'image/svg+xml'].includes(file.type)) return
+    if (!['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp'].includes(file.type)) return
     if (file.size > MAX_IMAGE_BYTES) return
 
-    const url = URL.createObjectURL(file)
-    void loadImageToCanvas(fabricCanvas, url)
-      .then(() => {
-        pushHistory()
-        URL.revokeObjectURL(url)
-      })
-      .catch(() => URL.revokeObjectURL(url))
+    try {
+      if (file.type === 'image/svg+xml') {
+        const text = await file.text()
+        const dataUrl = `data:image/svg+xml;base64,${btoa(text)}`
+        await loadImageToCanvas(fabricCanvas, dataUrl)
+      } else {
+        const resized = await resizeImage(file, 2000, 2000)
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = () => reject(new Error('read failed'))
+          reader.readAsDataURL(resized)
+        })
+        await loadImageToCanvas(fabricCanvas, dataUrl)
+      }
+      pushHistory()
+    } catch {
+      /* ignore */
+    }
   }
 
   return (
@@ -109,8 +126,8 @@ export function EditorToolbar() {
                   className={cn(
                     'flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-150',
                     activeTool === id
-                      ? 'border border-accent-border bg-accent-dim text-accent-hover'
-                      : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+                      ? 'border border-accent-border bg-subtle text-text-primary'
+                      : 'text-text-tertiary hover:bg-subtle hover:text-text-primary'
                   )}
                   aria-label={label}
                 >

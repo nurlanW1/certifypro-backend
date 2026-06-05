@@ -21,7 +21,7 @@ export function WorkspaceLayout({ designId, eventId }: WorkspaceLayoutProps) {
           <WorkspaceLeftPanel designId={designId} eventId={eventId} />
         </div>
 
-        <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-workspace-canvas">
           <WorkspaceCanvas />
         </div>
 

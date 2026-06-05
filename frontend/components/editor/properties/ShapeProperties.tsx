@@ -2,6 +2,7 @@
 
 import { Trash2 } from 'lucide-react'
 import { fabric } from 'fabric'
+import { ColorPicker } from '@/components/editor/ColorPicker'
 import { useEditorStore } from '@/store/editorStore'
 
 export function ShapeProperties() {
@@ -34,21 +35,14 @@ export function ShapeProperties() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <label htmlFor="shape-fill" className="gildia-label">
-          To&apos;ldirish
-        </label>
-        <input
-          id="shape-fill"
-          type="color"
-          className="mt-1 h-10 w-full rounded-lg border border-border p-1"
-          value={fill.startsWith('#') ? fill : '#EEEDFE'}
-          onChange={(e) => update({ fill: e.target.value })}
-        />
-      </div>
+      <ColorPicker
+        label="To'ldirish"
+        color={fill.startsWith('#') ? fill : '#EEEDFE'}
+        onChange={(c) => update({ fill: c })}
+      />
 
       <div>
-        <label htmlFor="shape-stroke" className="gildia-label">
+        <label htmlFor="shape-stroke-w" className="gildia-label">
           Chegara ({strokeWidth}px)
         </label>
         <input
@@ -57,15 +51,12 @@ export function ShapeProperties() {
           min={0}
           max={20}
           value={strokeWidth}
-          className="mt-2 w-full accent-brand-600"
+          className="mt-2 w-full accent-accent"
           onChange={(e) => update({ strokeWidth: Number(e.target.value) })}
         />
-        <input
-          id="shape-stroke"
-          type="color"
-          className="mt-2 h-8 w-full rounded border border-border p-0.5"
-          value={stroke.startsWith('#') ? stroke : '#534AB7'}
-          onChange={(e) => update({ stroke: e.target.value })}
+        <ColorPicker
+          color={stroke.startsWith('#') ? stroke : '#534AB7'}
+          onChange={(c) => update({ stroke: c })}
         />
       </div>
 

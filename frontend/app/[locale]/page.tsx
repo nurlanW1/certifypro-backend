@@ -10,11 +10,15 @@ import { Navbar } from '@/components/layout/Navbar'
 import { isClerkConfigured } from '@/lib/clerk-config'
 import { isGuestMode } from '@/lib/env'
 
-export default async function HomePage() {
+export default async function HomePage({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
   if (isClerkConfigured()) {
     const { auth } = await import('@clerk/nextjs/server')
     const { userId } = auth()
-    if (userId) redirect('/dashboard')
+    if (userId) redirect(`/${locale}/dashboard`)
   }
 
   const showGuestBanner = isGuestMode()

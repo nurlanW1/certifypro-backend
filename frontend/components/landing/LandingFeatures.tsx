@@ -40,7 +40,7 @@ export function LandingFeatures() {
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
           <div>
-            <p className="label-caps mb-12">Qanday ishlaydi</p>
+            <p className="label-caps mb-12 text-text-tertiary">Qanday ishlaydi</p>
             <div>
               {FEATURES.map((f, i) => (
                 <div
@@ -54,7 +54,7 @@ export function LandingFeatures() {
                   </span>
                   <div>
                     <h3 className="mb-2 text-lg font-semibold text-text-primary">{f.title}</h3>
-                    <p className="text-sm leading-relaxed text-text-secondary">{f.desc}</p>
+                    <p className="text-base leading-relaxed text-text-secondary">{f.desc}</p>
                   </div>
                 </div>
               ))}
