@@ -26,5 +26,12 @@ const nextConfig = {
   experimental: {
     serverActions: { allowedOrigins: serverActionOrigins },
   },
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      config.devtool = 'cheap-module-source-map'
+    }
+
+    return config
+  },
 }
 module.exports = withNextIntl(nextConfig)
