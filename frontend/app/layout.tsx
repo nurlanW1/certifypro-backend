@@ -12,7 +12,32 @@ export const metadata: Metadata = {
     'Konferentsiya, seminar, forum va korporativ tadbirlar uchun dizayn materiallarini avtomatik generatsiya qilish.',
 }
 
-function RootShell({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const appBody = (
+    <>
+      <ThemeScript />
+      <AppProviders>{children}</AppProviders>
+    </>
+  )
+
+  if (!isClerkConfigured()) {
+    return (
+      <html
+        lang="uz"
+        className={`${GeistSans.variable} ${GeistMono.variable}`}
+        suppressHydrationWarning
+      >
+        <body className="font-sans antialiased">{appBody}</body>
+      </html>
+    )
+  }
+
+  const { ClerkProvider } = await import('@clerk/nextjs')
+
   return (
     <html
       lang="uz"
@@ -20,26 +45,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
-        <ThemeScript />
-        <AppProviders>{children}</AppProviders>
+        <ClerkProvider>{appBody}</ClerkProvider>
       </body>
     </html>
-  )
-}
-
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  if (!isClerkConfigured()) {
-    return <RootShell>{children}</RootShell>
-  }
-
-  const { ClerkProvider } = await import('@clerk/nextjs')
-  return (
-    <ClerkProvider>
-      <RootShell>{children}</RootShell>
-    </ClerkProvider>
   )
 }

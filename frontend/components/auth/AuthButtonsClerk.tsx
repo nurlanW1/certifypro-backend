@@ -1,6 +1,7 @@
 'use client'
 
-import { SignInButton, SignUpButton } from '@clerk/nextjs'
+import { SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+import { Show } from '@/components/auth/Show'
 
 interface AuthButtonsClerkProps {
   size?: 'nav' | 'hero'
@@ -14,16 +15,21 @@ export function AuthButtonsClerk({ size = 'nav' }: AuthButtonsClerkProps) {
 
   return (
     <>
-      <SignInButton mode="modal">
-        <button type="button" className={secondaryClass}>
-          Kirish
-        </button>
-      </SignInButton>
-      <SignUpButton mode="modal">
-        <button type="button" className={primaryClass}>
-          {size === 'hero' ? 'Bepul boshlash →' : 'Bepul boshlash'}
-        </button>
-      </SignUpButton>
+      <Show when="signed-out">
+        <SignInButton mode="modal">
+          <button type="button" className={secondaryClass}>
+            Kirish
+          </button>
+        </SignInButton>
+        <SignUpButton mode="modal">
+          <button type="button" className={primaryClass}>
+            {size === 'hero' ? 'Bepul boshlash →' : 'Bepul boshlash'}
+          </button>
+        </SignUpButton>
+      </Show>
+      <Show when="signed-in">
+        <UserButton afterSignOutUrl="/" />
+      </Show>
     </>
   )
 }

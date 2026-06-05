@@ -4,9 +4,15 @@ import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Menu, X } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { isClerkConfiguredClient } from '@/lib/clerk-config'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
+
+const NavbarAuth = dynamic(
+  () => import('@/components/auth/NavbarAuth').then((m) => m.NavbarAuth),
+  { ssr: false }
+)
 
 export function Navbar() {
   const t = useTranslations('nav')
@@ -26,9 +32,6 @@ export function Navbar() {
     window.addEventListener('scroll', fn)
     return () => window.removeEventListener('scroll', fn)
   }, [])
-
-  const signInHref = clerk ? '/sign-in' : '/dashboard'
-  const signUpHref = clerk ? '/sign-up' : '/events/new'
 
   return (
     <>
@@ -64,12 +67,18 @@ export function Navbar() {
           <div className="hidden items-center gap-2 md:flex">
             <LocaleSwitcher />
             <ThemeToggle showLabel={false} />
-            <Link href={signInHref} className="btn-ghost btn-sm text-text-secondary">
-              {t('login')}
-            </Link>
-            <Link href={signUpHref} className="btn-primary btn-sm">
-              {t('signup')}
-            </Link>
+            {clerk ? (
+              <NavbarAuth variant="desktop" />
+            ) : (
+              <>
+                <Link href="/dashboard" className="btn-ghost btn-sm text-text-secondary">
+                  {t('login')}
+                </Link>
+                <Link href="/events/new" className="btn-primary btn-sm">
+                  {t('signup')}
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -105,12 +114,26 @@ export function Navbar() {
                 <span className="text-sm text-text-tertiary">Theme</span>
                 <ThemeToggle showLabel />
               </div>
-              <Link href={signInHref} className="btn-secondary btn-lg w-full text-center">
-                {t('login')}
-              </Link>
-              <Link href={signUpHref} className="btn-primary btn-lg w-full text-center">
-                {t('signup')}
-              </Link>
+              {clerk ? (
+                <NavbarAuth variant="mobile" onNavigate={() => setOpen(false)} />
+              ) : (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="btn-secondary btn-lg w-full text-center"
+                    onClick={() => setOpen(false)}
+                  >
+                    {t('login')}
+                  </Link>
+                  <Link
+                    href="/events/new"
+                    className="btn-primary btn-lg w-full text-center"
+                    onClick={() => setOpen(false)}
+                  >
+                    {t('signup')}
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

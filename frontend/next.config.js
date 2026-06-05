@@ -16,6 +16,13 @@ if (process.env.NEXT_PUBLIC_APP_URL) {
 }
 
 const nextConfig = {
+  eslint: {
+    // Vercel production installs may omit devDependencies; do not fail deploy on lint.
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.supabase.co' },
