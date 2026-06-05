@@ -2,28 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { Calendar, Palette, Download, Crown, Users } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-
-interface StatCardProps {
-  icon: LucideIcon
-  value: string
-  label: string
-  iconClass: string
-}
-
-function StatCard({ icon: Icon, value, label, iconClass }: StatCardProps) {
-  return (
-    <div className="gildia-card flex items-center gap-4 p-4">
-      <div className={`flex h-11 w-11 items-center justify-center rounded-lg ${iconClass}`}>
-        <Icon className="h-5 w-5" />
-      </div>
-      <div>
-        <p className="text-2xl font-semibold text-text-primary">{value}</p>
-        <p className="text-sm text-text-muted">{label}</p>
-      </div>
-    </div>
-  )
-}
 
 interface AnalyticsPayload {
   planName: string
@@ -47,40 +25,34 @@ export function StatsRow() {
     ? `${usage.exportsCount} / ${usage.exportsCount + (data?.remaining.exports ?? 0)}`
     : '—'
 
+  const stats = [
+    { label: 'Tadbirlar', value: usage ? String(usage.eventsCount) : '—', icon: Calendar },
+    { label: 'Dizaynlar', value: usage ? String(usage.designsCount) : '—', icon: Palette },
+    { label: 'Eksportlar', value: exportsLabel, icon: Download },
+    { label: 'Ishtirokchi', value: data ? String(data.participantsTotal) : '—', icon: Users },
+  ]
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <StatCard
-        icon={Calendar}
-        value={usage ? String(usage.eventsCount) : '—'}
-        label="Tadbir"
-        iconClass="bg-brand-50 text-brand-600"
-      />
-      <StatCard
-        icon={Palette}
-        value={usage ? String(usage.designsCount) : '—'}
-        label="Dizayn"
-        iconClass="bg-brand-50 text-brand-600"
-      />
-      <StatCard
-        icon={Download}
-        value={exportsLabel}
-        label="Eksport (oy)"
-        iconClass="bg-success-light text-success-dark"
-      />
-      <StatCard
-        icon={Users}
-        value={data ? String(data.participantsTotal) : '—'}
-        label="Ishtirokchi"
-        iconClass="bg-brand-50 text-brand-600"
-      />
+    <div>
+      <div className="grid grid-cols-2 divide-x divide-divide border-b border-divide md:grid-cols-4">
+        {stats.map(({ label, value }) => (
+          <div key={label} className="p-6">
+            <div className="mb-1 text-3xl font-semibold tracking-tight text-text-primary">
+              {value}
+            </div>
+            <div className="label-caps">{label}</div>
+          </div>
+        ))}
+      </div>
+
       {data && (
-        <div className="gildia-card flex items-center gap-4 p-4 sm:col-span-2 xl:col-span-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-warning-light text-warning-dark">
-            <Crown className="h-5 w-5" />
+        <div className="flex items-center gap-4 border-b border-divide p-6">
+          <div className="flex h-9 w-9 items-center justify-center rounded bg-accent-dim text-accent-hover">
+            <Crown className="h-4 w-4" />
           </div>
           <div>
-            <p className="text-lg font-semibold text-text-primary">{data.planName}</p>
-            <p className="text-sm text-text-muted">
+            <p className="text-sm font-semibold text-text-primary">{data.planName}</p>
+            <p className="text-xs text-text-tertiary">
               Qolgan eksportlar: {data.remaining.exports}
             </p>
           </div>

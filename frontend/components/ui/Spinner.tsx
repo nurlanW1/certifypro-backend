@@ -18,8 +18,8 @@ const sizeMap = {
 export function Spinner({ size = 'md', className, label }: SpinnerProps) {
   return (
     <div className={cn('flex flex-col items-center justify-center gap-2', className)}>
-      <Loader2 className={cn('animate-spin text-brand-600', sizeMap[size])} />
-      {label && <span className="text-sm text-text-muted">{label}</span>}
+      <Loader2 className={cn('animate-spin text-accent', sizeMap[size])} />
+      {label && <span className="text-sm text-text-tertiary">{label}</span>}
     </div>
   )
 }

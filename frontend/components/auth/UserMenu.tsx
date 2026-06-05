@@ -12,7 +12,7 @@ export function UserMenu() {
   if (!isClerkConfiguredClient()) {
     return (
       <div
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-divide bg-subtle text-xs font-semibold text-text-secondary"
         title="Mehmon rejimi"
       >
         M

@@ -108,7 +108,7 @@ function FilterSections({ onClose }: { onClose?: () => void }) {
           clearFilters()
           onClose?.()
         }}
-        className="w-full rounded-lg border border-border py-2.5 text-sm font-medium text-text-secondary transition-all duration-150 hover:border-brand-200 hover:bg-brand-50"
+        className="w-full rounded-lg border border-divide bg-canvas py-2.5 text-sm font-medium text-text-secondary transition-all duration-150 hover:border-accent-border hover:bg-accent-dim hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--g-focus-bg)]"
       >
         Barcha filtrlarni tozalash
       </button>
@@ -137,7 +137,7 @@ function FilterGroup({
           <button
             type="button"
             onClick={onClear}
-            className="text-xs font-medium text-brand-600 hover:text-brand-800"
+            className="text-xs font-medium text-accent hover:text-accent-hover"
           >
             Tozalash
           </button>
@@ -151,7 +151,7 @@ function FilterGroup({
 export function FilterSidebarDesktop() {
   return (
     <aside className="hidden w-56 shrink-0 lg:block">
-      <div className="sticky top-24 rounded-xl border border-border bg-surface p-4 shadow-xs">
+      <div className="sticky top-24 rounded-xl border border-divide bg-ink p-4 shadow-xs">
         <h2 className="mb-4 text-sm font-semibold text-text-primary">Filtrlar</h2>
         <FilterSections />
       </div>
@@ -168,11 +168,11 @@ export function FilterSidebarMobile({ open, onOpenChange }: FilterSidebarMobileP
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-brand-900/40 backdrop-blur-sm lg:hidden" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-sm lg:hidden" />
         <Dialog.Content
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl',
-            'border border-border bg-surface p-6 shadow-lg focus:outline-none lg:hidden'
+            'border border-divide bg-ink p-6 shadow-lg focus:outline-none lg:hidden'
           )}
         >
           <div className="mb-4 flex items-center justify-between">
@@ -180,7 +180,7 @@ export function FilterSidebarMobile({ open, onOpenChange }: FilterSidebarMobileP
               Filtrlar
             </Dialog.Title>
             <Dialog.Close
-              className="rounded-lg p-2 text-text-muted hover:bg-brand-50"
+              className="rounded-lg p-2 text-text-tertiary transition-colors hover:bg-subtle hover:text-text-primary"
               aria-label="Yopish"
             >
               <X className="h-5 w-5" />

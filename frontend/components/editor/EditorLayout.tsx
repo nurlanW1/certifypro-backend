@@ -1,12 +1,9 @@
 'use client'
 
-import { Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { formatDate } from '@/lib/utils'
-import { EditorTopBar } from '@/components/editor/EditorTopBar'
-import { EditorToolbar } from '@/components/editor/EditorToolbar'
-import { EditorCanvas } from '@/components/editor/EditorCanvas'
-import { EditorProperties } from '@/components/editor/EditorProperties'
+import { WorkspaceLayout } from '@/components/workspace/WorkspaceLayout'
 import { useEditorStore, type ActiveTool } from '@/store/editorStore'
 import { AUTO_SAVE_INTERVAL_MS } from '@/lib/editor/constants'
 import { saveDesign } from '@/lib/export'
@@ -153,16 +150,5 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
     return () => window.clearInterval(interval)
   }, [designId, setDirty, setLastSaved])
 
-  return (
-    <div className="flex h-full flex-col overflow-hidden bg-surface-tertiary">
-      <EditorTopBar designId={designId} />
-      <div className="flex min-h-0 flex-1 overflow-hidden">
-        <EditorToolbar />
-        <EditorCanvas />
-        <Suspense fallback={<aside className="hidden w-60 md:block" />}>
-          <EditorProperties />
-        </Suspense>
-      </div>
-    </div>
-  )
+  return <WorkspaceLayout designId={designId} eventId={eventId} />
 }

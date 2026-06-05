@@ -97,18 +97,18 @@ export function AgencyTeamPanel({ canManage }: { canManage: boolean }) {
     <div className="space-y-4">
       <Card className="p-5">
         <h3 className="font-semibold text-text-primary">Jamoa</h3>
-        <ul className="mt-3 divide-y divide-border">
+        <ul className="mt-3 divide-y divide-divide">
           {members.map((m) => (
             <li key={m.id} className="flex justify-between py-2 text-sm">
               <span>
                 {m.name ?? m.email}
-                <span className="ml-2 text-text-muted">({m.role})</span>
+                <span className="ml-2 text-text-tertiary">({m.role})</span>
               </span>
-              <span className="text-text-muted">{m.email}</span>
+              <span className="text-text-tertiary">{m.email}</span>
             </li>
           ))}
           {members.length === 0 && (
-            <li className="py-2 text-sm text-text-muted">A’zolar yo‘q</li>
+            <li className="py-2 text-sm text-text-tertiary">A’zolar yo‘q</li>
           )}
         </ul>
       </Card>
@@ -143,18 +143,18 @@ export function AgencyTeamPanel({ canManage }: { canManage: boolean }) {
               {invites.map((inv) => (
                 <li
                   key={inv.id}
-                  className="flex items-center justify-between rounded-lg bg-surface-secondary px-3 py-2 text-sm"
+                  className="flex items-center justify-between rounded-lg border border-divide bg-ink px-3 py-2 text-sm"
                 >
                   <span>
                     {inv.email}{' '}
-                    <span className="text-text-muted">({inv.role})</span>
+                    <span className="text-text-tertiary">({inv.role})</span>
                     {inv.emailSentAt && (
                       <span className="ml-1 text-success">✓ email</span>
                     )}
                   </span>
                   <button
                     type="button"
-                    className="text-text-muted hover:text-danger"
+                    className="text-text-tertiary transition-colors hover:text-danger"
                     onClick={() => void revokeInvite(inv.id)}
                     aria-label="Bekor qilish"
                   >

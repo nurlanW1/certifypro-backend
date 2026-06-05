@@ -1,89 +1,69 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  CalendarPlus,
-  Layout,
-  Award,
-  CreditCard,
-  type LucideIcon,
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { CalendarPlus, Layout, Award, CreditCard } from 'lucide-react'
 
-interface QuickAction {
-  icon: LucideIcon
-  title: string
-  desc: string
-  href: string
-  color: 'brand' | 'success' | 'warning'
-  isPro?: boolean
-}
-
-const QUICK_ACTIONS: QuickAction[] = [
+const QUICK_ACTIONS = [
   {
     icon: CalendarPlus,
     title: 'Yangi tadbir',
     desc: 'Materiallar ro‘yxati bilan loyiha',
     href: '/events/new',
-    color: 'brand',
+    primary: true,
   },
   {
     icon: Layout,
     title: 'Tadbirlarim',
     desc: 'Barcha loyihalar',
     href: '/events',
-    color: 'success',
+    primary: false,
   },
   {
     icon: Award,
     title: 'Sertifikat shablon',
-    desc: 'Katalogdan (tadbirga bog‘lash tavsiya etiladi)',
+    desc: 'Katalogdan tanlash',
     href: '/templates?category=CERTIFICATE',
-    color: 'warning',
+    primary: false,
   },
   {
     icon: CreditCard,
     title: 'Pro rejim',
     desc: "Ko'proq imkoniyat",
     href: '/upgrade',
-    color: 'brand',
-    isPro: true,
+    primary: false,
+    accent: true,
   },
 ]
 
-const colorMap = {
-  brand: 'bg-brand-50 text-brand-600',
-  success: 'bg-success-light text-success-dark',
-  warning: 'bg-warning-light text-warning-dark',
-}
-
 export function QuickActions() {
   return (
-    <section className="gildia-card p-6">
-      <h2 className="mb-4 text-lg font-semibold text-text-primary">Tezkor harakatlar</h2>
-      <div className="space-y-3">
+    <section className="border-b border-divide">
+      <p className="label-caps border-b border-divide py-4">Tezkor harakatlar</p>
+      <div className="divide-y divide-divide">
         {QUICK_ACTIONS.map((action) => (
           <Link
             key={action.href}
             href={action.href}
-            className={cn(
-              'flex items-center gap-4 rounded-xl border border-border p-4',
-              'cursor-pointer transition-all duration-150 hover:border-brand-200 hover:shadow-md',
-              action.isPro && 'border-warning/30 bg-warning-light/30'
-            )}
+            className="group flex items-center gap-4 py-4 transition-colors hover:bg-subtle"
           >
             <div
-              className={cn(
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
-                colorMap[action.color]
-              )}
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded ${
+                action.primary
+                  ? 'bg-accent-dim text-accent-hover'
+                  : action.accent
+                    ? 'bg-warn/10 text-warn'
+                    : 'bg-subtle text-text-tertiary'
+              }`}
             >
-              <action.icon className="h-5 w-5" />
+              <action.icon className="h-4 w-4" />
             </div>
-            <div className="min-w-0">
-              <p className="font-medium text-text-primary">{action.title}</p>
-              <p className="text-xs text-text-muted">{action.desc}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-text-primary">{action.title}</p>
+              <p className="text-xs text-text-tertiary">{action.desc}</p>
             </div>
+            <span className="text-xs text-text-disabled transition-colors group-hover:text-text-tertiary">
+              →
+            </span>
           </Link>
         ))}
       </div>

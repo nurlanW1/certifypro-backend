@@ -1,20 +1,10 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans } from 'next/font/google'
+import { GeistMono } from 'geist/font/mono'
+import { GeistSans } from 'geist/font/sans'
 import { AppProviders } from '@/components/AppProviders'
+import { ThemeScript } from '@/components/theme/ThemeScript'
 import { isClerkConfigured } from '@/lib/clerk-config'
 import './globals.css'
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  weight: ['400', '500', '600', '700', '800'],
-})
-
-const display = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-display',
-  weight: ['600', '700', '800'],
-})
 
 export const metadata: Metadata = {
   title: 'Gildia — Tadbir dizayn platformasi',
@@ -22,23 +12,34 @@ export const metadata: Metadata = {
     'Konferentsiya, seminar, forum va korporativ tadbirlar uchun dizayn materiallarini avtomatik generatsiya qilish.',
 }
 
+function RootShell({ children }: { children: React.ReactNode }) {
+  return (
+    <html
+      lang="uz"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="font-sans antialiased">
+        <ThemeScript />
+        <AppProviders>{children}</AppProviders>
+      </body>
+    </html>
+  )
+}
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const content = (
-    <html lang="uz">
-      <body className={`${jakarta.variable} ${display.variable} font-sans antialiased`}>
-        <AppProviders>{children}</AppProviders>
-      </body>
-    </html>
-  )
-
   if (!isClerkConfigured()) {
-    return content
+    return <RootShell>{children}</RootShell>
   }
 
   const { ClerkProvider } = await import('@clerk/nextjs')
-  return <ClerkProvider>{content}</ClerkProvider>
+  return (
+    <ClerkProvider>
+      <RootShell>{children}</RootShell>
+    </ClerkProvider>
+  )
 }

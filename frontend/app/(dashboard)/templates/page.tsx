@@ -1,20 +1,26 @@
 import { Suspense } from 'react'
-import { TemplateGallery } from '@/components/templates/TemplateGallery'
-import { Spinner } from '@/components/ui/Spinner'
+import { TemplatesPageClient } from '@/components/templates/TemplatesPageClient'
+import { TemplateSkeleton } from '@/components/ui/Skeleton'
 
 export const metadata = {
-  title: 'Shablon katalogi — Gildia',
+  title: 'Shablonlar — Gildia',
   description: 'Tadbir materiali uchun shablon tanlash',
+}
+
+function TemplatesFallback() {
+  return (
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
+      {Array.from({ length: 12 }).map((_, i) => (
+        <TemplateSkeleton key={i} />
+      ))}
+    </div>
+  )
 }
 
 export default function TemplatesPage() {
   return (
-    <div className="-m-4 md:-m-6">
-      <div className="px-4 py-2 md:px-6 md:py-4">
-        <Suspense fallback={<Spinner className="py-16" />}>
-          <TemplateGallery />
-        </Suspense>
-      </div>
-    </div>
+    <Suspense fallback={<TemplatesFallback />}>
+      <TemplatesPageClient />
+    </Suspense>
   )
 }

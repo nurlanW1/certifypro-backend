@@ -2,6 +2,7 @@
 
 import { Menu } from 'lucide-react'
 import { UserMenu } from '@/components/auth/UserMenu'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { usePathname } from 'next/navigation'
 
 const PAGE_TITLES: Record<string, string> = {
@@ -33,20 +34,21 @@ export function TopBar({ onMenuClick }: TopBarProps) {
   const title = resolvePageTitle(pathname)
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-border bg-surface/80 px-4 backdrop-blur-md md:px-6">
+    <header className="flex h-12 shrink-0 items-center gap-4 border-b border-divide bg-canvas px-4 md:px-6">
       <button
         type="button"
         onClick={onMenuClick}
-        className="rounded-xl p-2 text-text-muted transition-colors hover:bg-brand-50 hover:text-brand-700 md:hidden"
+        className="btn-ghost btn-icon-md text-text-secondary md:hidden"
         aria-label="Menyu"
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="h-4 w-4" />
       </button>
 
       <div className="min-w-0 flex-1">
-        <h1 className="truncate font-display text-lg font-bold text-text-primary">{title}</h1>
+        <h1 className="truncate text-sm font-semibold text-text-primary">{title}</h1>
       </div>
 
+      <ThemeToggle />
       <UserMenu />
     </header>
   )

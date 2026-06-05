@@ -1,6 +1,6 @@
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="space-y-6">
       <h1 className="text-2xl font-semibold text-text-primary">Yordam</h1>
       <div className="gildia-card space-y-4 p-6">
         <div>

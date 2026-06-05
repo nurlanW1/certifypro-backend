@@ -79,13 +79,13 @@ function UpgradePageContent() {
   if (loading) return <Spinner className="py-16" />
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="space-y-8">
       <div className="text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-warning-light">
-          <Crown className="h-7 w-7 text-warning-dark" />
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-divide bg-ink">
+          <Crown className="h-7 w-7 text-accent" />
         </div>
         <h1 className="text-2xl font-semibold text-text-primary">Rejalar</h1>
-        <p className="mt-2 text-text-muted">
+        <p className="mt-2 text-text-secondary">
           Hozirgi reja:{' '}
           <span className="font-medium text-text-primary">{billing?.planName ?? '—'}</span>
         </p>
@@ -123,17 +123,17 @@ function UpgradePageContent() {
             <Card
               key={id}
               className={
-                highlight ? 'border-brand-300 ring-2 ring-brand-600/20' : undefined
+                highlight ? 'border-accent-border ring-2 ring-accent/20' : undefined
               }
             >
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-text-primary">
                   {id === 'FREE' ? 'Bepul' : id === 'PRO' ? 'Pro' : 'Agentlik'}
                 </h3>
-                <p className="mt-1 text-2xl font-semibold text-brand-600">
+                <p className="mt-1 text-2xl font-semibold text-accent">
                   {price != null ? `${price.toLocaleString('uz-UZ')} so‘m/oy` : 'Kelishuv'}
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-text-muted">
+                <ul className="mt-4 space-y-2 text-sm text-text-secondary">
                   <Feature>{limits.maxEvents} tadbir</Feature>
                   <Feature>{limits.maxDesigns} dizayn</Feature>
                   <Feature>{limits.maxExports} eksport/oy</Feature>
@@ -212,7 +212,7 @@ function UpgradePageContent() {
       </p>
 
       <div className="text-center">
-        <Link href="/dashboard" className="text-sm font-medium text-brand-600 hover:text-brand-800">
+        <Link href="/dashboard" className="text-sm font-medium text-accent hover:text-accent-hover">
           ← Bosh sahifa
         </Link>
       </div>
@@ -247,9 +247,9 @@ function UsageBar({
           {used} / {max}
         </span>
       </div>
-      <div className="mt-1 h-2 overflow-hidden rounded-full bg-surface-tertiary">
+      <div className="mt-1 h-2 overflow-hidden rounded-full bg-muted">
         <div
-          className="h-full rounded-full bg-brand-600 transition-all"
+          className="h-full rounded-full bg-accent transition-all"
           style={{ width: `${pct}%` }}
         />
       </div>

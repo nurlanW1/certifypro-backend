@@ -4,7 +4,7 @@ export default function EditorRouteLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-surface-tertiary">
+    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-canvas">
       {children}
     </div>
   )

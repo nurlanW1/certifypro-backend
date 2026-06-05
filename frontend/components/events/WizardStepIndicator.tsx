@@ -24,11 +24,11 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
                 <div
                   className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition-all duration-150',
-                    isActive && 'bg-brand-gradient text-text-inverse shadow-sm ring-4 ring-brand-100',
-                    isCompleted && 'bg-brand-600 text-text-inverse',
+                    isActive && 'bg-accent text-text-inverse shadow-sm ring-4 ring-accent-dim',
+                    isCompleted && 'bg-accent text-text-inverse',
                     !isActive &&
                       !isCompleted &&
-                      'border border-border bg-surface text-text-muted'
+                      'border border-divide bg-ink text-text-tertiary'
                   )}
                 >
                   {isCompleted ? (
@@ -41,12 +41,12 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
                   <p
                     className={cn(
                       'text-xs font-semibold',
-                      isActive ? 'text-brand-800' : 'text-text-muted'
+                      isActive ? 'text-text-primary' : 'text-text-tertiary'
                     )}
                   >
                     {step.id}. {step.title}
                   </p>
-                  <p className="mt-0.5 max-w-[7rem] text-[10px] leading-tight text-text-muted">
+                  <p className="mt-0.5 max-w-[7rem] text-[10px] leading-tight text-text-tertiary">
                     {step.description}
                   </p>
                 </div>
@@ -55,7 +55,7 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
                 <div
                   className={cn(
                     'mx-2 h-0.5 flex-1 transition-colors duration-150 sm:mx-4',
-                    isCompleted ? 'bg-brand-400' : 'bg-border'
+                    isCompleted ? 'bg-accent' : 'bg-divide'
                   )}
                   aria-hidden
                 />

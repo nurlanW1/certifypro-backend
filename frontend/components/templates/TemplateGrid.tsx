@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { TemplateCard } from '@/components/templates/TemplateCard'
 import { TemplatePreviewModal } from '@/components/templates/TemplatePreviewModal'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { TemplateSkeleton } from '@/components/ui/Skeleton'
 import { useTemplateStore } from '@/store/templateStore'
 import { startTemplateDesignForEvent } from '@/lib/start-template-design'
 import type { MockTemplate } from '@/lib/mock-templates'
@@ -25,18 +26,6 @@ interface TemplateGridProps {
   isLoading?: boolean
   eventId?: string
   materialCategory?: MaterialCategory
-}
-
-function TemplateCardSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-xl border border-border">
-      <div className="aspect-[4/3] animate-pulse bg-surface-tertiary" />
-      <div className="space-y-2 p-3">
-        <div className="h-4 w-3/4 animate-pulse rounded bg-surface-tertiary" />
-        <div className="h-3 w-1/2 animate-pulse rounded bg-surface-tertiary" />
-      </div>
-    </div>
-  )
 }
 
 export function TemplateGrid({
@@ -83,7 +72,7 @@ export function TemplateGrid({
     return (
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <TemplateCardSkeleton key={i} />
+          <TemplateSkeleton key={i} />
         ))}
       </div>
     )
@@ -104,7 +93,7 @@ export function TemplateGrid({
               className={cn(
                 'font-medium transition-all duration-150',
                 sortBy === opt.value
-                  ? 'text-brand-600 underline decoration-brand-600 underline-offset-4'
+                  ? 'text-accent underline decoration-accent underline-offset-4'
                   : 'text-text-muted hover:text-text-primary'
               )}
             >

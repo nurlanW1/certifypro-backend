@@ -6,7 +6,11 @@ import { useEditorStore } from '@/store/editorStore'
 import { getFabricObjectType } from '@/lib/editor/fabric-utils'
 import { cn } from '@/lib/utils'
 
-export function EditorLayersPanel() {
+interface EditorLayersPanelProps {
+  inline?: boolean
+}
+
+export function EditorLayersPanel({ inline = false }: EditorLayersPanelProps) {
   const {
     fabricCanvas,
     layersOpen,
@@ -19,8 +23,12 @@ export function EditorLayersPanel() {
 
   const objects = [...fabricCanvas.getObjects()].reverse()
 
+  const panelClass = inline
+    ? 'w-full rounded border border-divide bg-canvas'
+    : 'absolute bottom-20 left-16 z-20 w-56 rounded-xl border border-border bg-surface shadow-lg'
+
   return (
-    <div className="absolute bottom-20 left-16 z-20 w-56 rounded-xl border border-border bg-surface shadow-lg">
+    <div className={panelClass}>
       <div className="flex items-center justify-between border-b border-border px-3 py-2">
         <span className="flex items-center gap-2 text-xs font-semibold text-text-primary">
           <Layers className="h-4 w-4" />

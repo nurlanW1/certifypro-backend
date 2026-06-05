@@ -63,7 +63,7 @@ function InviteContent() {
         <p className="text-text-primary">
           {preview.expired ? 'Taklif muddati tugagan.' : 'Taklif topilmadi yoki ishlatilgan.'}
         </p>
-        <Link href="/agency" className="mt-4 inline-block text-sm text-brand-600">
+        <Link href="/agency" className="mt-4 inline-block text-sm text-accent hover:text-accent-hover">
           Agentlik →
         </Link>
       </Card>
@@ -86,10 +86,8 @@ function InviteContent() {
 
 export default function InvitePage() {
   return (
-    <div className="mx-auto max-w-lg py-8">
-      <Suspense fallback={<Spinner className="py-12" />}>
-        <InviteContent />
-      </Suspense>
-    </div>
+    <Suspense fallback={<Spinner className="py-12" />}>
+      <InviteContent />
+    </Suspense>
   )
 }

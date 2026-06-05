@@ -54,7 +54,7 @@ export function AdminOverviewPanel() {
         <p className="mt-2 text-sm text-text-muted">
           `GILDIA_ADMIN_EMAILS` da emailingiz bo‘lishi kerak.
         </p>
-        <Link href="/dashboard" className="mt-4 inline-block text-sm text-brand-600">
+        <Link href="/dashboard" className="mt-4 inline-block text-sm text-accent hover:text-accent-hover">
           Bosh sahifa
         </Link>
       </Card>
@@ -66,7 +66,7 @@ export function AdminOverviewPanel() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <Shield className="h-7 w-7 text-brand-600" />
+        <Shield className="h-7 w-7 text-accent" />
         <h1 className="text-2xl font-semibold text-text-primary">Platform admin</h1>
       </div>
 
@@ -109,12 +109,15 @@ export function AdminOverviewPanel() {
         <h2 className="font-semibold text-text-primary">So‘nggi to‘lovlar</h2>
         <ul className="mt-2 max-h-48 overflow-auto text-xs text-text-muted">
           {overview.recentPaidOrders.map((o) => (
-            <li key={o.id} className="border-b border-border/50 py-1">
+            <li key={o.id} className="border-b border-divide/60 py-1">
               {o.userEmail} — {o.plan} — {o.amount.toLocaleString('uz-UZ')} UZS
             </li>
           ))}
         </ul>
-        <Link href="/settings/billing" className="mt-3 inline-block text-sm text-brand-600">
+        <Link
+          href="/settings/billing"
+          className="mt-3 inline-block text-sm text-accent hover:text-accent-hover"
+        >
           Billing sozlamalar →
         </Link>
       </Card>

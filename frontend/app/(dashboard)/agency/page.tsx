@@ -60,13 +60,13 @@ export default function AgencyPage() {
   if (loading) return <Spinner className="py-16" />
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="space-y-6">
       <div>
         <h1 className="flex items-center gap-2 text-2xl font-semibold text-text-primary">
-          <Building2 className="h-7 w-7 text-brand-600" />
+          <Building2 className="h-7 w-7 text-accent" />
           Agentlik
         </h1>
-        <p className="mt-1 text-sm text-text-muted">
+        <p className="mt-1 text-sm text-text-secondary">
           Jamoa va tadbirlarni bir tashkilot ostida boshqaring (ENTERPRISE).
         </p>
       </div>
@@ -74,13 +74,13 @@ export default function AgencyPage() {
       {org ? (
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-text-primary">{org.name}</h2>
-          <p className="text-sm text-text-muted">/{org.slug}</p>
+          <p className="text-sm text-text-tertiary">/{org.slug}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <Stat label="Reja" value={PLAN_LABELS[org.plan]} />
             <Stat label="A’zolar" value={String(org.memberCount)} />
             <Stat label="Tadbirlar" value={String(org.eventCount)} />
           </div>
-          <p className="mt-4 text-xs text-text-muted">Rolingiz: {org.role}</p>
+          <p className="mt-4 text-xs text-text-tertiary">Rolingiz: {org.role}</p>
           <div className="mt-6">
             <AgencyTeamPanel canManage={org.role === 'OWNER' || org.role === 'ADMIN'} />
           </div>
@@ -88,7 +88,7 @@ export default function AgencyPage() {
       ) : (
         <Card className="p-6">
           <h2 className="font-semibold text-text-primary">Agentlik yarating</h2>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 text-sm text-text-secondary">
             Yangi tadbirlar avtomatik shu agentlikka bog‘lanadi.
           </p>
           <label className="mt-4 block text-sm">
@@ -112,8 +112,8 @@ export default function AgencyPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-surface-secondary p-3">
-      <p className="text-xs text-text-muted">{label}</p>
+    <div className="rounded-lg border border-divide bg-ink p-3">
+      <p className="text-xs text-text-tertiary">{label}</p>
       <p className="font-semibold text-text-primary">{value}</p>
     </div>
   )

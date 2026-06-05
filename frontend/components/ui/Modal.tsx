@@ -24,7 +24,7 @@ export function Modal({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-brand-900/40 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-overlay backdrop-blur-sm" />
         <Dialog.Content
           className={cn(
             'fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
@@ -44,7 +44,7 @@ export function Modal({
               )}
             </div>
             <Dialog.Close
-              className="rounded-lg p-1 text-text-muted hover:bg-brand-50 hover:text-text-primary"
+              className="rounded-lg p-1 text-text-tertiary transition-colors hover:bg-subtle hover:text-text-primary"
               aria-label="Yopish"
             >
               <X className="h-5 w-5" />

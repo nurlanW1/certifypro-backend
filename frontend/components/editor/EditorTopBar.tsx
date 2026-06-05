@@ -22,6 +22,7 @@ import toast from 'react-hot-toast'
 import { useEditorStore } from '@/store/editorStore'
 import { exportToPNG, exportToPDF, saveDesign, copyCanvasPreviewLink } from '@/lib/export'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 interface EditorTopBarProps {
   designId: string
@@ -70,13 +71,13 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
   const filename = designName.replace(/\s+/g, '-').toLowerCase() || 'gildia-design'
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-surface px-3 md:px-4">
+    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-divide bg-canvas px-4">
       <button
         type="button"
         onClick={() =>
           eventId ? router.push(`/events/${eventId}/materials`) : router.back()
         }
-        className="flex items-center gap-1 rounded-lg p-2 text-sm text-text-secondary transition-all duration-150 hover:bg-brand-50 hover:text-text-primary"
+        className="btn-ghost btn-icon-sm"
       >
         <ArrowLeft className="h-4 w-4" />
         <span className="hidden sm:inline">Orqaga</span>
@@ -96,36 +97,37 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
         <button
           type="button"
           onClick={() => setEditingName(true)}
-          className="max-w-[140px] truncate px-2 text-sm font-semibold text-text-primary hover:text-brand-600 md:max-w-xs"
+          className="max-w-[140px] truncate border-b border-transparent bg-transparent px-1 py-0.5 text-sm font-medium text-text-primary transition-colors hover:border-divide focus:border-accent md:max-w-xs"
         >
           {designName}
         </button>
       )}
 
-      <div className="mx-1 hidden h-6 w-px bg-border sm:block" />
+      <div className="mx-1 hidden h-5 w-px bg-divide sm:block" />
 
       <div className="hidden items-center gap-1 sm:flex">
         <button
           type="button"
           onClick={undo}
           disabled={!canUndo()}
-          className="rounded-lg p-2 text-text-muted transition-all duration-150 hover:bg-brand-50 disabled:opacity-40"
+          className="btn-ghost btn-icon-sm disabled:opacity-40"
           aria-label="Bekor qilish"
         >
-          <Undo2 className="h-4 w-4" />
+          <Undo2 size={13} />
         </button>
         <button
           type="button"
           onClick={redo}
           disabled={!canRedo()}
-          className="rounded-lg p-2 text-text-muted transition-all duration-150 hover:bg-brand-50 disabled:opacity-40"
+          className="btn-ghost btn-icon-sm disabled:opacity-40"
           aria-label="Qaytarish"
         >
-          <Redo2 className="h-4 w-4" />
+          <Redo2 size={13} />
         </button>
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-1">
+        <ThemeToggle />
         {isDirty && saveStatus === 'idle' && (
           <span className="hidden text-xs text-warning md:inline">Saqlanmagan</span>
         )}
@@ -135,7 +137,9 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
             type="button"
             className={cn(
               'hidden rounded-lg p-2 md:inline-flex',
-              printPreview ? 'bg-brand-50 text-brand-600' : 'text-text-muted hover:bg-brand-50'
+              printPreview
+                ? 'bg-accent-dim text-accent-hover'
+                : 'text-text-tertiary hover:bg-subtle'
             )}
             aria-label="Chop etish ko‘rinishi"
             onClick={() => setPrintPreview(!printPreview)}
@@ -149,7 +153,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
           onClick={() => void handleSave()}
           disabled={saveStatus === 'saving'}
           className={cn(
-            'gildia-btn-primary inline-flex items-center gap-2 px-3 py-2 text-sm',
+            'btn-secondary btn-sm inline-flex items-center gap-1.5',
             saveStatus === 'error' && 'bg-danger hover:bg-danger'
           )}
         >
@@ -170,7 +174,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
-            <button type="button" className="gildia-btn-secondary inline-flex items-center gap-1 px-3 py-2 text-sm">
+            <button type="button" className="btn-primary btn-sm inline-flex items-center gap-1.5">
               <Download className="h-4 w-4" />
               <span className="hidden sm:inline">Eksport</span>
               <ChevronDown className="h-3 w-3" />
@@ -179,10 +183,10 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               align="end"
-              className="z-50 min-w-[200px] rounded-xl border border-border bg-surface p-1 shadow-lg"
+              className="z-50 min-w-[200px] rounded border border-divide bg-ink p-1 shadow-lg"
             >
               <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-primary outline-none hover:bg-brand-50"
+                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
                 onSelect={() => {
                   if (!fabricCanvas) return
                   void exportToPNG(fabricCanvas, filename, {
@@ -197,7 +201,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 PNG yuklash
               </DropdownMenu.Item>
               <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-primary outline-none hover:bg-brand-50"
+                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
                 onSelect={() => {
                   if (!fabricCanvas) return
                   void exportToPDF(fabricCanvas, filename, {
@@ -212,7 +216,7 @@ export function EditorTopBar({ designId }: EditorTopBarProps) {
                 PDF yuklash
               </DropdownMenu.Item>
               <DropdownMenu.Item
-                className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-text-primary outline-none hover:bg-brand-50"
+                className="flex cursor-pointer items-center gap-2 rounded px-3 py-2 text-sm text-text-secondary outline-none transition-colors hover:bg-subtle hover:text-text-primary"
                 onSelect={() => {
                   if (!fabricCanvas) return
                   void copyCanvasPreviewLink(fabricCanvas).then(() => {

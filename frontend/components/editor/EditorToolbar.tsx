@@ -98,7 +98,7 @@ export function EditorToolbar() {
 
   return (
     <Tooltip.Provider delayDuration={300}>
-      <aside className="flex w-[52px] shrink-0 flex-col items-center border-r border-border bg-surface py-2">
+      <aside className="flex w-[52px] shrink-0 flex-col items-center border-r border-divide bg-canvas py-2">
         <div className="flex flex-col gap-1">
           {visibleTools.map(({ id, icon: Icon, label, shortcut }) => (
             <Tooltip.Root key={id}>
@@ -109,8 +109,8 @@ export function EditorToolbar() {
                   className={cn(
                     'flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-150',
                     activeTool === id
-                      ? 'bg-brand-50 text-brand-600'
-                      : 'text-text-muted hover:bg-surface-secondary hover:text-text-primary'
+                      ? 'border border-accent-border bg-accent-dim text-accent-hover'
+                      : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
                   )}
                   aria-label={label}
                 >
@@ -138,8 +138,8 @@ export function EditorToolbar() {
                 className={cn(
                   'flex h-11 w-11 items-center justify-center rounded-lg transition-all duration-150',
                   layersOpen
-                    ? 'bg-brand-50 text-brand-600'
-                    : 'text-text-muted hover:bg-surface-secondary'
+                    ? 'border border-accent-border bg-accent-dim text-accent-hover'
+                    : 'text-text-disabled hover:bg-subtle'
                 )}
                 aria-label="Qatlamlar"
               >

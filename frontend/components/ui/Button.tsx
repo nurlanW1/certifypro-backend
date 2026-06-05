@@ -16,7 +16,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: 'gildia-btn-primary',
   secondary: 'gildia-btn-secondary',
   ghost:
-    'rounded-sm px-4 py-2.5 text-sm font-semibold text-text-secondary transition-all hover:bg-surface-tertiary',
+    'rounded-sm px-4 py-2.5 text-sm font-semibold text-text-secondary transition-all hover:bg-subtle hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--g-focus-bg)]',
   danger:
     'rounded-xl bg-danger px-4 py-2.5 text-sm font-semibold text-text-inverse shadow-sm transition-all hover:opacity-90',
 }

@@ -7,7 +7,6 @@ import { useEditorStore } from '@/store/editorStore'
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '@/lib/editor/constants'
 import { isFabricCanvasJson, serializeCanvas } from '@/lib/editor/fabric-utils'
 import { loadSvgOntoCanvas } from '@/lib/editor/svg-to-fabric'
-import { EditorLayersPanel } from '@/components/editor/EditorLayersPanel'
 
 export function EditorCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -116,7 +115,7 @@ export function EditorCanvas() {
   const handleFitScreen = () => setZoom(0.75)
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden bg-surface-tertiary">
+    <div className="relative flex flex-1 flex-col overflow-hidden bg-canvas">
       <div className="flex flex-1 items-center justify-center overflow-auto p-6 md:p-10">
         <div
           className="shadow-lg transition-transform duration-150"
@@ -134,9 +133,7 @@ export function EditorCanvas() {
         </div>
       </div>
 
-      <EditorLayersPanel />
-
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-lg border border-border bg-surface px-2 py-1 shadow-sm">
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-lg border border-divide bg-ink px-2 py-1 shadow-sm">
         <button
           type="button"
           onClick={handleZoomOut}

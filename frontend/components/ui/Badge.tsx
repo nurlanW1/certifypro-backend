@@ -5,10 +5,10 @@ import { cn } from '@/lib/utils'
 type BadgeVariant = 'default' | 'success' | 'warning' | 'premium'
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: 'bg-brand-50 text-text-secondary border-border',
+  default: 'bg-ink text-text-secondary border-divide',
   success: 'bg-success-light text-success-dark border-success/20',
   warning: 'bg-warning-light text-warning-dark border-warning/20',
-  premium: 'bg-brand-600 text-text-inverse border-brand-800',
+  premium: 'bg-accent text-text-inverse border-accent-border',
 }
 
 interface BadgeProps {

@@ -41,10 +41,10 @@ export default function TemplateDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="space-y-6">
       <h1>{template.nameUz ?? template.name}</h1>
       <Card padding="none" className="overflow-hidden">
-        <div className="relative aspect-video bg-gradient-to-br from-brand-50 to-brand-100">
+        <div className="relative aspect-video bg-subtle border border-divide">
           {template.previewUrl ? (
             <Image
               src={template.previewUrl}
