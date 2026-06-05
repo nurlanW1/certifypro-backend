@@ -1,4 +1,4 @@
-import type { NextRequest } from 'next/server'
+import type { NextFetchEvent, NextRequest } from 'next/server'
 import { clerkMiddleware } from '@clerk/nextjs/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
@@ -26,8 +26,13 @@ function intlOnly(request: NextRequest) {
   return handleIntl(request)
 }
 
-/** Clerk + next-intl network boundary (Next.js ≤15: wired via middleware.ts). */
-export default isClerkConfigured() ? clerkHandler : intlOnly
+/** Re-check Clerk env on every request (not only at cold start). */
+export default function proxy(request: NextRequest, event: NextFetchEvent) {
+  if (isClerkConfigured()) {
+    return clerkHandler(request, event)
+  }
+  return intlOnly(request)
+}
 
 export const config = {
   matcher: [

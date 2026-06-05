@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import dynamic from 'next/dynamic'
-import { isClerkConfiguredClient } from '@/lib/clerk-config'
+import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
 
 const AuthButtonsClerk = dynamic(
   () => import('./AuthButtonsClerk').then((m) => m.AuthButtonsClerk),
@@ -19,7 +19,7 @@ export function AuthButtons({ size = 'nav' }: AuthButtonsProps) {
   const secondaryClass =
     size === 'hero' ? 'gildia-btn-secondary px-8 py-3 text-base' : 'gildia-btn-secondary px-4 py-2 text-sm'
 
-  if (!isClerkConfiguredClient()) {
+  if (!useClerkEnabled()) {
     return (
       <>
         <Link href="/dashboard" className={secondaryClass}>

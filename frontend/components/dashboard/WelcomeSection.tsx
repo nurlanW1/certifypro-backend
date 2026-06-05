@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { isClerkConfiguredClient } from '@/lib/clerk-config'
+import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
 import { WelcomeSectionContent } from './WelcomeSectionContent'
 
 const WelcomeSectionClerk = dynamic(
@@ -10,7 +10,7 @@ const WelcomeSectionClerk = dynamic(
 )
 
 export function WelcomeSection() {
-  if (!isClerkConfiguredClient()) {
+  if (!useClerkEnabled()) {
     return <WelcomeSectionContent firstName="Mehmon" />
   }
   return <WelcomeSectionClerk />

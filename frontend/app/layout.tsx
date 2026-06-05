@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { AppProviders } from '@/components/AppProviders'
+import { ClerkAppProvider } from '@/components/auth/ClerkAppProvider'
 import { ThemeScript } from '@/components/theme/ThemeScript'
-import { isClerkConfigured } from '@/lib/clerk-config'
+import { getClerkPublishableKey, isClerkConfigured } from '@/lib/clerk-config'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -12,31 +13,16 @@ export const metadata: Metadata = {
     'Konferentsiya, seminar, forum va korporativ tadbirlar uchun dizayn materiallarini avtomatik generatsiya qilish.',
 }
 
-export default async function RootLayout({
+/** Read Clerk env at request time (Vercel runtime vars work without rebuild). */
+export const dynamic = 'force-dynamic'
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const appBody = (
-    <>
-      <ThemeScript />
-      <AppProviders>{children}</AppProviders>
-    </>
-  )
-
-  if (!isClerkConfigured()) {
-    return (
-      <html
-        lang="uz"
-        className={`${GeistSans.variable} ${GeistMono.variable}`}
-        suppressHydrationWarning
-      >
-        <body className="font-sans antialiased">{appBody}</body>
-      </html>
-    )
-  }
-
-  const { ClerkProvider } = await import('@clerk/nextjs')
+  const publishableKey = getClerkPublishableKey()
+  const clerkEnabled = isClerkConfigured()
 
   return (
     <html
@@ -45,7 +31,15 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
-        <ClerkProvider>{appBody}</ClerkProvider>
+        <ClerkAppProvider
+          config={{
+            enabled: clerkEnabled,
+            publishableKey,
+          }}
+        >
+          <ThemeScript />
+          <AppProviders>{children}</AppProviders>
+        </ClerkAppProvider>
       </body>
     </html>
   )

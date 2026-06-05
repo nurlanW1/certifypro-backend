@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { isBlobStorageConfigured } from '@/lib/blob/storage'
 import { isEmailConfigured } from '@/lib/email/config'
 import { isClickConfigured, isPaymeConfigured } from '@/lib/payments/config'
+import { isClerkConfigured, isClerkPublishableConfigured } from '@/lib/clerk-config'
 import { prisma } from '@/lib/prisma'
 
 export async function GET() {
@@ -20,7 +21,8 @@ export async function GET() {
     service: 'gildia-frontend',
     checks: {
       database: db,
-      clerk: Boolean(process.env.CLERK_SECRET_KEY?.trim()),
+      clerk: isClerkConfigured(),
+      clerkPublishable: isClerkPublishableConfigured(),
       payme: isPaymeConfigured(),
       click: isClickConfigured(),
       openai: Boolean(process.env.OPENAI_API_KEY?.trim()),

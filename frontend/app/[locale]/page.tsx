@@ -9,7 +9,6 @@ import { LandingShowcase } from '@/components/landing/LandingShowcase'
 import { Footer } from '@/components/layout/Footer'
 import { Navbar } from '@/components/layout/Navbar'
 import { isClerkConfigured } from '@/lib/clerk-config'
-import { isGuestMode } from '@/lib/env'
 
 export default async function HomePage({
   params: { locale },
@@ -22,15 +21,8 @@ export default async function HomePage({
     if (userId) redirect(`/${locale}/dashboard`)
   }
 
-  const showGuestBanner = isGuestMode()
-
   return (
     <div className="min-h-screen bg-canvas">
-      {showGuestBanner && (
-        <div className="border-b border-accent-border bg-accent-dim px-6 py-2 text-center text-sm text-accent-hover">
-          Mehmon rejimi — Clerk keyinroq ulanadi. Dizayn va funksiyalarni sinab ko&apos;ring.
-        </div>
-      )}
       <Navbar />
       <main>
         <LandingHero />

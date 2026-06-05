@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { ClerkSetupNotice } from '@/components/auth/ClerkSetupNotice'
-import { isClerkConfiguredClient } from '@/lib/clerk-config'
+import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
 
 const SignUp = dynamic(
   () => import('@clerk/nextjs').then((m) => m.SignUp),
@@ -12,7 +12,7 @@ const SignUp = dynamic(
 export default function SignUpPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-secondary p-4">
-      {isClerkConfiguredClient() ? <SignUp /> : <ClerkSetupNotice />}
+      {useClerkEnabled() ? <SignUp /> : <ClerkSetupNotice />}
     </div>
   )
 }

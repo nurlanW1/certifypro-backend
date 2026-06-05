@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Menu, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { isClerkConfiguredClient } from '@/lib/clerk-config'
+import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 
@@ -19,7 +19,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const clerk = isClerkConfiguredClient()
+  const clerk = useClerkEnabled()
 
   const LINKS = [
     { href: '/templates' as const, label: t('templates') },

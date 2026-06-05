@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { isClerkConfiguredClient } from '@/lib/clerk-config'
+import { useClerkEnabled } from '@/components/auth/ClerkConfigContext'
 import { cn } from '@/lib/utils'
 
 const ClerkUserButton = dynamic(
@@ -10,7 +10,7 @@ const ClerkUserButton = dynamic(
 )
 
 export function SidebarUser({ collapsed }: { collapsed: boolean }) {
-  if (!isClerkConfiguredClient()) {
+  if (!useClerkEnabled()) {
     return (
       <div
         className={cn(
