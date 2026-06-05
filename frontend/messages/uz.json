@@ -199,7 +199,21 @@
     "noResults": "Natija topilmadi",
     "noResultsDesc": "Boshqa kalit so'z bilan qidiring",
     "noDate": "Sana yo'q",
-    "createFirst": "Birinchi tadbiringizni yarating"
+    "createFirst": "Birinchi tadbiringizni yarating",
+    "tabOverview": "Umumiy",
+    "tabParticipants": "Ishtirokchilar",
+    "tabBranding": "Brending",
+    "tabExport": "Eksport",
+    "tabSettings": "Sozlamalar",
+    "backToEvents": "Tadbirlarga qaytish",
+    "eventNotFound": "Tadbir topilmadi",
+    "materialsReady": "{ready} / {total} material tayyor",
+    "noMaterials": "Materiallar topilmadi",
+    "noMaterialsDesc": "Wizard orqali material tanlangan bo'lishi kerak. Yangi tadbir yarating.",
+    "edit": "Tahrirlash",
+    "selectTemplate": "Shablon tanlash",
+    "designLinked": "Dizayn bog'langan — muharrirda tahrirlashingiz mumkin",
+    "selectTemplateHint": "Shablon tanlang va dizayn yarating"
   },
 
   "eventWizard": {

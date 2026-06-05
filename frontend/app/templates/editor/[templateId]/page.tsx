@@ -7,7 +7,7 @@ export const metadata = {
   description: 'Edit a Gildia starter template',
 }
 
-export default function EditorTemplatePage({ params }: { params: { templateId: string } }) {
+export default function StarterEditorPage({ params }: { params: { templateId: string } }) {
   const template = findStarterTemplate(params.templateId)
   if (!template) notFound()
 

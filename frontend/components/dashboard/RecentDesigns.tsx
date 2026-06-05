@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowRight, PenTool } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { TemplateSkeleton } from '@/components/ui/Skeleton'

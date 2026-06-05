@@ -28,7 +28,7 @@ export function TemplateGallery() {
   )
 
   const useTemplate = (templateId: string) => {
-    router.push(`/editor/${templateId}`)
+    router.push(`/templates/editor/${templateId}`)
   }
 
   return (

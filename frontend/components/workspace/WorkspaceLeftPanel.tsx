@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { FileImage, LayoutTemplate } from 'lucide-react'
 import { EditorToolbar } from '@/components/editor/EditorToolbar'
 import { EditorLayersPanel } from '@/components/editor/EditorLayersPanel'

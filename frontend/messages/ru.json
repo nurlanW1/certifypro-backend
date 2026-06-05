@@ -201,7 +201,21 @@
     "noResults": "Ничего не найдено",
     "noResultsDesc": "Попробуйте другой поисковый запрос",
     "noDate": "Дата не указана",
-    "createFirst": "Создайте первое мероприятие"
+    "createFirst": "Создайте первое мероприятие",
+    "tabOverview": "Обзор",
+    "tabParticipants": "Участники",
+    "tabBranding": "Брендинг",
+    "tabExport": "Экспорт",
+    "tabSettings": "Настройки",
+    "backToEvents": "К списку мероприятий",
+    "eventNotFound": "Мероприятие не найдено",
+    "materialsReady": "{ready} / {total} материалов готово",
+    "noMaterials": "Материалы не найдены",
+    "noMaterialsDesc": "Материалы должны быть выбраны в мастере. Создайте новое мероприятие.",
+    "edit": "Редактировать",
+    "selectTemplate": "Выбрать шаблон",
+    "designLinked": "Дизайн привязан — можно редактировать в редакторе",
+    "selectTemplateHint": "Выберите шаблон и создайте дизайн"
   },
   "eventWizard": {
     "title": "Создать новое мероприятие",

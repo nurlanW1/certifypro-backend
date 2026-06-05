@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { CalendarPlus, Layout, Award, CreditCard } from 'lucide-react'
 
 const QUICK_ACTIONS = [

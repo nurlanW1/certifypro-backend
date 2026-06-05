@@ -1,7 +1,7 @@
 'use client'
 
 import { Bell, Menu, Search } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { usePathname } from '@/i18n/navigation'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { LanguageToggle } from '@/components/ui/LanguageToggle'
 import { UserMenu } from '@/components/auth/UserMenu'

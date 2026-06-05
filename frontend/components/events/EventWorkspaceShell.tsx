@@ -1,23 +1,23 @@
 'use client'
 
-import Link from 'next/link'
-import { useParams, usePathname } from 'next/navigation'
+import { Link, usePathname } from '@/i18n/navigation'
+import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Calendar, MapPin } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { EventWorkspaceContext } from '@/contexts/EventWorkspaceContext'
 import { useEvent } from '@/hooks/useEvent'
-import { EVENT_TYPE_LABELS } from '@/types/event'
 import { formatDate, cn } from '@/lib/utils'
-import type { Event } from '@/types/event'
+import type { Event, EventType } from '@/types/event'
 
-const TABS = [
-  { id: 'overview', label: 'Umumiy', suffix: '' },
-  { id: 'materials', label: 'Materiallar', suffix: '/materials' },
-  { id: 'participants', label: 'Ishtirokchilar', suffix: '/participants' },
-  { id: 'branding', label: 'Brending', suffix: '/branding' },
-  { id: 'export', label: 'Eksport', suffix: '/export' },
-  { id: 'settings', label: 'Sozlamalar', suffix: '/settings' },
+const TAB_IDS = [
+  { id: 'overview', suffix: '' },
+  { id: 'materials', suffix: '/materials' },
+  { id: 'participants', suffix: '/participants' },
+  { id: 'branding', suffix: '/branding' },
+  { id: 'export', suffix: '/export' },
+  { id: 'settings', suffix: '/settings' },
 ] as const
 
 function activeTabFromPath(pathname: string, eventId: string): string {
@@ -30,7 +30,20 @@ function activeTabFromPath(pathname: string, eventId: string): string {
   return 'overview'
 }
 
+function tabLabelKey(
+  id: string
+): 'tabOverview' | 'materials' | 'tabParticipants' | 'tabBranding' | 'tabExport' | 'tabSettings' {
+  if (id === 'overview') return 'tabOverview'
+  if (id === 'materials') return 'materials'
+  if (id === 'participants') return 'tabParticipants'
+  if (id === 'branding') return 'tabBranding'
+  if (id === 'export') return 'tabExport'
+  return 'tabSettings'
+}
+
 export function EventWorkspaceShell({ children }: { children: React.ReactNode }) {
+  const t = useTranslations('events')
+  const tWizard = useTranslations('eventWizard')
   const params = useParams()
   const pathname = usePathname()
   const eventId = params.eventId as string
@@ -51,6 +64,14 @@ export function EventWorkspaceShell({ children }: { children: React.ReactNode })
 
   const activeTab = activeTabFromPath(pathname, eventId)
 
+  const eventTypeLabel = (type: EventType) => {
+    try {
+      return tWizard(`types.${type}`)
+    } catch {
+      return type
+    }
+  }
+
   if (loading) {
     return (
       <div className="mx-auto max-w-6xl space-y-4">
@@ -64,9 +85,9 @@ export function EventWorkspaceShell({ children }: { children: React.ReactNode })
   if (error || !displayEvent) {
     return (
       <div className="gildia-card mx-auto max-w-lg p-8 text-center">
-        <p className="text-text-primary">{error ?? 'Tadbir topilmadi'}</p>
+        <p className="text-text-primary">{error ?? t('eventNotFound')}</p>
         <Link href="/events" className="mt-4 inline-block text-sm font-medium text-brand-600">
-          ← Tadbirlar
+          ← {t('backToEvents')}
         </Link>
       </div>
     )
@@ -84,9 +105,9 @@ export function EventWorkspaceShell({ children }: { children: React.ReactNode })
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <Badge>{EVENT_TYPE_LABELS[displayEvent.type]}</Badge>
+            <Badge>{eventTypeLabel(displayEvent.type)}</Badge>
             <h1 className="mt-2 text-2xl font-semibold text-text-primary">{displayEvent.name}</h1>
-            <div className="mt-2 flex flex-wrap gap-4 text-sm text-text-muted">
+            <div className="mt-2 flex flex-wrap gap-4 text-sm text-text-secondary">
               {displayEvent.date && (
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
@@ -109,7 +130,7 @@ export function EventWorkspaceShell({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="flex flex-wrap gap-1 border-b border-border pb-px">
-          {TABS.map((tab) => {
+          {TAB_IDS.map((tab) => {
             const href = `/events/${eventId}${tab.suffix}`
             const isActive = activeTab === tab.id
             return (
@@ -120,10 +141,10 @@ export function EventWorkspaceShell({ children }: { children: React.ReactNode })
                   'px-3 py-2 text-sm font-medium transition-colors',
                   isActive
                     ? 'border-b-2 border-brand-600 text-brand-600'
-                    : 'text-text-muted hover:text-text-primary'
+                    : 'text-text-tertiary hover:text-text-primary'
                 )}
               >
-                {tab.label}
+                {t(tabLabelKey(tab.id))}
                 {tab.id === 'materials' && displayEvent.materialCount != null && (
                   <span className="ml-1.5 rounded-full bg-brand-50 px-2 py-0.5 text-xs text-brand-800">
                     {displayEvent.materialCount}

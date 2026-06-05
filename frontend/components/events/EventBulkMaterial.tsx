@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import toast from 'react-hot-toast'
 import { Award, Badge as BadgeIcon, Tag, Download, FileText } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'

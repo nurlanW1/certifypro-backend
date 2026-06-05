@@ -3,7 +3,7 @@
 import { Menu } from 'lucide-react'
 import { UserMenu } from '@/components/auth/UserMenu'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
-import { usePathname } from 'next/navigation'
+import { usePathname } from '@/i18n/navigation'
 
 const PAGE_TITLES: Record<string, string> = {
   '/dashboard': 'Bosh sahifa',

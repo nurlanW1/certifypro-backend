@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import toast from 'react-hot-toast'
 import { Download, Pencil, Package } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
