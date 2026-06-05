@@ -4,6 +4,7 @@ import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import { findMockTemplate } from '@/lib/filter-templates'
 import { generateTemplateSvg } from '@/lib/templates/generate-template-svg'
+import { applyTemplateVariables } from '@/lib/templates/template-variables'
 
 /** Shablon SVG preview — Blob CDN yoki inline SVG. */
 export async function GET(
@@ -35,6 +36,10 @@ export async function GET(
           isPremium: mock.isPremium,
         })
       }
+    }
+
+    if (svg?.trim()) {
+      svg = applyTemplateVariables(svg)
     }
 
     if (!svg?.trim()) {

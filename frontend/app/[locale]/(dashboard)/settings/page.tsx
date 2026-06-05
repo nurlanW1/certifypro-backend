@@ -1,28 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { Bell, CreditCard, Globe, Palette, Shield, User } from 'lucide-react'
 import { ThemeSettings } from '@/components/settings/ThemeSettings'
 import { ActivityLogPanel } from '@/components/settings/ActivityLogPanel'
 
-const TABS = [
-  { id: 'profile', icon: User, label: 'Profil' },
-  { id: 'appearance', icon: Palette, label: "Ko'rinish" },
-  { id: 'language', icon: Globe, label: 'Til' },
-  { id: 'notifications', icon: Bell, label: 'Bildirishnomalar' },
-  { id: 'billing', icon: CreditCard, label: "To'lov" },
-  { id: 'security', icon: Shield, label: 'Xavfsizlik' },
-]
+const TAB_IDS = [
+  { id: 'profile', icon: User },
+  { id: 'appearance', icon: Palette },
+  { id: 'language', icon: Globe },
+  { id: 'notifications', icon: Bell },
+  { id: 'billing', icon: CreditCard },
+  { id: 'security', icon: Shield },
+] as const
+
+type TabId = (typeof TAB_IDS)[number]['id']
 
 export default function SettingsPage() {
-  const [active, setActive] = useState('profile')
+  const t = useTranslations('settings')
+  const [active, setActive] = useState<TabId>('profile')
 
   return (
     <div className="-mx-6 -mt-8 flex min-h-screen gap-0 lg:-mx-10 xl:-mx-14">
       <aside className="w-52 shrink-0 space-y-0.5 border-r border-divide p-4">
-        <p className="label-caps mb-4 px-3">Sozlamalar</p>
-        {TABS.map(({ id, icon: Icon, label }) => (
+        <p className="label-caps mb-4 px-3">{t('title')}</p>
+        {TAB_IDS.map(({ id, icon: Icon }) => (
           <button
             key={id}
             type="button"
@@ -30,11 +34,11 @@ export default function SettingsPage() {
             className={`flex w-full items-center gap-2.5 rounded px-3 py-2.5 text-left text-sm transition-all ${
               active === id
                 ? 'bg-subtle font-medium text-text-primary'
-                : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+                : 'text-text-tertiary hover:bg-subtle hover:text-text-secondary'
             }`}
           >
             <Icon size={14} />
-            {label}
+            {t(id)}
           </button>
         ))}
       </aside>
@@ -52,11 +56,13 @@ export default function SettingsPage() {
 }
 
 function ProfileSettings() {
+  const t = useTranslations('settings')
+
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="mb-1 text-xl font-semibold text-text-primary">Profil</h2>
-        <p className="text-sm text-text-secondary">Shaxsiy ma&apos;lumotlaringizni yangilang</p>
+        <h2 className="mb-1 text-xl font-semibold text-text-primary">{t('profileTitle')}</h2>
+        <p className="text-sm text-text-secondary">{t('profileDesc')}</p>
       </div>
       <div className="space-y-5">
         <div className="flex items-center gap-4 border-b border-divide pb-6">
@@ -65,15 +71,15 @@ function ProfileSettings() {
           </div>
           <div>
             <button type="button" className="btn-secondary btn-sm">
-              Rasm yuklash
+              {t('uploadPhoto')}
             </button>
-            <p className="mt-2 text-xs text-text-disabled">PNG, JPG — max 2MB</p>
+            <p className="mt-2 text-sm text-text-tertiary">{t('photoFormats')}</p>
           </div>
         </div>
         {[
-          { label: 'Ism', placeholder: 'Alisher Karimov', type: 'text' },
-          { label: 'Email', placeholder: 'alisher@example.com', type: 'email' },
-          { label: 'Tashkilot', placeholder: 'IT Park Toshkent', type: 'text' },
+          { label: t('name'), placeholder: 'Alisher Karimov', type: 'text' },
+          { label: t('email'), placeholder: 'alisher@example.com', type: 'email' },
+          { label: t('organization'), placeholder: 'IT Park Toshkent', type: 'text' },
         ].map(({ label, placeholder, type }) => (
           <div key={label}>
             <label className="label-sm mb-2 block">{label}</label>
@@ -82,10 +88,10 @@ function ProfileSettings() {
         ))}
         <div className="flex justify-end gap-3 border-t border-divide pt-4">
           <button type="button" className="btn-ghost btn-md">
-            Bekor qilish
+            {t('cancel')}
           </button>
           <button type="button" className="btn-primary btn-md">
-            Saqlash
+            {t('save')}
           </button>
         </div>
       </div>
@@ -94,16 +100,19 @@ function ProfileSettings() {
 }
 
 function LanguageSettings() {
+  const t = useTranslations('settings')
+  const tWizard = useTranslations('eventWizard')
+
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="mb-1 text-xl font-semibold text-text-primary">Til</h2>
-        <p className="text-sm text-text-secondary">Interfeys tilini tanlang</p>
+        <h2 className="mb-1 text-xl font-semibold text-text-primary">{t('languageTitle')}</h2>
+        <p className="text-sm text-text-secondary">{t('languageDesc')}</p>
       </div>
       <div className="space-y-2">
         {[
-          { code: 'uz', label: "O'zbek" },
-          { code: 'ru', label: 'Русский' },
+          { code: 'uz', label: tWizard('uz') },
+          { code: 'ru', label: tWizard('ru') },
         ].map(({ code, label }) => (
           <button
             key={code}
@@ -111,7 +120,7 @@ function LanguageSettings() {
             className={`flex w-full items-center gap-3 rounded border p-4 text-sm transition-all ${
               code === 'uz'
                 ? 'border-accent-border bg-accent-dim text-text-primary'
-                : 'border-divide text-text-secondary hover:border-text-disabled'
+                : 'border-divide text-text-secondary hover:border-text-tertiary'
             }`}
           >
             <span className="font-medium">{label}</span>
@@ -123,47 +132,53 @@ function LanguageSettings() {
 }
 
 function NotificationsSettings() {
+  const t = useTranslations('settings')
+
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-text-primary">Bildirishnomalar</h2>
-      <p className="text-sm text-text-secondary">Tez orada qo&apos;shiladi.</p>
+      <h2 className="text-xl font-semibold text-text-primary">{t('notifications')}</h2>
+      <p className="text-sm text-text-secondary">{t('notificationsComingSoon')}</p>
     </div>
   )
 }
 
 function BillingSettings() {
+  const t = useTranslations('settings')
+
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="mb-1 text-xl font-semibold text-text-primary">To&apos;lov</h2>
-        <p className="text-sm text-text-secondary">Joriy reja va to&apos;lov ma&apos;lumotlari</p>
+        <h2 className="mb-1 text-xl font-semibold text-text-primary">{t('billingTitle')}</h2>
+        <p className="text-sm text-text-secondary">{t('billingDesc')}</p>
       </div>
       <div className="rounded border border-divide p-5">
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <p className="mb-1 text-sm font-semibold text-text-primary">Free Reja</p>
-            <p className="text-xs text-text-secondary">Oyiga 5 ta dizayn, watermarked eksport</p>
+            <p className="mb-1 text-sm font-semibold text-text-primary">{t('freePlan')}</p>
+            <p className="text-sm text-text-secondary">{t('freePlanDesc')}</p>
           </div>
-          <span className="tag tag-default">Joriy</span>
+          <span className="tag tag-default">{t('current')}</span>
         </div>
         <div className="flex items-center justify-between border-t border-divide pt-4">
-          <p className="text-xs text-text-tertiary">3/5 tadbir ishlatildi</p>
+          <p className="text-sm text-text-tertiary">{t('usage')}</p>
           <Link href="/upgrade" className="btn-accent btn-sm">
-            Pro ga o&apos;tish
+            {t('upgrade')}
           </Link>
         </div>
       </div>
       <Link href="/settings/billing" className="text-sm text-accent hover:text-accent-hover">
-        To&apos;lovlar tarixi →
+        {t('billingHistory')} →
       </Link>
     </div>
   )
 }
 
 function SecuritySettings() {
+  const t = useTranslations('settings')
+
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-text-primary">Xavfsizlik</h2>
+      <h2 className="text-xl font-semibold text-text-primary">{t('security')}</h2>
       <ActivityLogPanel />
     </div>
   )

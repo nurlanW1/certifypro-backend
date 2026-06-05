@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="794" height="1123" viewBox="0 0 794 1123">
+  <rect width="794" height="1123" fill="#080808"/>
+  <rect x="48" y="48" width="698" height="1027" fill="#111111" stroke="#9080F5" stroke-width="4" rx="8"/>
+  
+  <rect x="0" y="0" width="794" height="157" fill="#7B68EE"/>
+  <rect x="0" y="157" width="794" height="6" fill="#9080F5"/>
+  <text x="397" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="32" fill="#ffffff" font-weight="600">Forum Sertifikati PRO</text>
+  <text x="397" y="247.06" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#7B68EE">SERTIFIKAT</text>
+  <line x1="158.8" y1="280.75" x2="635.2" y2="280.75" stroke="#9080F5" stroke-width="2"/>
+  <text x="397" y="381.82000000000005" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" fill="#F2F2F2" font-weight="600">AI Forum Toshkent 2025</text>
+<text x="397" y="439.4200000000001" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" fill="#A8A8A8" font-weight="700">Alisher Karimov</text>
+<text x="397" y="446.62000000000006" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#A8A8A8" font-weight="normal">O'zbekiston AI Markazi</text>
+<text x="397" y="457.4200000000001" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#A8A8A8" font-weight="normal">15.06.2025 · Toshkent IT Park</text>
+  <rect x="119.1" y="875.94" width="555.8" height="80" fill="#7B68EE" opacity="0.08" rx="6"/>
+  <text x="397" y="1033.16" text-anchor="middle" font-size="11" fill="#A8A8A8">Gildia · CERTIFICATE</text></svg>

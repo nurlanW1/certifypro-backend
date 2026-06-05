@@ -194,7 +194,12 @@
     "draft": "Qoralama",
     "noEvents": "Tadbir topilmadi",
     "noEventsDesc": "Yangi tadbir yarating yoki qidiruv so'zini o'zgartiring",
-    "designs": "ta dizayn"
+    "designs": "ta dizayn",
+    "projectsCount": "{count} ta loyiha",
+    "noResults": "Natija topilmadi",
+    "noResultsDesc": "Boshqa kalit so'z bilan qidiring",
+    "noDate": "Sana yo'q",
+    "createFirst": "Birinchi tadbiringizni yarating"
   },
 
   "eventWizard": {
@@ -206,6 +211,12 @@
     "step2Desc": "Logo va ranglarni sozlang",
     "step3": "Materiallar",
     "step3Desc": "Kerakli dizaynlarni tanlang",
+    "step4": "Brending to'plami",
+    "step4Desc": "Umumiy uslubni tanlang",
+    "step5": "Ko'rib chiqish",
+    "step5Desc": "Xulosani tekshiring",
+    "step6": "Ishga tushirish",
+    "step6Desc": "Tadbir markazini yarating",
     "eventName": "Tadbir nomi",
     "eventNamePlaceholder": "Masalan: AI Forum Toshkent 2025",
     "eventType": "Tadbir turi",
@@ -353,7 +364,9 @@
     "save": "Brand Kit saqlash",
     "cancel": "Bekor qilish",
     "saving": "Saqlanmoqda...",
-    "saved": "Saqlandi!"
+    "saved": "Saqlandi!",
+    "comingSoon": "Brand Kit tez orada. Hozircha sozlamalar orqali ranglarni boshqaring.",
+    "goToSettings": "Sozlamalarga o'tish"
   },
 
   "templates": {
@@ -372,7 +385,13 @@
     "filterBy": "Filtr",
     "materialType": "Material turi",
     "style": "Uslub",
-    "price": "Narx"
+    "price": "Narx",
+    "eventMaterialHint": "Tadbir materiali uchun shablon tanlang — tanlangan shablon muharrirda ochiladi.",
+    "templateCount": "{count} ta shablon",
+    "sortNew": "Yangi",
+    "sortPopular": "Mashhur",
+    "sortFree": "Bepul",
+    "designCreated": "Dizayn yaratildi"
   },
 
   "settings": {
@@ -403,7 +422,11 @@
     "freePlanDesc": "Oyiga 5 ta dizayn, watermarked eksport",
     "upgrade": "Pro ga o'tish",
     "save": "Saqlash",
-    "cancel": "Bekor qilish"
+    "cancel": "Bekor qilish",
+    "notificationsComingSoon": "Tez orada qo'shiladi.",
+    "billingHistory": "To'lovlar tarixi",
+    "usage": "3/5 tadbir ishlatildi",
+    "current": "Joriy"
   },
 
   "about": {

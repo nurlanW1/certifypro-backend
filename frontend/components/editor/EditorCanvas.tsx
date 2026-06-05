@@ -12,6 +12,7 @@ import {
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '@/lib/editor/constants'
 import { isFabricCanvasJson, serializeCanvas } from '@/lib/editor/fabric-utils'
 import { loadSvgOntoCanvas } from '@/lib/editor/svg-to-fabric'
+import { applyTemplateVariables } from '@/lib/templates/template-variables'
 import { enableFreehandDrawing } from '@/lib/editor/freehand'
 
 export function EditorCanvas() {
@@ -97,9 +98,10 @@ export function EditorCanvas() {
     fabricCanvas.loadFromJSON(canvasData as object, () => {
       const trySvg = async () => {
         const objs = fabricCanvas.getObjects()
-        const { templateSvg } = useEditorStore.getState()
+        const { templateSvg, eventContext } = useEditorStore.getState()
         if (objs.length === 0 && templateSvg) {
-          const loaded = await loadSvgOntoCanvas(fabricCanvas, templateSvg)
+          const filled = applyTemplateVariables(templateSvg, eventContext)
+          const loaded = await loadSvgOntoCanvas(fabricCanvas, filled)
           if (loaded) {
             useEditorStore.getState().setDirty(true)
           }

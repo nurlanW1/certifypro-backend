@@ -1,6 +1,7 @@
 'use client'
 
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { WIZARD_STEPS } from '@/components/events/wizard/constants'
 import { LucideIconByName } from '@/components/events/wizard/LucideIconByName'
@@ -10,6 +11,8 @@ interface WizardStepIndicatorProps {
 }
 
 export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
+  const t = useTranslations('eventWizard')
+
   return (
     <nav aria-label="Wizard bosqichlari" className="mb-8">
       <ol className="flex items-center justify-between">
@@ -17,6 +20,8 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
           const isCompleted = currentStep > step.id
           const isActive = currentStep === step.id
           const isLast = index === WIZARD_STEPS.length - 1
+          const titleKey = `step${step.id}` as 'step1'
+          const descKey = `step${step.id}Desc` as 'step1Desc'
 
           return (
             <li key={step.id} className={cn('flex flex-1 items-center', isLast && 'flex-none')}>
@@ -40,14 +45,14 @@ export function WizardStepIndicator({ currentStep }: WizardStepIndicatorProps) {
                 <div className="hidden text-center sm:block">
                   <p
                     className={cn(
-                      'text-xs font-semibold',
+                      'text-sm font-semibold',
                       isActive ? 'text-text-primary' : 'text-text-tertiary'
                     )}
                   >
-                    {step.id}. {step.title}
+                    {step.id}. {t(titleKey)}
                   </p>
-                  <p className="mt-0.5 max-w-[7rem] text-[10px] leading-tight text-text-tertiary">
-                    {step.description}
+                  <p className="mt-0.5 max-w-[7rem] text-xs leading-tight text-text-tertiary">
+                    {t(descKey)}
                   </p>
                 </div>
               </div>

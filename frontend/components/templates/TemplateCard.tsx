@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Eye, Zap, Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { MATERIAL_LABELS } from '@/types/event'
+import { useTranslations } from 'next-intl'
+import { useMaterialLabel } from '@/hooks/useMaterialLabel'
 import type { MaterialCategory } from '@/types/event'
 import type { MockTemplate } from '@/lib/mock-templates'
 
@@ -37,13 +38,14 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, onSelect, onPreview, isSelecting }: TemplateCardProps) {
+  const t = useTranslations('templates')
+  const materialLabel = useMaterialLabel()
   const [imageError, setImageError] = useState(false)
   const [hovered, setHovered] = useState(false)
   const previewSrc = template.previewUrl || `/api/templates/${template.id}/preview`
   const showPlaceholder = imageError
   const style = inferStyle(template)
-  const categoryLabel =
-    MATERIAL_LABELS[template.category as MaterialCategory] ?? template.category
+  const categoryLabel = materialLabel(template.category as MaterialCategory)
 
   return (
     <article
@@ -74,17 +76,17 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
 
         {template.isPremium ? (
           <div className="absolute right-2 top-2">
-            <span className="tag tag-accent px-1.5 py-0.5 text-[9px]">PRO</span>
+            <span className="tag tag-accent px-1.5 py-0.5 text-xs">PRO</span>
           </div>
         ) : (
           <div className="absolute right-2 top-2">
-            <span className="tag tag-ok px-1.5 py-0.5 text-[9px]">Bepul</span>
+            <span className="tag tag-ok px-1.5 py-0.5 text-xs">{t('free')}</span>
           </div>
         )}
 
         {template.isPremium && !hovered && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-canvas/40">
-            <Lock className="h-6 w-6 text-text-disabled" />
+            <Lock className="h-6 w-6 text-text-tertiary" />
           </div>
         )}
 
@@ -116,10 +118,10 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
       </div>
 
       <div className="border-t border-divide bg-ink px-3 py-2.5">
-        <p className="truncate text-xs text-text-secondary">
+        <p className="truncate text-sm text-text-secondary">
           {template.nameUz ?? template.name}
         </p>
-        <p className="mt-0.5 truncate text-[10px] text-text-tertiary">{categoryLabel}</p>
+        <p className="mt-0.5 truncate text-xs text-text-tertiary">{categoryLabel}</p>
       </div>
     </article>
   )

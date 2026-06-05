@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname } from '@/i18n/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import { AppSidebar } from '@/components/layout/AppSidebar'
 import { AppHeader } from '@/components/layout/AppHeader'
+import { FadeIn } from '@/components/ui/AnimatedComponents'
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -37,7 +38,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <AppHeader onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-auto">
           <div className="min-h-full max-w-screen-2xl px-6 py-8 lg:px-10 xl:px-14">
-            {children}
+            <FadeIn>{children}</FadeIn>
           </div>
         </main>
       </div>

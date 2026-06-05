@@ -236,7 +236,7 @@ function layoutTableTent(w: number, h: number, title: string, style: TemplateVis
   <text x="${w / 2}" y="${h * 0.35}" text-anchor="middle" font-size="36" fill="${p.primary}" font-weight="700">{{participantName}}</text>
   <text x="${w / 2}" y="${h * 0.48}" text-anchor="middle" font-size="18" fill="${p.muted}">{{organization}}</text>
   <text x="${w / 2}" y="${h * 0.72}" text-anchor="middle" font-size="24" fill="${p.primary}" font-weight="600" transform="rotate(180 ${w / 2} ${h * 0.72})">{{participantName}}</text>
-  <text x="${w / 2}" y="${h * 0.15}" text-anchor="middle" font-size="12" fill="${p.muted}">${escapeXml(title)}</text>`
+  <text x="${w / 2}" y="${h * 0.15}" text-anchor="middle" font-size="12" fill="${p.muted}">{{eventName}}</text>`
 }
 
 function layoutRollUp(w: number, h: number, title: string, style: TemplateVisualStyle) {

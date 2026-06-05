@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#FAFAFA"/>
+  <line x1="0" y1="300" x2="800" y2="300" stroke="#52525B" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="400" y="210" text-anchor="middle" font-size="36" fill="#09090B" font-weight="700">Alisher Karimov</text>
+  <text x="400" y="288" text-anchor="middle" font-size="18" fill="#71717A">O'zbekiston AI Markazi</text>
+  <text x="400" y="432" text-anchor="middle" font-size="24" fill="#09090B" font-weight="600" transform="rotate(180 400 432)">Alisher Karimov</text>
+  <text x="400" y="90" text-anchor="middle" font-size="12" fill="#71717A">AI Forum Toshkent 2025</text></svg>

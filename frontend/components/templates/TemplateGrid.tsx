@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
 import { Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
@@ -15,10 +16,10 @@ import type { MockTemplate } from '@/lib/mock-templates'
 import type { MaterialCategory } from '@/types/event'
 import type { TemplateSortOption } from '@/lib/filter-templates'
 
-const SORT_OPTIONS: { value: TemplateSortOption; label: string }[] = [
-  { value: 'new', label: 'Yangi' },
-  { value: 'popular', label: 'Mashhur' },
-  { value: 'free', label: 'Bepul' },
+const SORT_OPTIONS: { value: TemplateSortOption; labelKey: 'sortNew' | 'sortPopular' | 'sortFree' }[] = [
+  { value: 'new', labelKey: 'sortNew' },
+  { value: 'popular', labelKey: 'sortPopular' },
+  { value: 'free', labelKey: 'sortFree' },
 ]
 
 interface TemplateGridProps {
@@ -34,6 +35,7 @@ export function TemplateGrid({
   eventId,
   materialCategory,
 }: TemplateGridProps) {
+  const t = useTranslations('templates')
   const router = useRouter()
   const [selectingId, setSelectingId] = useState<string | null>(null)
   const {
@@ -45,7 +47,7 @@ export function TemplateGrid({
   } = useTemplateStore()
 
   const previewTemplate = useMemo(
-    () => templates.find((t) => t.id === previewTemplateId) ?? null,
+    () => templates.find((tpl) => tpl.id === previewTemplateId) ?? null,
     [templates, previewTemplateId]
   )
 
@@ -60,7 +62,7 @@ export function TemplateGrid({
         toast.error(result.error)
         return
       }
-      toast.success('Dizayn yaratildi')
+      toast.success(t('designCreated'))
       router.push(`/editor/${result.designId}?eventId=${eventId}&asset=1`)
       return
     }
@@ -81,8 +83,8 @@ export function TemplateGrid({
   return (
     <>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-text-muted">
-          <span className="font-medium text-text-primary">{templates.length}</span> ta shablon
+        <p className="text-sm text-text-secondary">
+          {t('templateCount', { count: templates.length })}
         </p>
         <div className="flex items-center gap-4 text-sm">
           {SORT_OPTIONS.map((opt) => (
@@ -94,10 +96,10 @@ export function TemplateGrid({
                 'font-medium transition-all duration-150',
                 sortBy === opt.value
                   ? 'text-accent underline decoration-accent underline-offset-4'
-                  : 'text-text-muted hover:text-text-primary'
+                  : 'text-text-tertiary hover:text-text-primary'
               )}
             >
-              {opt.label}
+              {t(opt.labelKey)}
             </button>
           ))}
         </div>
@@ -106,8 +108,8 @@ export function TemplateGrid({
       {templates.length === 0 ? (
         <EmptyState
           icon={Search}
-          title="Shablon topilmadi"
-          description="Boshqa kalit so'z yoki filtr sinab ko'ring"
+          title={t('noResults')}
+          description={t('noResultsDesc')}
         />
       ) : (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">

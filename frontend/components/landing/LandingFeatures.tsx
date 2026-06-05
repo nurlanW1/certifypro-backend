@@ -1,60 +1,58 @@
 'use client'
 
-const FEATURES = [
-  {
-    num: '01',
-    title: 'Bir marta kiriting',
-    desc: "Tadbir nomi, sana, joylashuv, logo — bir marta. Barcha 20+ materialga avtomatik.",
-  },
-  {
-    num: '02',
-    title: 'Uslub tanlang',
-    desc: "Minimalist, Klassik yoki Hi-Tech. Bir klikda — barcha material shu uslubda o'zgaradi.",
-  },
-  {
-    num: '03',
-    title: 'Tahrirlang',
-    desc: "Har qanday elementni o'zgartiring. Matn, rang, font, o'lcham — to'liq nazorat.",
-  },
-  {
-    num: '04',
-    title: 'Eksport va print',
-    desc: "PNG, PDF, SVG. Yoki to'g'ridan-to'g'ri printga yuborish. Rahbariyatga tasdiqlash uchun link.",
-  },
-]
+import { useTranslations } from 'next-intl'
 
-const CAPABILITIES = [
-  { label: 'AI matn yordamchi', icon: '◈' },
-  { label: 'Print tayyor', icon: '⊡' },
-  { label: 'Tasdiqlash tizimi', icon: '◎' },
-  { label: 'Brand Kit', icon: '◉' },
-  { label: 'Dark/Light rejim', icon: '◐' },
-  { label: "O'zbek/Rus tili", icon: '◑' },
-  { label: 'Bulk generatsiya', icon: '▦' },
-  { label: 'PNG PDF SVG', icon: '⊞' },
-]
+const STEP_KEYS = ['step1', 'step2', 'step3', 'step4'] as const
+const CAPABILITY_KEYS = [
+  'ai',
+  'print',
+  'approval',
+  'brandkit',
+  'bilingual',
+  'export',
+  'styles',
+  'enterOnce',
+] as const
+
+const CAPABILITY_ICONS: Record<(typeof CAPABILITY_KEYS)[number], string> = {
+  ai: '◈',
+  print: '⊡',
+  approval: '◎',
+  brandkit: '◉',
+  bilingual: '◑',
+  export: '⊞',
+  styles: '◐',
+  enterOnce: '▦',
+}
 
 export function LandingFeatures() {
+  const tHow = useTranslations('howItWorks')
+  const tFeat = useTranslations('features')
+
   return (
     <section className="border-t border-divide bg-ink px-6 py-24 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
           <div>
-            <p className="label-caps mb-12 text-text-tertiary">Qanday ishlaydi</p>
+            <p className="label-caps mb-12 text-text-tertiary">{tHow('sectionTag')}</p>
             <div>
-              {FEATURES.map((f, i) => (
+              {STEP_KEYS.map((key, i) => (
                 <div
-                  key={f.num}
+                  key={key}
                   className={`flex gap-8 py-8 ${
-                    i < FEATURES.length - 1 ? 'border-b border-divide' : ''
+                    i < STEP_KEYS.length - 1 ? 'border-b border-divide' : ''
                   }`}
                 >
                   <span className="flex-shrink-0 pt-1 text-4xl font-semibold leading-none text-divide">
-                    {f.num}
+                    {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h3 className="mb-2 text-lg font-semibold text-text-primary">{f.title}</h3>
-                    <p className="text-base leading-relaxed text-text-secondary">{f.desc}</p>
+                    <h3 className="mb-2 text-lg font-semibold text-text-primary">
+                      {tHow(`${key}Title`)}
+                    </h3>
+                    <p className="text-base leading-relaxed text-text-secondary">
+                      {tHow(`${key}Desc`)}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -62,18 +60,18 @@ export function LandingFeatures() {
           </div>
 
           <div className="relative">
-            <p className="label-caps mb-12">Imkoniyatlar</p>
+            <p className="label-caps mb-12">{tFeat('sectionTag')}</p>
             <div className="grid grid-cols-2 gap-px bg-divide">
-              {CAPABILITIES.map(({ label, icon }) => (
+              {CAPABILITY_KEYS.map((key) => (
                 <div
-                  key={label}
+                  key={key}
                   className="group cursor-default bg-canvas p-5 transition-colors hover:bg-subtle"
                 >
                   <div className="mb-3 inline-block font-mono text-2xl text-accent transition-transform group-hover:scale-110">
-                    {icon}
+                    {CAPABILITY_ICONS[key]}
                   </div>
                   <p className="text-sm text-text-secondary transition-colors group-hover:text-text-primary">
-                    {label}
+                    {tFeat(key)}
                   </p>
                 </div>
               ))}

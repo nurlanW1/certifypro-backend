@@ -1,45 +1,41 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 
-const STYLES = [
+const STYLE_CONFIG = [
   {
-    id: 'MINIMALIST',
-    name: 'Minimalist',
-    desc: "Toza sahifalar, kuchli tipografiya, ko'p bo'shliq",
+    id: 'MINIMALIST' as const,
+    key: 'minimalist' as const,
     indicator: 'bg-white',
     previewBg: '#FAFAFA',
     previewText: '#0A0A0A',
     previewAccent: '#7B68EE',
     previewBorder: '#E5E5E5',
-    tags: ['Inter font', 'Oq fon', 'Minimal dekor'],
   },
   {
-    id: 'CLASSIC',
-    name: 'Klassik',
-    desc: 'Serif tipografiya, oltin detallar, rasmiy chiziqlar',
+    id: 'CLASSIC' as const,
+    key: 'classic' as const,
     indicator: 'bg-amber-400',
     previewBg: '#FDFAF5',
     previewText: '#2C1654',
     previewAccent: '#C9A84C',
     previewBorder: '#C9A84C',
-    tags: ['Playfair Display', 'Krem fon', 'Oltin ramka'],
   },
   {
-    id: 'HITECH',
-    name: 'Hi-Tech',
-    desc: "Qorong'i fon, neon detallar, kelajak estetikasi",
+    id: 'HITECH' as const,
+    key: 'hitech' as const,
     indicator: 'bg-accent',
     previewBg: '#080808',
     previewText: '#F2F2F2',
     previewAccent: '#7B68EE',
     previewBorder: '#262626',
-    tags: ['Geist font', 'Qora fon', 'Neon accent'],
   },
-] as const
+]
 
 export function LandingShowcase() {
+  const t = useTranslations('styles')
   const [active, setActive] = useState<string>('MINIMALIST')
 
   return (
@@ -47,19 +43,21 @@ export function LandingShowcase() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex items-end justify-between">
           <div>
-            <p className="label-caps mb-3">Dizayn uslublari</p>
+            <p className="label-caps mb-3">{t('sectionTag')}</p>
             <h2 className="text-4xl font-semibold tracking-tight text-text-primary">
-              Bir klikda uslub
+              {t('title')}
             </h2>
           </div>
           <p className="hidden max-w-xs text-right text-sm text-text-secondary md:block">
-            Bitta uslub tanlang — barcha 20+ material shu uslubda avtomatik tayyorlanadi
+            {t('subtitle')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-px bg-divide md:grid-cols-3">
-          {STYLES.map((style) => {
+          {STYLE_CONFIG.map((style) => {
             const isActive = active === style.id
+            const tags = t.raw(`${style.key}Tags`) as string[]
+
             return (
               <div
                 key={style.id}
@@ -72,7 +70,7 @@ export function LandingShowcase() {
                   <div className={`h-2 w-2 rounded-full ${style.indicator}`} />
                   {isActive && (
                     <div className="flex h-5 w-5 items-center justify-center rounded-full bg-accent-dim">
-                      <Check size={10} className="text-accent-hover" />
+                      <Check size={11} className="text-accent-hover" />
                     </div>
                   )}
                 </div>
@@ -140,10 +138,12 @@ export function LandingShowcase() {
                   </div>
                 </div>
 
-                <h3 className="mb-2 text-xl font-semibold text-text-primary">{style.name}</h3>
-                <p className="mb-5 text-sm leading-relaxed text-text-secondary">{style.desc}</p>
+                <h3 className="mb-2 text-xl font-semibold text-text-primary">{t(style.key)}</h3>
+                <p className="mb-5 text-sm leading-relaxed text-text-secondary">
+                  {t(`${style.key}Desc`)}
+                </p>
                 <div className="flex flex-wrap gap-2">
-                  {style.tags.map((tag) => (
+                  {tags.map((tag) => (
                     <span key={tag} className="tag tag-default">
                       {tag}
                     </span>

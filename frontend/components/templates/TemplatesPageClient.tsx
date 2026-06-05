@@ -1,33 +1,30 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Search } from 'lucide-react'
 import { TemplateGrid } from '@/components/templates/TemplateGrid'
 import { useTemplateStore } from '@/store/templateStore'
 import type { MockTemplate } from '@/lib/mock-templates'
 import type { MaterialCategory } from '@/types/event'
 import type { PriceFilterType } from '@/lib/filter-templates'
+import { useMaterialLabel } from '@/hooks/useMaterialLabel'
 
-const CATEGORIES = [
-  { id: 'ALL', label: 'Hammasi' },
-  { id: 'CERTIFICATE', label: 'Sertifikat' },
-  { id: 'BADGE', label: 'Nishon' },
-  { id: 'INVITATION', label: 'Taklifnoma' },
-  { id: 'FLYER', label: 'Flayer' },
-  { id: 'POSTER', label: 'Poster' },
-  { id: 'SOCIAL_MEDIA', label: 'Ijt. tarmoq' },
-  { id: 'EMAIL_BANNER', label: 'Email' },
-  { id: 'ROLL_UP', label: 'Roll-up' },
-  { id: 'TABLE_TENT', label: 'Stol kartasi' },
+const CATEGORY_IDS = [
+  'ALL',
+  'CERTIFICATE',
+  'BADGE',
+  'INVITATION',
+  'FLYER',
+  'POSTER',
+  'SOCIAL_MEDIA',
+  'EMAIL_BANNER',
+  'ROLL_UP',
+  'TABLE_TENT',
 ] as const
 
-const STYLES = [
-  { id: 'ALL', label: 'Barcha uslub', dot: '' },
-  { id: 'MINIMALIST', label: 'Minimalist', dot: 'bg-text-primary' },
-  { id: 'CLASSIC', label: 'Klassik', dot: 'bg-warn' },
-  { id: 'HITECH', label: 'Hi-Tech', dot: 'bg-accent' },
-]
+const STYLE_IDS = ['ALL', 'MINIMALIST', 'CLASSIC', 'HITECH'] as const
 
 function priceFilterToPremium(priceType: PriceFilterType): string | null {
   if (priceType === 'FREE') return 'false'
@@ -36,6 +33,9 @@ function priceFilterToPremium(priceType: PriceFilterType): string | null {
 }
 
 export function TemplatesPageClient() {
+  const t = useTranslations('templates')
+  const tStyles = useTranslations('styles')
+  const materialLabel = useMaterialLabel()
   const searchParams = useSearchParams()
   const eventId = searchParams.get('eventId') ?? undefined
   const materialCategory = (searchParams.get('category') as MaterialCategory | null) ?? undefined
@@ -47,6 +47,25 @@ export function TemplatesPageClient() {
 
   const { searchQuery, activeCategory, sortBy, filters, setActiveCategory, setSearchQuery } =
     useTemplateStore()
+
+  const categories = useMemo(
+    () =>
+      CATEGORY_IDS.map((id) => ({
+        id,
+        label: id === 'ALL' ? t('allCategories') : materialLabel(id),
+      })),
+    [t, materialLabel]
+  )
+
+  const styles = useMemo(
+    () => [
+      { id: 'ALL' as const, label: t('allStyles'), dot: '' },
+      { id: 'MINIMALIST' as const, label: tStyles('minimalist'), dot: 'bg-text-primary' },
+      { id: 'CLASSIC' as const, label: tStyles('classic'), dot: 'bg-warn' },
+      { id: 'HITECH' as const, label: tStyles('hitech'), dot: 'bg-accent' },
+    ],
+    [t, tStyles]
+  )
 
   const fetchTemplates = useCallback(async () => {
     setIsLoading(true)
@@ -64,8 +83,8 @@ export function TemplatesPageClient() {
       let list = data.templates ?? []
 
       if (styleFilter !== 'ALL') {
-        list = list.filter((t) => {
-          const tags = t.tags.join(' ').toLowerCase()
+        list = list.filter((tpl) => {
+          const tags = tpl.tags.join(' ').toLowerCase()
           if (styleFilter === 'CLASSIC') return tags.includes('klassik')
           if (styleFilter === 'MINIMALIST') return tags.includes('minimal') || tags.includes('zamonaviy')
           return !tags.includes('klassik') && !tags.includes('minimal')
@@ -82,21 +101,13 @@ export function TemplatesPageClient() {
     void fetchTemplates()
   }, [fetchTemplates])
 
-  const counts = CATEGORIES.map((c) => ({
-    ...c,
-    count:
-      c.id === 'ALL'
-        ? templates.length
-        : templates.filter((t) => t.category === c.id).length,
-  }))
-
   return (
     <div className="-mx-6 -mt-8 flex min-h-screen gap-0 lg:-mx-10 xl:-mx-14">
       <aside className="sticky top-0 w-56 shrink-0 space-y-6 border-r border-divide p-5">
         <div>
-          <p className="label-caps mb-3">Material turi</p>
+          <p className="label-caps mb-3">{t('materialType')}</p>
           <div className="space-y-0.5">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
@@ -104,7 +115,7 @@ export function TemplatesPageClient() {
                 className={`flex w-full items-center justify-between rounded px-3 py-2 text-sm transition-all ${
                   activeCategory === cat.id
                     ? 'bg-subtle font-medium text-text-primary'
-                    : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+                    : 'text-text-tertiary hover:bg-subtle hover:text-text-secondary'
                 }`}
               >
                 <span>{cat.label}</span>
@@ -114,9 +125,9 @@ export function TemplatesPageClient() {
         </div>
 
         <div className="border-t border-divide pt-5">
-          <p className="label-caps mb-3">Uslub</p>
+          <p className="label-caps mb-3">{t('style')}</p>
           <div className="space-y-0.5">
-            {STYLES.map((s) => (
+            {styles.map((s) => (
               <button
                 key={s.id}
                 type="button"
@@ -124,7 +135,7 @@ export function TemplatesPageClient() {
                 className={`flex w-full items-center gap-2.5 rounded px-3 py-2 text-sm transition-all ${
                   styleFilter === s.id
                     ? 'bg-subtle font-medium text-text-primary'
-                    : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+                    : 'text-text-tertiary hover:bg-subtle hover:text-text-secondary'
                 }`}
               >
                 {s.dot && <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${s.dot}`} />}
@@ -135,7 +146,7 @@ export function TemplatesPageClient() {
         </div>
 
         <div className="border-t border-divide pt-5">
-          <p className="label-caps mb-3">Narx</p>
+          <p className="label-caps mb-3">{t('price')}</p>
           <div className="space-y-0.5">
             {(['ALL', 'FREE', 'PREMIUM'] as const).map((p) => (
               <button
@@ -145,10 +156,10 @@ export function TemplatesPageClient() {
                 className={`w-full rounded px-3 py-2 text-left text-sm transition-all ${
                   priceFilter === p
                     ? 'bg-subtle font-medium text-text-primary'
-                    : 'text-text-disabled hover:bg-subtle hover:text-text-secondary'
+                    : 'text-text-tertiary hover:bg-subtle hover:text-text-secondary'
                 }`}
               >
-                {p === 'ALL' ? 'Barchasi' : p === 'FREE' ? 'Bepul' : 'Premium'}
+                {p === 'ALL' ? t('allPrices') : p === 'FREE' ? t('free') : t('premium')}
               </button>
             ))}
           </div>
@@ -159,23 +170,25 @@ export function TemplatesPageClient() {
         <div className="mb-6 flex items-center gap-3">
           <div className="relative max-w-xs flex-1">
             <Search
-              size={13}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-disabled"
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
             />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Shablon qidiring..."
+              placeholder={t('searchPlaceholder')}
               className="input py-2 pl-9 text-sm"
             />
           </div>
           <div className="flex-1" />
-          <p className="text-xs text-text-tertiary">{templates.length} ta natija</p>
+          <p className="text-sm text-text-tertiary">
+            {templates.length} {t('results')}
+          </p>
         </div>
 
         {eventId && materialCategory && (
           <p className="mb-4 rounded border border-accent-border bg-accent-dim px-3 py-2 text-sm text-accent-hover">
-            Tadbir materiali uchun shablon tanlang — tanlangan shablon muharrirda ochiladi.
+            {t('eventMaterialHint')}
           </p>
         )}
 

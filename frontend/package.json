@@ -10,6 +10,7 @@
     "db:push": "prisma db push",
     "db:seed": "node --import tsx prisma/seed.ts",
     "db:validate-templates": "node scripts/validate-seed-templates.mjs",
+    "templates:export": "node --import tsx scripts/export-public-templates.ts",
     "test": "node --import tsx --test lib/parse-csv.test.mjs lib/ai/suggestions.test.mjs lib/templates/validate-svg.test.mjs lib/templates/svg-fingerprint.test.mjs lib/email/templates/org-invite.test.mjs lib/email/templates/certificate-ready.test.mjs lib/qrcode/claim-url.test.mjs lib/participants/export-csv.test.mjs",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"

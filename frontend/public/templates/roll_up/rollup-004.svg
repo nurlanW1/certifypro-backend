@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="2000" viewBox="0 0 850 2000">
+  <rect width="850" height="2000" fill="#080808"/>
+  <rect x="40" y="40" width="770" height="1920" fill="#111111" stroke="#7B68EE" stroke-width="4"/>
+  <rect x="40" y="40" width="770" height="280" fill="#7B68EE"/>
+  <text x="425" y="200" text-anchor="middle" font-size="56" fill="#fff" font-weight="800">Ilmiy Roll-up</text>
+  <text x="425" y="520" text-anchor="middle" font-family="Arial,sans-serif" font-size="36" fill="#F2F2F2" font-weight="700">AI Forum Toshkent 2025</text>
+<text x="425" y="563.2" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" fill="#A8A8A8" font-weight="normal">15.06.2025</text>
+<text x="425" y="592" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#A8A8A8" font-weight="normal">Toshkent IT Park</text>
+<text x="425" y="617.2" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#A8A8A8" font-weight="normal">O'zbekiston AI Markazi</text>
+  <rect x="170" y="1680" width="510" height="120" fill="#9080F5" opacity="0.25" rx="8"/></svg>

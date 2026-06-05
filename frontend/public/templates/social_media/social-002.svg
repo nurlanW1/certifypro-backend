@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#FAFAFA"/>
+  <rect x="0" y="0" width="1080" height="1080" fill="url(#grad)" opacity="0"/>
+  <defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#09090B"/><stop offset="100%" stop-color="#52525B"/></linearGradient></defs>
+  <rect x="0" y="0" width="1080" height="1080" fill="#09090B" opacity="0.85"/>
+  <text x="540" y="410.4" text-anchor="middle" font-size="48" fill="#fff" font-weight="800">Telegram Banner</text>
+  <text x="540" y="540" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" fill="#18181B" font-weight="600">AI Forum Toshkent 2025</text>
+<text x="540" y="576" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#71717A" font-weight="normal">15.06.2025</text>
+  <text x="540" y="950.4" text-anchor="middle" font-size="16" fill="#ffffffaa">@gildia</text></svg>
