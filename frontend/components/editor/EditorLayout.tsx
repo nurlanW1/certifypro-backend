@@ -30,6 +30,7 @@ const SHORTCUTS: Record<string, ActiveTool | 'undo' | 'redo' | 'save'> = {
 export function EditorLayout({ designId }: EditorLayoutProps) {
   const searchParams = useSearchParams()
   const eventId = searchParams.get('eventId')
+  const templateIdParam = searchParams.get('templateId')
   const assetParam = searchParams.get('asset') === '1'
 
   const {
@@ -46,9 +47,9 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
   } = useEditorStore()
 
   useEffect(() => {
-    void initEditor(designId)
+    void initEditor(designId, { templateId: templateIdParam })
     return () => useEditorStore.getState().reset()
-  }, [designId, initEditor])
+  }, [designId, templateIdParam, initEditor])
 
   useEffect(() => {
     setAssetMode(assetParam)

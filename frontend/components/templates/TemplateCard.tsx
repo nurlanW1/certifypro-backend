@@ -39,7 +39,8 @@ interface TemplateCardProps {
 export function TemplateCard({ template, onSelect, onPreview, isSelecting }: TemplateCardProps) {
   const [imageError, setImageError] = useState(false)
   const [hovered, setHovered] = useState(false)
-  const showPlaceholder = !template.previewUrl || imageError
+  const previewSrc = template.previewUrl || `/api/templates/${template.id}/preview`
+  const showPlaceholder = imageError
   const style = inferStyle(template)
   const categoryLabel =
     MATERIAL_LABELS[template.category as MaterialCategory] ?? template.category
@@ -56,14 +57,15 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
       >
         {!showPlaceholder && (
           <Image
-            src={template.previewUrl}
+            src={previewSrc}
             alt={template.nameUz ?? template.name}
             fill
             className={cn(
-              'object-cover transition-all duration-150',
+              'object-contain p-2 transition-all duration-150',
               template.isPremium && 'blur-[2px] group-hover:blur-0'
             )}
             sizes="(max-width: 640px) 50vw, 25vw"
+            unoptimized
             onError={() => setImageError(true)}
           />
         )}

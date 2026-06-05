@@ -3,7 +3,7 @@ import { cacheTemplatePreviewToBlob, isBlobStorageConfigured } from '@/lib/blob/
 import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import { findMockTemplate } from '@/lib/filter-templates'
-import { buildBrandedTemplateSvg } from '@/lib/templates/branded-svg'
+import { generateTemplateSvg } from '@/lib/templates/generate-template-svg'
 
 /** Shablon SVG preview — Blob CDN yoki inline SVG. */
 export async function GET(
@@ -27,9 +27,12 @@ export async function GET(
     if (!svg && allowDevMocks()) {
       const mock = findMockTemplate(params.templateId)
       if (mock) {
-        svg = buildBrandedTemplateSvg({
-          title: mock.nameUz ?? mock.name,
+        svg = generateTemplateSvg({
+          id: mock.id,
+          name: mock.nameUz ?? mock.name,
           category: mock.category,
+          tags: mock.tags,
+          isPremium: mock.isPremium,
         })
       }
     }

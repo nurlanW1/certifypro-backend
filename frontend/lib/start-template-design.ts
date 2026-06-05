@@ -5,7 +5,7 @@ export async function startTemplateDesignForEvent(
   category: MaterialCategory,
   templateId: string
 ): Promise<{ designId: string } | { error: string }> {
-  const res = await fetch(`/api/events/${eventId}/materials/${category}/design`, {
+  const res = await fetch(`/api/events/${eventId}/materials/${category}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ templateId }),

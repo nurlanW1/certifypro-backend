@@ -63,7 +63,7 @@ interface EditorStore {
   canUndo: () => boolean
   canRedo: () => boolean
 
-  initEditor: (designId: string) => Promise<void>
+  initEditor: (designId: string, options?: { templateId?: string | null }) => Promise<void>
   syncFromCanvas: () => void
   reset: () => void
 }
@@ -161,7 +161,9 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set({ canvasData: fabricCanvas.toJSON() as object })
   },
 
-  initEditor: async (designId) => {
+  initEditor: async (designId, options) => {
+    const queryTemplateId = options?.templateId ?? null
+
     set({
       designId,
       canvasReady: false,
@@ -177,13 +179,42 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       if (res.ok) {
         const data = (await res.json()) as {
           design: { name: string; canvasData: object | null; templateId: string }
-          template?: { svgContent: string }
+          template?: { svgContent: string; name?: string }
         }
         set({
           designName: data.design.name,
           canvasData: data.design.canvasData,
           templateId: data.design.templateId,
           templateSvg: data.template?.svgContent ?? null,
+        })
+        return
+      }
+
+      if (res.status === 404 && queryTemplateId) {
+        const tplRes = await fetch(`/api/templates?id=${encodeURIComponent(queryTemplateId)}`)
+        const tplData = tplRes.ok
+          ? ((await tplRes.json()) as { template?: { name: string; nameUz?: string | null } })
+          : null
+        const tplName = tplData?.template?.nameUz ?? tplData?.template?.name ?? 'Nomsiz dizayn'
+
+        await fetch(`/api/designs/${designId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            templateId: queryTemplateId,
+            name: tplName,
+            canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
+          }),
+        })
+
+        const svgRes = await fetch(`/api/templates/${queryTemplateId}/preview`)
+        const templateSvg = svgRes.ok ? await svgRes.text() : null
+
+        set({
+          designName: tplName,
+          canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
+          templateId: queryTemplateId,
+          templateSvg,
         })
         return
       }

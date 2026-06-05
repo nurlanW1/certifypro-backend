@@ -1,6 +1,7 @@
 import { fabric } from 'fabric'
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from '@/lib/editor/constants'
 
-/** Load SVG string onto canvas (scaled to fit certificate size). */
+/** Load SVG string onto canvas as individual editable Fabric objects. */
 export async function loadSvgOntoCanvas(
   canvas: fabric.Canvas,
   svgContent: string
@@ -16,23 +17,32 @@ export async function loadSvgOntoCanvas(
           resolve(false)
           return
         }
+
+        const targetW = CANVAS_WIDTH
+        const targetH = CANVAS_HEIGHT
+
         const group = fabric.util.groupSVGElements(objects, options)
-        const targetW = 794
-        const targetH = 1123
-        const scale = Math.min(
-          targetW / (group.width || targetW),
-          targetH / (group.height || targetH),
-          1
-        )
-        group.scale(scale)
-        group.set({
-          left: (targetW - (group.width || 0) * scale) / 2,
-          top: (targetH - (group.height || 0) * scale) / 2,
-          selectable: true,
-        })
+        const rawW = group.width || targetW
+        const rawH = group.height || targetH
+        const scale = Math.min(targetW / rawW, targetH / rawH, 1) * 0.92
+
         canvas.clear()
         canvas.setBackgroundColor('#ffffff', () => {})
-        canvas.add(group)
+
+        const offsetX = (targetW - rawW * scale) / 2
+        const offsetY = (targetH - rawH * scale) / 2
+
+        objects.forEach((obj) => {
+          obj.scale(scale)
+          obj.set({
+            left: (obj.left ?? 0) * scale + offsetX,
+            top: (obj.top ?? 0) * scale + offsetY,
+            selectable: true,
+            evented: true,
+          })
+          canvas.add(obj)
+        })
+
         canvas.renderAll()
         resolve(true)
       } catch {

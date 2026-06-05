@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { TemplateGrid } from '@/components/templates/TemplateGrid'
 import { useTemplateStore } from '@/store/templateStore'
@@ -14,7 +15,9 @@ const CATEGORIES = [
   { id: 'BADGE', label: 'Nishon' },
   { id: 'INVITATION', label: 'Taklifnoma' },
   { id: 'FLYER', label: 'Flayer' },
+  { id: 'POSTER', label: 'Poster' },
   { id: 'SOCIAL_MEDIA', label: 'Ijt. tarmoq' },
+  { id: 'EMAIL_BANNER', label: 'Email' },
   { id: 'ROLL_UP', label: 'Roll-up' },
   { id: 'TABLE_TENT', label: 'Stol kartasi' },
 ] as const
@@ -33,6 +36,10 @@ function priceFilterToPremium(priceType: PriceFilterType): string | null {
 }
 
 export function TemplatesPageClient() {
+  const searchParams = useSearchParams()
+  const eventId = searchParams.get('eventId') ?? undefined
+  const materialCategory = (searchParams.get('category') as MaterialCategory | null) ?? undefined
+
   const [templates, setTemplates] = useState<MockTemplate[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [priceFilter, setPriceFilter] = useState<'ALL' | 'FREE' | 'PREMIUM'>('ALL')
@@ -166,7 +173,18 @@ export function TemplatesPageClient() {
           <p className="text-xs text-text-tertiary">{templates.length} ta natija</p>
         </div>
 
-        <TemplateGrid templates={templates} isLoading={isLoading} />
+        {eventId && materialCategory && (
+          <p className="mb-4 rounded border border-accent-border bg-accent-dim px-3 py-2 text-sm text-accent-hover">
+            Tadbir materiali uchun shablon tanlang — tanlangan shablon muharrirda ochiladi.
+          </p>
+        )}
+
+        <TemplateGrid
+          templates={templates}
+          isLoading={isLoading}
+          eventId={eventId}
+          materialCategory={materialCategory}
+        />
       </div>
     </div>
   )

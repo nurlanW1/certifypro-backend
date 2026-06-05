@@ -66,8 +66,13 @@ export function filterTemplates(
   return result
 }
 
+const MOCK_ID_ALIASES: Record<string, string> = {
+  'invite-001': 'inv-001',
+}
+
 export function findMockTemplate(id: string): MockTemplate | undefined {
-  return MOCK_TEMPLATES.find((t) => t.id === id)
+  const resolved = MOCK_ID_ALIASES[id] ?? id
+  return MOCK_TEMPLATES.find((t) => t.id === resolved)
 }
 
 export type { MaterialCategory, EventType }

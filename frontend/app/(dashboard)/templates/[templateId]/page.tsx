@@ -30,8 +30,21 @@ export default function TemplateDetailPage() {
     })()
   }, [templateId])
 
-  const startEditing = () => {
+  const startEditing = async () => {
     const designId = nanoid()
+    const res = await fetch(`/api/designs/${designId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        templateId,
+        name: template?.nameUz ?? template?.name ?? 'Nomsiz dizayn',
+        canvasData: { version: '5.3.0', objects: [], background: '#ffffff' },
+      }),
+    })
+    if (!res.ok) {
+      router.push(`/editor/${designId}?templateId=${templateId}`)
+      return
+    }
     router.push(`/editor/${designId}?templateId=${templateId}`)
   }
 
@@ -42,21 +55,22 @@ export default function TemplateDetailPage() {
 
   return (
     <div className="space-y-6">
-      <h1>{template.nameUz ?? template.name}</h1>
+      <h1 className="text-2xl font-semibold text-text-primary">
+        {template.nameUz ?? template.name}
+      </h1>
+      <p className="text-sm text-text-secondary">{template.category}</p>
       <Card padding="none" className="overflow-hidden">
-        <div className="relative aspect-video bg-subtle border border-divide">
-          {template.previewUrl ? (
-            <Image
-              src={template.previewUrl}
-              alt={template.name}
-              fill
-              className="object-contain"
-              unoptimized
-            />
-          ) : null}
+        <div className="relative aspect-video border border-divide bg-ink">
+          <Image
+            src={template.previewUrl || `/api/templates/${template.id}/preview`}
+            alt={template.name}
+            fill
+            className="object-contain p-4"
+            unoptimized
+          />
         </div>
       </Card>
-      <Button onClick={startEditing}>Muharrirda ochish</Button>
+      <Button onClick={() => void startEditing()}>Muharrirda ochish</Button>
     </div>
   )
 }

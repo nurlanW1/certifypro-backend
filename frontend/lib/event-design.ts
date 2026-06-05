@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client'
 import { getKitTokens } from '@/lib/branding/kits'
 import { findMockTemplate } from '@/lib/filter-templates'
 import { prisma } from '@/lib/prisma'
+import { ensureTemplateInDatabase } from '@/lib/templates/resolve-template-svg'
 import type { BrandingKitId, MaterialCategory } from '@/types/event'
 
 const DEFAULT_CANVAS = {
@@ -132,19 +133,19 @@ export async function startEventMaterialDesign(params: {
   const material = event.materials.find((m) => m.category === category)
   if (!material) return { error: 'material_not_in_event' as const }
 
+  await ensureTemplateInDatabase(templateId)
+
   const meta = await resolveTemplateMeta(templateId)
   if (meta && meta.category !== category) {
     return { error: 'category_mismatch' as const }
   }
 
   const designId = material.designId ?? nanoid()
-  const canvasData = buildInitialCanvas({
-    primaryColor: event.primaryColor,
-    accentColor: event.accentColor,
-    name: event.name,
-    organization: event.organization,
-    brandingKit: event.brandingKit,
-  })
+  // Empty canvas so editor hydrates template SVG as editable layers
+  const canvasData = {
+    ...DEFAULT_CANVAS,
+    objects: [] as object[],
+  }
 
   const designName = meta?.nameUz ?? meta?.name ?? MATERIAL_FALLBACK_NAME[category]
 

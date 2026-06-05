@@ -3,6 +3,10 @@ import { Prisma } from '@prisma/client'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { syncMaterialStatusFromCanvas } from '@/lib/event-design'
 import { prisma } from '@/lib/prisma'
+import {
+  ensureTemplateInDatabase,
+  resolveTemplateSvgContent,
+} from '@/lib/templates/resolve-template-svg'
 import type { Design } from '@/types/design'
 
 function mapDesign(record: {
@@ -50,10 +54,14 @@ export async function GET(
       if (!design) {
         return NextResponse.json({ error: 'Not found' }, { status: 404 })
       }
+      const svgContent =
+        design.template.svgContent?.trim() ||
+        (await resolveTemplateSvgContent(design.templateId)) ||
+        ''
       return NextResponse.json({
         design: mapDesign(design),
         template: {
-          svgContent: design.template.svgContent,
+          svgContent,
           name: design.template.name,
         },
       })
@@ -97,6 +105,10 @@ export async function PATCH(
       ? (JSON.parse(JSON.stringify(body.canvasData)) as Prisma.InputJsonValue)
       : undefined
 
+    if (body.templateId) {
+      await ensureTemplateInDatabase(body.templateId)
+    }
+
     const existing = await prisma.design.findFirst({
       where: { id: designId, userId: user.id },
     })
@@ -108,6 +120,7 @@ export async function PATCH(
             ...(body.name ? { name: body.name } : {}),
             ...(canvasJson !== undefined ? { canvasData: canvasJson } : {}),
             ...(body.eventId !== undefined ? { eventId: body.eventId } : {}),
+            ...(body.templateId ? { templateId: body.templateId } : {}),
           },
         })
       : await prisma.design.create({
