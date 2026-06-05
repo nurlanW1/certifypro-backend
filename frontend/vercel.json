@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "buildCommand": "npx prisma generate && npm run build",
-  "installCommand": "NPM_CONFIG_PRODUCTION=false npm install",
+  "installCommand": "npm ci --include=dev",
   "github": {
     "enabled": true
   }
