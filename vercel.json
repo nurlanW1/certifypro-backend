@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd frontend && npm install --legacy-peer-deps",
   "buildCommand": "cd frontend && npx prisma generate && npm run build",
-  "installCommand": "cd frontend && npm install --include=dev --legacy-peer-deps",
   "framework": "nextjs"
 }
