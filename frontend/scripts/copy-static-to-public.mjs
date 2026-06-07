@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const src = join(root, '.next', 'static')
-const dest = join(root, 'public', '_next', 'static')
+const dest = join(root, 'public', 'gildia-static')
 
 if (!existsSync(src)) {
   console.warn('[copy-static] .next/static not found — skip')
@@ -12,6 +12,6 @@ if (!existsSync(src)) {
 }
 
 rmSync(dest, { recursive: true, force: true })
-mkdirSync(join(root, 'public', '_next'), { recursive: true })
+mkdirSync(join(root, 'public'), { recursive: true })
 cpSync(src, dest, { recursive: true })
-console.log('[copy-static] copied .next/static → public/_next/static')
+console.log('[copy-static] copied .next/static → public/gildia-static')
