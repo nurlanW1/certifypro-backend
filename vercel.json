@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "cd frontend && npx prisma generate && npm run build",
-  "installCommand": "cd frontend && npm ci --include=dev",
+  "installCommand": "cd frontend && npm install --include=dev --legacy-peer-deps",
   "framework": "nextjs"
 }
