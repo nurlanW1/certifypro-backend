@@ -7,5 +7,8 @@ export type Locale = (typeof locales)[number]
 export const routing = defineRouting({
   locales,
   defaultLocale,
-  localePrefix: 'always',
+  // uz: gildia.uz/  |  ru: gildia.uz/ru/
+  localePrefix: 'as-needed',
+  // Brauzer tiliga qarab avtomatik /ru ga o'tmasin
+  localeDetection: false,
 })

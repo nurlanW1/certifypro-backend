@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { LandingCta } from '@/components/landing/LandingCta'
 import { LandingFaq } from '@/components/landing/LandingFaq'
 import { LandingFeatures } from '@/components/landing/LandingFeatures'
@@ -18,7 +18,7 @@ export default async function HomePage({
   if (isClerkConfigured()) {
     const { auth } = await import('@clerk/nextjs/server')
     const { userId } = auth()
-    if (userId) redirect(`/${locale}/dashboard`)
+    if (userId) redirect({ href: '/dashboard', locale })
   }
 
   return (
