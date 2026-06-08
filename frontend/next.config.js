@@ -32,16 +32,6 @@ const nextConfig = {
   experimental: {
     serverActions: { allowedOrigins: serverActionOrigins },
   },
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/_next/static/:path*',
-          destination: '/static/:path*',
-        },
-      ],
-    }
-  },
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       config.devtool = 'cheap-module-source-map'
