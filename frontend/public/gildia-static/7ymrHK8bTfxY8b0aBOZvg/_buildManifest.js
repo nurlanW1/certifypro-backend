@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST={__rewrites:{afterFiles:[],beforeFiles:[{has:void 0,source:"/_next/static/:path*",destination:"/gildia-static/:path*"}],fallback:[]},"/_error":["static/chunks/pages/_error-c66a4e8afc46f17b.js"],sortedPages:["/_app","/_error"]},self.__BUILD_MANIFEST_CB&&self.__BUILD_MANIFEST_CB();

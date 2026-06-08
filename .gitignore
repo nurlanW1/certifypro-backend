@@ -16,5 +16,4 @@ backend/storage/uploads/**
 !backend/data/.gitkeep
 coverage/
 .next/
-frontend/public/gildia-static/
 .env.local
