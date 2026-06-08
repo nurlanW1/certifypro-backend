@@ -1,9 +1,13 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { Prisma } from '@prisma/client'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import type { Design, DesignCanvasData } from '@/types/design'
+
 
 function toJsonValue(data: DesignCanvasData): Prisma.InputJsonValue {
   return JSON.parse(JSON.stringify(data)) as Prisma.InputJsonValue

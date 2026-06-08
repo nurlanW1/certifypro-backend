@@ -1,7 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { getOrCreateDbUser } from '@/lib/auth'
 import { requireOrgAdmin } from '@/lib/org/get-membership'
 import { prisma } from '@/lib/prisma'
+
 
 export async function DELETE(
   _req: Request,

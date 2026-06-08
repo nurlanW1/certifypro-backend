@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { requirePlatformAdmin } from '@/lib/auth/platform-admin'
 import { prisma } from '@/lib/prisma'
+
 
 /** Payme tranzaksiyalar jadvali (platform admin). */
 export async function GET(req: NextRequest) {

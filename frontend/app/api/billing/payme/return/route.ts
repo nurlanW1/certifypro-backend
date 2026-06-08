@@ -1,4 +1,8 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
+
 
 /** Payme checkout qaytish — upgrade sahifasiga yo‘naltirish. */
 export async function GET(req: NextRequest) {

@@ -1,9 +1,13 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { Prisma } from '@prisma/client'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { syncMaterialStatusFromCanvas } from '@/lib/event-design'
 import { prisma } from '@/lib/prisma'
 import {
+
   ensureTemplateInDatabase,
   resolveTemplateSvgContent,
 } from '@/lib/templates/resolve-template-svg'

@@ -1,10 +1,14 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import type { Plan } from '@prisma/client'
 import { logActivity } from '@/lib/activity/log'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getBillingMe } from '@/lib/billing/service'
 import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
+
 
 const ALLOWED: Plan[] = ['PRO', 'ENTERPRISE']
 

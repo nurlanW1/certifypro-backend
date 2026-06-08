@@ -1,8 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getEventSuggestionsWithLlm } from '@/lib/ai/llm-suggestions'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import type { EventType } from '@/types/event'
+
 
 export async function GET(
   _req: NextRequest,

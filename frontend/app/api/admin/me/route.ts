@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { isPlatformAdminEmail } from '@/lib/auth/platform-admin'
 import { getOrCreateDbUser } from '@/lib/auth'
+
 
 export async function GET() {
   const user = await getOrCreateDbUser()

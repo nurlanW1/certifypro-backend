@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { logActivity } from '@/lib/activity/log'
 import { isBulkMaterialCategory } from '@/lib/bulk/material-config'
@@ -5,6 +7,7 @@ import { runBulkMaterialExport } from '@/lib/bulk/run-bulk-export'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { BULK_MATERIAL_CONFIG } from '@/lib/bulk/material-config'
+
 
 export async function POST(
   req: NextRequest,
@@ -17,6 +20,7 @@ export async function POST(
     }
 
     const body = (await req.json()) as { masterDesignId?: string; category?: string }
+
     if (!body.masterDesignId || !body.category || !isBulkMaterialCategory(body.category)) {
       return NextResponse.json(
         { error: 'masterDesignId va category (CERTIFICATE|BADGE|NAME_TAG) kerak' },

@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { getEventAnalytics } from '@/lib/analytics/user-stats'
 import { getOrCreateDbUser } from '@/lib/auth'
+
 
 export async function GET(
   _req: Request,

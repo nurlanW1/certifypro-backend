@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { cacheTemplatePreviewToBlob, isBlobStorageConfigured } from '@/lib/blob/storage'
 import { allowDevMocks } from '@/lib/env'
@@ -5,6 +7,7 @@ import { prisma } from '@/lib/prisma'
 import { findMockTemplate } from '@/lib/filter-templates'
 import { generateTemplateSvg } from '@/lib/templates/generate-template-svg'
 import { applyTemplateVariables } from '@/lib/templates/template-variables'
+
 
 /** Shablon SVG preview — Blob CDN yoki inline SVG. */
 export async function GET(
@@ -56,6 +59,7 @@ export async function GET(
     return new NextResponse(svg, {
       headers: {
         'Content-Type': 'image/svg+xml; charset=utf-8',
+
         'Cache-Control': 'public, max-age=86400, s-maxage=604800',
       },
     })

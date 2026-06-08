@@ -1,4 +1,7 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import { MOCK_TEMPLATES } from '@/lib/mock-templates'
@@ -7,6 +10,7 @@ import type { Template } from '@/types/template'
 import type { MaterialCategory, EventType } from '@/types/event'
 import type { TemplateSortOption } from '@/lib/filter-templates'
 import { resolveTemplatePreviewUrl } from '@/lib/templates/preview-url'
+
 
 function mapTemplate(record: {
   id: string

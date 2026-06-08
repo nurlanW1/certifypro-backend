@@ -1,5 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { prisma } from '@/lib/prisma'
+
 
 /** Muddati o‘tgan takliflarni tozalash. Header: Authorization: Bearer CRON_SECRET */
 export async function POST(req: NextRequest) {

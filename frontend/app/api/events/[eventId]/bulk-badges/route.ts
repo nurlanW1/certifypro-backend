@@ -1,8 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { logActivity } from '@/lib/activity/log'
 import { runBulkMaterialExport } from '@/lib/bulk/run-bulk-export'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
+
 
 /** @deprecated — `/bulk-materials` category=BADGE ishlating */
 export async function POST(

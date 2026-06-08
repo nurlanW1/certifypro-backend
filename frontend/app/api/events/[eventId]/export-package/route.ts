@@ -1,9 +1,13 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getBillingMe, billingError } from '@/lib/billing/service'
 import { prisma } from '@/lib/prisma'
 import { MATERIAL_LABELS } from '@/types/event'
 import type { MaterialCategory } from '@/types/event'
+
 
 export async function GET(
   _req: NextRequest,

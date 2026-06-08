@@ -1,7 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getUserOrgMembership } from '@/lib/org/get-membership'
 import { prisma } from '@/lib/prisma'
+
 
 export async function GET() {
   try {

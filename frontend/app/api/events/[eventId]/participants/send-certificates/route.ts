@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { logActivity } from '@/lib/activity/log'
 import { ensureParticipantClaimToken } from '@/lib/claim/ensure-token'
@@ -7,6 +9,7 @@ import { sendCertificateReadyEmail } from '@/lib/email/send'
 import { getBillingMe, billingError } from '@/lib/billing/service'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { prisma } from '@/lib/prisma'
+
 
 const MAX_EMAILS_PER_RUN = 50
 export async function POST(
@@ -70,6 +73,7 @@ export async function POST(
     let sent = 0
     let failed = 0
     const results: { participantId: string; ok: boolean; error?: string }[] = []
+
 
     for (const p of slice) {
       const token = await ensureParticipantClaimToken(p.id)

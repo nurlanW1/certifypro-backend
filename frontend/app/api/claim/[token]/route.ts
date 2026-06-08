@@ -1,5 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { resolveCertificateByClaimToken } from '@/lib/claim/resolve-certificate'
+
 
 /** Ochiq sertifikat (token orqali, auth shart emas). */
 export async function GET(

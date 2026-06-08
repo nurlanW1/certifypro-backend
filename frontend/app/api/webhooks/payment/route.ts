@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { fulfillPaymentOrder } from '@/lib/payments/fulfill-order'
 import { prisma } from '@/lib/prisma'
+
 
 /**
  * Universal webhook (Payme/Click callback proxy yoki dev).

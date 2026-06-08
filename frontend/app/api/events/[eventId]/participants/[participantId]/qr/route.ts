@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import QRCode from 'qrcode'
 import { ensureParticipantClaimToken } from '@/lib/claim/ensure-token'
@@ -5,9 +7,11 @@ import { buildClaimUrl } from '@/lib/qrcode/claim-url'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
+
 export async function GET(
   _req: Request,
   { params }: { params: { eventId: string; participantId: string } }
+
 ) {
   try {
     const user = await getOrCreateDbUser()

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { logActivity } from '@/lib/activity/log'
 import { getOrCreateDbUser } from '@/lib/auth'
@@ -9,6 +11,7 @@ import { getAppBaseUrl } from '@/lib/payments/config'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { prisma } from '@/lib/prisma'
 import type { OrgRole } from '@prisma/client'
+
 
 const INVITE_DAYS = 7
 
@@ -67,6 +70,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = (await req.json()) as { email?: string; role?: OrgRole }
+
     const email = normalizeInviteEmail(body.email ?? '')
     if (!email || !email.includes('@')) {
       return NextResponse.json({ error: 'Email kerak' }, { status: 400 })

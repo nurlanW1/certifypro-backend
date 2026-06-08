@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
+
 import { getAdminOverview } from '@/lib/admin/overview'
 import { requirePlatformAdmin } from '@/lib/auth/platform-admin'
+
 
 export async function GET() {
   try {

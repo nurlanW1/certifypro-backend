@@ -1,8 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { fulfillPaymentOrder } from '@/lib/payments/fulfill-order'
 import { verifyClickSignString } from '@/lib/payments/click/signature'
 import { logPaymentWebhook } from '@/lib/payments/payme/webhook-log'
 import { prisma } from '@/lib/prisma'
+
 
 /**
  * Click SHOP API (prepare / complete).

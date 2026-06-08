@@ -1,4 +1,7 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { logActivity } from '@/lib/activity/log'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getBillingMe, billingError } from '@/lib/billing/service'
@@ -6,6 +9,7 @@ import { allowDevMocks } from '@/lib/env'
 import { mapEvent } from '@/lib/events-api'
 import { prisma } from '@/lib/prisma'
 import type { BrandingKitId, EventFormData, MaterialCategory } from '@/types/event'
+
 
 export async function GET() {
   try {

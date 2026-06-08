@@ -1,8 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getBillingMe, billingError } from '@/lib/billing/service'
 import { buildParticipantsCsv } from '@/lib/participants/export-csv'
 import { prisma } from '@/lib/prisma'
+
 
 /** Ishtirokchilar hisoboti (CSV). */
 export async function GET(
@@ -50,6 +53,7 @@ export async function GET(
     return new NextResponse(csv, {
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
+
         'Content-Disposition': `attachment; filename="${safeName}-ishtirokchilar.csv"`,
       },
     })

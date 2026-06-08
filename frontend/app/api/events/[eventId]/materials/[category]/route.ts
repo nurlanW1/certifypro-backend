@@ -1,9 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { getBillingMe, billingError } from '@/lib/billing/service'
 import { startEventMaterialDesign, resolveTemplateMeta } from '@/lib/event-design'
 import { mapEventMaterial } from '@/lib/events-api'
 import type { MaterialCategory } from '@/types/event'
+
 
 const VALID_CATEGORIES = new Set<string>([
   'CERTIFICATE',
@@ -29,6 +32,7 @@ const VALID_CATEGORIES = new Set<string>([
 export async function POST(
   req: NextRequest,
   { params }: { params: { eventId: string; category: string } }
+
 ) {
   try {
     const user = await getOrCreateDbUser()

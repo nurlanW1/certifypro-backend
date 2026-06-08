@@ -1,7 +1,11 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { processPaymeWebhook } from '@/lib/payments/payme/rpc-handler'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { getClientIp } from '@/lib/rate-limit/client-ip'
+
 
 /** Payme Merchant API JSON-RPC (POST). */
 export async function POST(req: NextRequest) {

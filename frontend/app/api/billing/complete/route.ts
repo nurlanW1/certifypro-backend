@@ -1,6 +1,10 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { allowDevMocks } from '@/lib/env'
 import { fulfillPaymentOrder } from '@/lib/payments/fulfill-order'
+
 
 /** Dev/mock to‘lovni yakunlash (PAYMENT_DEV_TOKEN). */
 export async function GET(req: NextRequest) {

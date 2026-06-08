@@ -1,8 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { logActivity } from '@/lib/activity/log'
 import { getOrCreateDbUser } from '@/lib/auth'
 import { normalizeInviteEmail } from '@/lib/org/invite-token'
 import { prisma } from '@/lib/prisma'
+
 
 export async function POST(req: NextRequest) {
   try {

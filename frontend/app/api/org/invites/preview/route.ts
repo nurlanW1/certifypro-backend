@@ -1,5 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { prisma } from '@/lib/prisma'
+
 
 /** Auth talab qilmaydi — taklif ma’lumotini ko‘rsatish. */
 export async function GET(req: NextRequest) {

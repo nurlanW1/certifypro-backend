@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import type { Plan } from '@prisma/client'
 import { logActivity } from '@/lib/activity/log'
@@ -7,6 +9,7 @@ import { allowDevMocks } from '@/lib/env'
 import { createPaymentSession } from '@/lib/payments/providers'
 import { checkRateLimit, rateLimitResponse } from '@/lib/rate-limit'
 import { prisma } from '@/lib/prisma'
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,6 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = (await req.json()) as { plan?: Plan; provider?: 'PAYME' | 'CLICK' | 'MOCK' }
+
     const plan = body.plan ?? 'PRO'
     if (plan === 'FREE') {
       return NextResponse.json({ error: 'Noto‘g‘ri reja' }, { status: 400 })

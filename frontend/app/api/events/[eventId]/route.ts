@@ -1,8 +1,12 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
+
 import { getOrCreateDbUser } from '@/lib/auth'
 import { mapEvent } from '@/lib/events-api'
 import { prisma } from '@/lib/prisma'
 import type { BrandingKitId, EventFormData } from '@/types/event'
+
 
 export async function GET(
   _req: NextRequest,
