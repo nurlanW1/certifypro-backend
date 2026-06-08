@@ -1,4 +1,3 @@
-const path = require('path')
 const createNextIntlPlugin = require('next-intl/plugin')
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
@@ -17,8 +16,6 @@ if (process.env.NEXT_PUBLIC_APP_URL) {
 }
 
 const nextConfig = {
-  // Monorepo: Vercel repo root deploy uchun static/server tracing
-  outputFileTracingRoot: path.join(__dirname, '..'),
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -40,7 +37,7 @@ const nextConfig = {
       beforeFiles: [
         {
           source: '/_next/static/:path*',
-          destination: '/gildia-static/:path*',
+          destination: '/static/:path*',
         },
       ],
     }

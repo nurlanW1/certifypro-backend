@@ -38,7 +38,7 @@ function shouldSkipIntl(pathname: string) {
   return (
     pathname.startsWith('/api') ||
     pathname.startsWith('/templates') ||
-    pathname.startsWith('/gildia-static') ||
+    pathname.startsWith('/static/') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/_vercel')
   )

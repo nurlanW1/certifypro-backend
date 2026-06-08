@@ -2,5 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "cd frontend && npm install --legacy-peer-deps",
   "buildCommand": "cd frontend && npx prisma generate && npm run build",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/_next/static/:path*",
+      "destination": "/static/:path*"
+    }
+  ]
 }

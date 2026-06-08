@@ -1,8 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npx prisma generate && npm run build",
-  "installCommand": "npm install --include=dev --legacy-peer-deps",
+  "rewrites": [
+    {
+      "source": "/_next/static/:path*",
+      "destination": "/static/:path*"
+    }
+  ],
   "github": {
     "enabled": true
   }
