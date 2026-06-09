@@ -158,14 +158,15 @@ export function useCanvasViewportControls({
       spacePressedRef.current = false
       setIsSpacePressed(false)
     }
+    const onWindowBlur = () => releaseSpace()
 
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', releaseSpace)
-    window.addEventListener('blur', releaseSpace)
+    window.addEventListener('blur', onWindowBlur)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', releaseSpace)
-      window.removeEventListener('blur', releaseSpace)
+      window.removeEventListener('blur', onWindowBlur)
     }
   }, [maxZoom, minZoom, setZoom])
 
