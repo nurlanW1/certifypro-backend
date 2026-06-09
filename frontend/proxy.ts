@@ -1,4 +1,4 @@
-import type { NextFetchEvent, NextRequest } from 'next/server'
+import { NextResponse, type NextFetchEvent, type NextRequest } from 'next/server'
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
@@ -50,6 +50,9 @@ function handleIntl(request: NextRequest) {
 }
 
 const clerkHandler = clerkMiddleware(async (auth, request) => {
+  if (shouldSkipIntl(request.nextUrl.pathname)) {
+    return NextResponse.next()
+  }
   if (!isPublicRoute(request)) {
     await auth().protect()
   }
@@ -68,10 +71,3 @@ export default function proxy(request: NextRequest, event: NextFetchEvent) {
   return intlOnly(request)
 }
 
-export const config = {
-  matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/__clerk/:path*',
-    '/(api|trpc)(.*)',
-  ],
-}
