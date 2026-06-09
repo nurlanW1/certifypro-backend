@@ -21,6 +21,7 @@ interface EditorLayoutProps {
 
 const SHORTCUTS: Record<string, ActiveTool | 'undo' | 'redo' | 'save'> = {
   v: 'select',
+  h: 'hand',
   t: 'text',
   i: 'image',
   r: 'rect',
@@ -38,8 +39,6 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
   const {
     initEditor,
     fabricCanvas,
-    undo,
-    redo,
     designName,
     setSaveStatus,
     setLastSaved,
@@ -85,12 +84,6 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
         return
       }
 
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-        e.preventDefault()
-        if (e.shiftKey) redo()
-        else undo()
-        return
-      }
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault()
         if (fabricCanvas) {
@@ -105,6 +98,7 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
         }
         return
       }
+      if (e.ctrlKey || e.metaKey || e.altKey) return
 
       const key = e.key.toLowerCase()
       const tool = SHORTCUTS[key]
@@ -114,18 +108,23 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
         useEditorStore.getState().setActiveTool(tool)
         const canvas = useEditorStore.getState().fabricCanvas
         if (!canvas) return
+        let canvasChanged = false
         switch (tool) {
           case 'text':
             addDefaultText(canvas)
+            canvasChanged = true
             break
           case 'rect':
             addDefaultRect(canvas)
+            canvasChanged = true
             break
           case 'circle':
             addDefaultCircle(canvas)
+            canvasChanged = true
             break
           case 'line':
             addDefaultLine(canvas)
+            canvasChanged = true
             break
           case 'image':
             document.querySelector<HTMLInputElement>('input[type=file][accept*="image"]')?.click()
@@ -133,13 +132,13 @@ export function EditorLayout({ designId }: EditorLayoutProps) {
           default:
             break
         }
-        useEditorStore.getState().pushHistory()
+        if (canvasChanged) useEditorStore.getState().pushHistory()
       }
     }
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [designId, designName, fabricCanvas, redo, undo, setDirty, setLastSaved, setSaveStatus])
+  }, [designId, designName, fabricCanvas, setDirty, setLastSaved, setSaveStatus])
 
   useEffect(() => {
     const interval = window.setInterval(() => {

@@ -14,11 +14,13 @@ import { isFabricCanvasJson, serializeCanvas } from '@/lib/editor/fabric-utils'
 import { loadSvgOntoCanvas } from '@/lib/editor/svg-to-fabric'
 import { applyTemplateVariables } from '@/lib/templates/template-variables'
 import { enableFreehandDrawing } from '@/lib/editor/freehand'
+import { useCanvasViewportControls } from '@/hooks/useCanvasViewportControls'
 
 export function EditorCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const initializedRef = useRef(false)
   const hydratingRef = useRef(true)
+  const workspaceRef = useRef<HTMLDivElement>(null)
 
   const {
     setFabricCanvas,
@@ -34,6 +36,13 @@ export function EditorCanvas() {
     printPreview,
     activeTool,
   } = useEditorStore()
+
+  const { isPanning, isSpacePressed } = useCanvasViewportControls({
+    containerRef: workspaceRef,
+    zoom,
+    setZoom,
+    leftPanEnabled: activeTool === 'hand',
+  })
 
   useEffect(() => {
     if (!canvasRef.current || initializedRef.current) return
@@ -123,6 +132,17 @@ export function EditorCanvas() {
     const { fabricCanvas } = useEditorStore.getState()
     if (!fabricCanvas) return
 
+    if (activeTool === 'hand' || isSpacePressed) {
+      fabricCanvas.selection = false
+      fabricCanvas.skipTargetFind = true
+      fabricCanvas.defaultCursor = isPanning ? 'grabbing' : 'grab'
+      fabricCanvas.hoverCursor = isPanning ? 'grabbing' : 'grab'
+      fabricCanvas.requestRenderAll()
+      return
+    }
+
+    fabricCanvas.skipTargetFind = false
+
     if (activeTool === 'pen') {
       fabricCanvas.selection = false
       fabricCanvas.defaultCursor = 'crosshair'
@@ -145,7 +165,7 @@ export function EditorCanvas() {
     fabricCanvas.selection = true
     fabricCanvas.defaultCursor = 'default'
     fabricCanvas.hoverCursor = 'move'
-  }, [activeTool, pushHistory, setDirty, syncFromCanvas])
+  }, [activeTool, isPanning, isSpacePressed, pushHistory, setDirty, syncFromCanvas])
 
   const handleZoomIn = () => setZoom(Math.min(zoom + 0.1, 3))
   const handleZoomOut = () => setZoom(Math.max(zoom - 0.1, 0.3))
@@ -153,12 +173,25 @@ export function EditorCanvas() {
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden bg-workspace-canvas">
-      <div className="flex flex-1 items-center justify-center overflow-auto p-6 md:p-10">
+      <div
+        ref={workspaceRef}
+        className="flex flex-1 overflow-auto p-6 md:p-10"
+        style={{
+          cursor: isPanning
+            ? 'grabbing'
+            : activeTool === 'hand' || isSpacePressed
+              ? 'grab'
+              : undefined,
+        }}
+      >
         <div
-          className="shadow-lg transition-transform duration-150"
-          style={{ transform: `scale(${zoom})`, transformOrigin: 'center center' }}
+          className="relative m-auto shrink-0"
+          style={{ width: CANVAS_WIDTH * zoom, height: CANVAS_HEIGHT * zoom }}
         >
-          <div className="relative rounded-sm border border-border bg-surface">
+          <div
+            className="absolute left-0 top-0 rounded-sm border border-border bg-surface shadow-lg"
+            style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
+          >
             {printPreview && (
               <div
                 className="pointer-events-none absolute inset-2 rounded border border-dashed border-brand-400/60"

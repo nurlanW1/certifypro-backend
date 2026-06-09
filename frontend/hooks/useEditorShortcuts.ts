@@ -1,6 +1,6 @@
 'use client'
 
-import { useHotkeys } from 'react-hotkeys-hook'
+import { useEffect } from 'react'
 import { fabric } from 'fabric'
 import { useEditorStore } from '@/store/editorStore'
 import {
@@ -10,79 +10,83 @@ import {
   moveLayerDown,
 } from '@/lib/editor/fabricConfig'
 
+function isEditableTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false
+  return (
+    target.tagName === 'INPUT' ||
+    target.tagName === 'TEXTAREA' ||
+    target.tagName === 'SELECT' ||
+    target.isContentEditable
+  )
+}
+
 export function useEditorShortcuts(canvas: fabric.Canvas | null) {
-  const { undo, redo, setZoom, zoom, setActiveTool } = useEditorStore()
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (isEditableTarget(event.target)) return
 
-  useHotkeys(
-    'ctrl+c, meta+c',
-    () => {
-      if (canvas) copyObject(canvas)
-    },
-    [canvas]
-  )
+      const modifier = event.ctrlKey || event.metaKey
+      const key = event.key.toLowerCase()
 
-  useHotkeys(
-    'ctrl+v, meta+v',
-    () => {
-      if (canvas) pasteObject(canvas)
-    },
-    [canvas]
-  )
-
-  useHotkeys(
-    'ctrl+z, meta+z',
-    (e) => {
-      if (e.shiftKey) redo()
-      else undo()
-    },
-    [undo, redo]
-  )
-
-  useHotkeys(
-    'ctrl+shift+z, meta+shift+z, ctrl+y, meta+y',
-    () => redo(),
-    [redo]
-  )
-
-  useHotkeys(
-    'delete, backspace',
-    (e) => {
-      const target = e.target as HTMLElement
-      if (['INPUT', 'TEXTAREA'].includes(target.tagName) || target.isContentEditable) return
-      const obj = canvas?.getActiveObject()
-      if (obj && canvas) {
-        canvas.remove(obj)
+      if (modifier && key === 'z') {
+        event.preventDefault()
+        if (event.shiftKey) useEditorStore.getState().redo()
+        else useEditorStore.getState().undo()
+        return
+      }
+      if (modifier && key === 'y') {
+        event.preventDefault()
+        useEditorStore.getState().redo()
+        return
+      }
+      if (modifier && key === 'c' && canvas) {
+        event.preventDefault()
+        copyObject(canvas)
+        return
+      }
+      if (modifier && key === 'v' && canvas) {
+        event.preventDefault()
+        pasteObject(canvas)
+        return
+      }
+      if (modifier && event.key === ']' && canvas) {
+        event.preventDefault()
+        moveLayerUp(canvas)
+        return
+      }
+      if (modifier && event.key === '[' && canvas) {
+        event.preventDefault()
+        moveLayerDown(canvas)
+        return
+      }
+      if (modifier && (event.key === '=' || event.key === '+')) {
+        event.preventDefault()
+        const { zoom, setZoom } = useEditorStore.getState()
+        setZoom(Math.min(zoom + 0.1, 3))
+        return
+      }
+      if (modifier && event.key === '-') {
+        event.preventDefault()
+        const { zoom, setZoom } = useEditorStore.getState()
+        setZoom(Math.max(zoom - 0.1, 0.3))
+        return
+      }
+      if (modifier && event.key === '0') {
+        event.preventDefault()
+        useEditorStore.getState().setZoom(0.75)
+        return
+      }
+      if ((event.key === 'Delete' || event.key === 'Backspace') && canvas) {
+        const object = canvas.getActiveObject()
+        if (!object) return
+        event.preventDefault()
+        canvas.remove(object)
         canvas.requestRenderAll()
         useEditorStore.getState().pushHistory()
       }
-    },
-    [canvas]
-  )
+    }
 
-  useHotkeys(
-    'ctrl+], meta+]',
-    () => {
-      if (canvas) moveLayerUp(canvas)
-    },
-    [canvas]
-  )
-
-  useHotkeys(
-    'ctrl+[, meta+[',
-    () => {
-      if (canvas) moveLayerDown(canvas)
-    },
-    [canvas]
-  )
-
-  useHotkeys('ctrl+=, meta+=', () => setZoom(Math.min(zoom + 0.1, 3)), [zoom, setZoom])
-  useHotkeys('ctrl+-, meta+-', () => setZoom(Math.max(zoom - 0.1, 0.3)), [zoom, setZoom])
-  useHotkeys('ctrl+0, meta+0', () => setZoom(0.75), [setZoom])
-
-  useHotkeys('v', () => setActiveTool('select'), [setActiveTool])
-  useHotkeys('t', () => setActiveTool('text'), [setActiveTool])
-  useHotkeys('r', () => setActiveTool('rect'), [setActiveTool])
-  useHotkeys('c', () => setActiveTool('circle'), [setActiveTool])
-  useHotkeys('p', () => setActiveTool('pen'), [setActiveTool])
-  useHotkeys('i', () => setActiveTool('image'), [setActiveTool])
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [canvas])
 }

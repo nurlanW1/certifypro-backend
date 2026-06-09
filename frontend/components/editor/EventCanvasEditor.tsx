@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { EditorToolbar } from '@/components/editor/EditorToolbar'
 import { EditorSidebar } from '@/components/editor/EditorSidebar'
 import { EditorPropertiesPanel } from '@/components/editor/EditorPropertiesPanel'
 import { cloneTemplateElements } from '@/lib/templates/templateUtils'
 import type { StarterTemplate, TemplateElement } from '@/lib/templates/types'
+import { useCanvasViewportControls } from '@/hooks/useCanvasViewportControls'
 
 interface EventCanvasEditorProps {
   template: StarterTemplate
@@ -191,16 +192,60 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
   const [zoom, setZoom] = useState(0.72)
   const [drag, setDrag] = useState<DragState | null>(null)
   const canvasWrapRef = useRef<HTMLDivElement>(null)
+  const elementsRef = useRef(elements)
+  const historyRef = useRef<TemplateElement[][]>([cloneTemplateElements(template)])
+  const historyIndexRef = useRef(0)
+
+  const { isPanning, isSpacePressed } = useCanvasViewportControls({
+    containerRef: canvasWrapRef,
+    zoom,
+    setZoom,
+    minZoom: 0.25,
+    maxZoom: 1.5,
+  })
 
   const selectedElement = useMemo(
     () => elements.find((element) => element.id === selectedId) ?? null,
     [elements, selectedId]
   )
 
+  const setCurrentElements = useCallback((next: TemplateElement[]) => {
+    elementsRef.current = next
+    setElements(next)
+  }, [])
+
+  const commitElements = useCallback((next: TemplateElement[]) => {
+    const snapshots = historyRef.current.slice(0, historyIndexRef.current + 1)
+    snapshots.push(next.map((element) => ({ ...element })))
+    historyRef.current = snapshots
+    historyIndexRef.current = snapshots.length - 1
+    setCurrentElements(next)
+  }, [setCurrentElements])
+
+  const undo = useCallback(() => {
+    if (historyIndexRef.current <= 0) return
+    historyIndexRef.current -= 1
+    setCurrentElements(
+      historyRef.current[historyIndexRef.current].map((element) => ({ ...element }))
+    )
+    setDrag(null)
+  }, [setCurrentElements])
+
+  const redo = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return
+    historyIndexRef.current += 1
+    setCurrentElements(
+      historyRef.current[historyIndexRef.current].map((element) => ({ ...element }))
+    )
+    setDrag(null)
+  }, [setCurrentElements])
+
   const updateSelected = (patch: Partial<TemplateElement>) => {
     if (!selectedId) return
-    setElements((current) =>
-      current.map((element) => (element.id === selectedId ? ({ ...element, ...patch } as TemplateElement) : element))
+    commitElements(
+      elementsRef.current.map((element) =>
+        element.id === selectedId ? ({ ...element, ...patch } as TemplateElement) : element
+      )
     )
   }
 
@@ -213,8 +258,8 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
     if (!drag) return
     const dx = (clientX - drag.startX) / zoom
     const dy = (clientY - drag.startY) / zoom
-    setElements((current) =>
-      current.map((element) => {
+    setCurrentElements(
+      elementsRef.current.map((element) => {
         if (element.id !== drag.id) return element
         const original = drag.original
         if (original.type === 'line') {
@@ -224,6 +269,46 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
       })
     )
   }
+
+  const finishDrag = () => {
+    if (!drag) return
+    const moved = elementsRef.current.find((element) => element.id === drag.id)
+    setDrag(null)
+    if (!moved || JSON.stringify(moved) === JSON.stringify(drag.original)) return
+
+    const snapshots = historyRef.current.slice(0, historyIndexRef.current + 1)
+    snapshots.push(elementsRef.current.map((element) => ({ ...element })))
+    historyRef.current = snapshots
+    historyIndexRef.current = snapshots.length - 1
+  }
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement
+      if (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable
+      ) {
+        return
+      }
+      if (!(event.ctrlKey || event.metaKey)) return
+
+      const key = event.key.toLowerCase()
+      if (key === 'z') {
+        event.preventDefault()
+        if (event.shiftKey) redo()
+        else undo()
+      } else if (key === 'y') {
+        event.preventDefault()
+        redo()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [redo, undo])
 
   const exportSVG = () => download(`${template.id}.svg`, elementsToSvg(template, elements), 'image/svg+xml')
 
@@ -268,25 +353,37 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
 
       <div className="flex min-h-0 flex-1">
         <EditorSidebar elements={elements} selectedId={selectedId} onSelect={setSelectedId} />
-        <main className="min-w-0 flex-1 overflow-auto p-6" ref={canvasWrapRef}>
+        <main
+          className="min-w-0 flex-1 overflow-auto p-6"
+          ref={canvasWrapRef}
+          style={{ cursor: isPanning ? 'grabbing' : isSpacePressed ? 'grab' : undefined }}
+        >
           <div className="mb-4">
             <h1 className="text-xl font-semibold text-text-primary">{template.title}</h1>
             <p className="text-sm text-text-muted">{template.size.label} / {template.category}</p>
           </div>
-          <div className="inline-block origin-top-left rounded border border-divide bg-white shadow-sm" style={{ transform: `scale(${zoom})` }}>
-            <svg
-              width={template.size.width}
-              height={template.size.height}
-              viewBox={`0 0 ${template.size.width} ${template.size.height}`}
-              role="img"
-              aria-label={template.title}
-              onPointerMove={(event) => moveDrag(event.clientX, event.clientY)}
-              onPointerUp={() => setDrag(null)}
-              onPointerLeave={() => setDrag(null)}
-              onPointerDown={() => setSelectedId(null)}
+          <div
+            className="relative"
+            style={{ width: template.size.width * zoom, height: template.size.height * zoom }}
+          >
+            <div
+              className="absolute left-0 top-0 origin-top-left rounded border border-divide bg-white shadow-sm"
+              style={{ transform: `scale(${zoom})` }}
             >
-              {elements.map((element) => renderElement(element, selectedId === element.id, beginDrag))}
-            </svg>
+              <svg
+                width={template.size.width}
+                height={template.size.height}
+                viewBox={`0 0 ${template.size.width} ${template.size.height}`}
+                role="img"
+                aria-label={template.title}
+                onPointerMove={(event) => moveDrag(event.clientX, event.clientY)}
+                onPointerUp={finishDrag}
+                onPointerLeave={finishDrag}
+                onPointerDown={() => setSelectedId(null)}
+              >
+                {elements.map((element) => renderElement(element, selectedId === element.id, beginDrag))}
+              </svg>
+            </div>
           </div>
         </main>
         <EditorPropertiesPanel selectedElement={selectedElement} onUpdate={updateSelected} />

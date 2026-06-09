@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { fabric } from 'fabric'
 import {
   MousePointer2,
+  Hand,
   Type,
   Image as ImageIcon,
   Square,
@@ -42,6 +43,7 @@ const TOOLS: {
   shortcut: string
 }[] = [
   { id: 'select', icon: MousePointer2, label: 'Tanlash', shortcut: 'V' },
+  { id: 'hand', icon: Hand, label: 'Surish', shortcut: 'H / Space' },
   { id: 'text', icon: Type, label: 'Matn', shortcut: 'T' },
   { id: 'image', icon: ImageIcon, label: 'Rasm', shortcut: 'I' },
   { id: 'rect', icon: Square, label: "To'rtburchak", shortcut: 'R' },
@@ -121,7 +123,7 @@ export function EditorToolbar({
   }
 
   const visibleTools = assetMode
-    ? TOOLS.filter((t) => ['select', 'text', 'image', 'pen'].includes(t.id))
+    ? TOOLS.filter((t) => ['select', 'hand', 'text', 'image', 'pen'].includes(t.id))
     : TOOLS
 
   const runTool = (tool: ActiveTool) => {
