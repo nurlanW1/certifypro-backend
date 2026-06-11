@@ -98,6 +98,7 @@ export interface StarterTemplate {
   isOnlineReady: boolean
   tags: string[]
   thumbnail: string
+  backgroundAsset?: string
   popularity: number
   elements: TemplateElement[]
 }

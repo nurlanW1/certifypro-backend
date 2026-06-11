@@ -139,7 +139,12 @@ function renderElement(element: TemplateElement, selected: boolean, onPointerDow
   )
 }
 
-function elementsToSvg(template: StarterTemplate, elements: TemplateElement[], watermark = false): string {
+function elementsToSvg(
+  template: StarterTemplate,
+  elements: TemplateElement[],
+  watermark = false,
+  backgroundHref = template.backgroundAsset
+): string {
   const body = elements
     .map((element) => {
       if (element.type === 'text') {
@@ -174,7 +179,11 @@ function elementsToSvg(template: StarterTemplate, elements: TemplateElement[], w
       )}" fill="#ef4444" opacity="0.18" transform="rotate(-24 ${template.size.width / 2} ${template.size.height / 2})">Gildia Draft Preview</text>`
     : ''
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${template.size.width}" height="${template.size.height}" viewBox="0 0 ${template.size.width} ${template.size.height}">${body}${draft}</svg>`
+  const background = backgroundHref
+    ? `<image href="${escapeXml(backgroundHref)}" x="0" y="0" width="${template.size.width}" height="${template.size.height}" preserveAspectRatio="none"/>`
+    : ''
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${template.size.width}" height="${template.size.height}" viewBox="0 0 ${template.size.width} ${template.size.height}">${background}${body}${draft}</svg>`
 }
 
 function download(filename: string, content: BlobPart, type: string) {
@@ -312,10 +321,27 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [redo, undo])
 
-  const exportSVG = () => download(`${template.id}.svg`, elementsToSvg(template, elements), 'image/svg+xml')
+  const getEmbeddedBackground = async () => {
+    if (!template.backgroundAsset) return undefined
+    const response = await fetch(template.backgroundAsset)
+    if (!response.ok) return template.backgroundAsset
+    const blob = await response.blob()
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(String(reader.result))
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(blob)
+    })
+  }
+
+  const exportSVG = async () => {
+    const background = await getEmbeddedBackground()
+    download(`${template.id}.svg`, elementsToSvg(template, elements, false, background), 'image/svg+xml')
+  }
 
   const exportPNG = async () => {
-    const svg = elementsToSvg(template, elements)
+    const background = await getEmbeddedBackground()
+    const svg = elementsToSvg(template, elements, false, background)
     const imageUrl = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }))
     const image = new Image()
     image.onload = () => {
@@ -333,8 +359,9 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
     image.src = imageUrl
   }
 
-  const printDraft = () => {
-    const svg = elementsToSvg(template, elements, true)
+  const printDraft = async () => {
+    const background = await getEmbeddedBackground()
+    const svg = elementsToSvg(template, elements, true, background)
     const printWindow = window.open('', '_blank', 'width=1100,height=800')
     if (!printWindow) return
     printWindow.document.write(`<!doctype html><html><head><title>${template.title}</title><style>body{margin:0;display:grid;place-items:center;min-height:100vh;background:#f8fafc}svg{max-width:96vw;max-height:96vh}</style></head><body>${svg}<script>window.onload=function(){window.print()}</script></body></html>`)
@@ -392,6 +419,17 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
                 onPointerLeave={finishDrag}
                 onPointerDown={() => setSelectedId(null)}
               >
+                {template.backgroundAsset && (
+                  <image
+                    href={template.backgroundAsset}
+                    x={0}
+                    y={0}
+                    width={template.size.width}
+                    height={template.size.height}
+                    preserveAspectRatio="none"
+                    pointerEvents="none"
+                  />
+                )}
                 {elements.map((element) => renderElement(element, selectedId === element.id, beginDrag))}
               </svg>
             </div>

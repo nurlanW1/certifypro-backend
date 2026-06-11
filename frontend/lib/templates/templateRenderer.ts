@@ -72,8 +72,11 @@ function renderStylePattern(template: StarterTemplate): string {
 
 export function renderStarterTemplateSvg(template: StarterTemplate): string {
   const body = template.elements.map(renderElement).join('\n')
+  const background = template.backgroundAsset
+    ? `<image href="${esc(template.backgroundAsset)}" x="0" y="0" width="${template.size.width}" height="${template.size.height}" preserveAspectRatio="none"/>`
+    : renderStylePattern(template)
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${template.size.width}" height="${template.size.height}" viewBox="0 0 ${template.size.width} ${template.size.height}" role="img" aria-label="${esc(template.title)}">
-    ${renderStylePattern(template)}
+    ${background}
     ${body}
   </svg>`
 }

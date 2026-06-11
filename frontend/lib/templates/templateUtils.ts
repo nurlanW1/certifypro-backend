@@ -1,5 +1,6 @@
 import { STARTER_TEMPLATES, findStarterTemplate } from './starterTemplates'
 import { renderStarterTemplateSvg } from './templateRenderer'
+import { DEFAULT_PREVIEW_VARIABLES } from './template-variables'
 import type { StarterTemplate, TemplateCategory, TemplateElement, TemplateStyle } from './types'
 
 export const TEMPLATE_CATEGORIES: TemplateCategory[] = [
@@ -61,7 +62,16 @@ export function filterStarterTemplates(filters: TemplateFilters): StarterTemplat
 }
 
 export function cloneTemplateElements(template: StarterTemplate): TemplateElement[] {
-  return template.elements.map((element) => ({ ...element }))
+  return template.elements.map((element) => {
+    if (element.type !== 'text') return { ...element }
+
+    return {
+      ...element,
+      text: element.text.replace(/\{\{([^}]+)\}\}/g, (placeholder, key: string) => {
+        return DEFAULT_PREVIEW_VARIABLES[key] ?? placeholder
+      }),
+    }
+  })
 }
 
 export function starterTemplateToSvg(template: StarterTemplate): string {

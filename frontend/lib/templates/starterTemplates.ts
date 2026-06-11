@@ -181,6 +181,8 @@ function makeTemplate(params: {
   size: TemplateSize
   isPremium?: boolean
   printable?: boolean
+  thumbnail?: string
+  backgroundAsset?: string
   tags: string[]
   elements: TemplateElement[]
   popularity: number
@@ -198,7 +200,8 @@ function makeTemplate(params: {
     isPrintable: params.printable ?? true,
     isOnlineReady: true,
     tags: [params.style, params.category, ...params.tags],
-    thumbnail: `/api/templates/${params.id}/preview`,
+    thumbnail: params.thumbnail ?? `/api/templates/${params.id}/preview`,
+    backgroundAsset: params.backgroundAsset,
     popularity: params.popularity,
     elements: params.elements,
   }
@@ -259,6 +262,77 @@ export const STARTER_TEMPLATES: StarterTemplate[] = [
     tags: ['Certificate of Participation', 'classic', 'print'],
     popularity: 92,
     elements: [...base('classic', SIZES.a4Landscape), ...commonTitle('classic', SIZES.a4Landscape, 'Certificate of Participation'), ...certificateExtras('classic', SIZES.a4Landscape)],
+  }),
+  makeTemplate({
+    id: 'classic-gold-certificate-v1',
+    title: 'Classic Gold Appreciation Certificate',
+    description: 'Elegant blue and gold landscape certificate with fully editable title, recipient, description, date, and signature text.',
+    style: 'classic',
+    category: 'certificate',
+    size: { width: 1127, height: 814, unit: 'px', label: 'Classic landscape print' },
+    thumbnail: '/templates/certificate/classic-gold-v1/preview.webp',
+    backgroundAsset: '/templates/certificate/classic-gold-v1/background.svg',
+    tags: ['certificate', 'appreciation', 'gold', 'blue', 'print', 'editable'],
+    popularity: 99,
+    elements: [
+      text('certificate-title', 563.5, 166, 'SERTIFIKAT', 68, '#D89A2B', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('certificate-subtitle', 563.5, 218, 'TAQDIRLASH SERTIFIKATI', 30, '#384B52', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('presentation-line', 563.5, 270, '{{eventName}} tadbiridagi faol ishtiroki uchun', 20, '#384B52', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('presentation-line-2', 563.5, 298, 'ushbu sertifikat bilan taqdirlanadi', 20, '#384B52', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('participant-name', 563.5, 392, '{{participantName}}', 70, '#041D3B', {
+        align: 'middle',
+        fontWeight: '400',
+        fontFamily: '"Brush Script MT", "Segoe Script", cursive',
+      }),
+      text('description-line-1', 563.5, 452, 'Tadbir rivojiga qo‘shgan hissasi, faolligi va yuksak natijalari uchun', 17, '#777777', {
+        align: 'middle',
+        fontFamily: 'Georgia, serif',
+      }),
+      text('description-line-2', 563.5, 476, 'tashkilotchilar tomonidan chuqur minnatdorlik bildiriladi.', 17, '#777777', {
+        align: 'middle',
+        fontFamily: 'Georgia, serif',
+      }),
+      text('organization', 563.5, 501, '{{organization}}', 16, '#777777', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('date-value', 439, 538, '{{date}}', 18, '#041D3B', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('date-label', 439, 574, 'SANA', 16, '#041D3B', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+      text('signature-value', 687, 538, 'Imzo', 18, '#041D3B', {
+        align: 'middle',
+        fontFamily: '"Brush Script MT", "Segoe Script", cursive',
+      }),
+      text('signature-label', 687, 574, 'IMZO', 16, '#041D3B', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Arial, sans-serif',
+      }),
+    ],
   }),
   makeTemplate({
     id: 'classic-invitation-006',
