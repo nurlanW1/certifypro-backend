@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Eye, Globe2, Lock, Printer, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { MockTemplate } from '@/lib/mock-templates'
+import { findStarterTemplate } from '@/lib/templates/starterTemplates'
 import type { StarterTemplate } from '@/lib/templates/types'
 
 type CardTemplate = MockTemplate | StarterTemplate
@@ -27,6 +28,19 @@ function styleOf(template: CardTemplate) {
   return 'minimalistic'
 }
 
+function sizeOf(template: CardTemplate) {
+  if (template.size) return template.size
+
+  return (
+    findStarterTemplate(template.id)?.size ?? {
+      width: 794,
+      height: 1123,
+      unit: 'px' as const,
+      label: 'Portrait',
+    }
+  )
+}
+
 interface TemplateCardProps {
   template: CardTemplate
   onSelect: (id: string) => void
@@ -38,18 +52,33 @@ export function TemplateCard({ template, onSelect, onPreview, isSelecting }: Tem
   const style = styleOf(template)
   const previewSrc = previewOf(template)
   const title = titleOf(template)
+  const size = sizeOf(template)
+  const isLandscape = size.width >= size.height
 
   return (
     <article className="group overflow-hidden rounded border border-divide bg-surface transition-all hover:border-text-disabled hover:shadow-sm">
-      <div className={cn('relative aspect-[3/4]', style === 'hitech' ? 'bg-[#07111f]' : style === 'classic' ? 'bg-[#fffaf0]' : 'bg-white')}>
-        <Image
-          src={previewSrc}
-          alt={title}
-          fill
-          className={cn('object-contain p-2 transition-all', template.isPremium && 'blur-[2px] group-hover:blur-0')}
-          sizes="(max-width: 640px) 50vw, 25vw"
-          unoptimized
-        />
+      <div
+        className={cn(
+          'relative flex h-72 items-center justify-center overflow-hidden p-4',
+          style === 'hitech' ? 'bg-[#07111f]' : style === 'classic' ? 'bg-[#f6f3eb]' : 'bg-subtle'
+        )}
+      >
+        <div
+          className={cn(
+            'relative overflow-hidden bg-white shadow-sm ring-1 ring-black/10',
+            isLandscape ? 'w-full' : 'h-full'
+          )}
+          style={{ aspectRatio: `${size.width} / ${size.height}` }}
+        >
+          <Image
+            src={previewSrc}
+            alt={title}
+            fill
+            className={cn('object-contain transition-all', template.isPremium && 'blur-[2px] group-hover:blur-0')}
+            sizes="(max-width: 640px) 80vw, (max-width: 1280px) 40vw, 24vw"
+            unoptimized
+          />
+        </div>
 
         <div className="absolute left-2 top-2 flex gap-1.5">
           {template.isPrintable && (

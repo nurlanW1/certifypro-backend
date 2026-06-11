@@ -1,5 +1,6 @@
 import type { Template } from '@/types/template'
 import { STARTER_TEMPLATES } from '@/lib/templates/starterTemplates'
+import type { TemplateSize } from '@/lib/templates/types'
 
 const now = Date.now()
 
@@ -15,6 +16,7 @@ export interface MockTemplate extends Template {
   isPrintable: boolean
   isOnlineReady: boolean
   sizeLabel: string
+  size?: TemplateSize
 }
 
 export const MOCK_TEMPLATES: MockTemplate[] = STARTER_TEMPLATES.map((template, index) => ({
@@ -35,6 +37,7 @@ export const MOCK_TEMPLATES: MockTemplate[] = STARTER_TEMPLATES.map((template, i
   isPrintable: template.isPrintable,
   isOnlineReady: template.isOnlineReady,
   sizeLabel: template.size.label,
+  size: template.size,
 }))
 
 export function getCategoryCounts(): Record<string, number> {

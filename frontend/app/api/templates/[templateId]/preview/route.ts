@@ -6,6 +6,8 @@ import { allowDevMocks } from '@/lib/env'
 import { prisma } from '@/lib/prisma'
 import { findMockTemplate } from '@/lib/filter-templates'
 import { generateTemplateSvg } from '@/lib/templates/generate-template-svg'
+import { findStarterTemplate } from '@/lib/templates/starterTemplates'
+import { renderStarterTemplateSvg } from '@/lib/templates/templateRenderer'
 import { applyTemplateVariables } from '@/lib/templates/template-variables'
 
 
@@ -15,10 +17,21 @@ export async function GET(
   { params }: { params: { templateId: string } }
 ) {
   try {
-    const row = await prisma.template.findUnique({
-      where: { id: params.templateId },
-      select: { svgContent: true, name: true, nameUz: true, previewUrl: true, category: true },
-    })
+    const starter = findStarterTemplate(params.templateId)
+    let row: {
+      svgContent: string | null
+      name: string
+      nameUz: string | null
+      previewUrl: string
+      category: string
+    } | null = null
+
+    if (!starter) {
+      row = await prisma.template.findUnique({
+        where: { id: params.templateId },
+        select: { svgContent: true, name: true, nameUz: true, previewUrl: true, category: true },
+      })
+    }
 
     if (
       row?.previewUrl?.startsWith('https://') &&
@@ -28,6 +41,10 @@ export async function GET(
     }
 
     let svg = row?.svgContent
+    if (!svg && starter) {
+      svg = renderStarterTemplateSvg(starter)
+    }
+
     if (!svg && allowDevMocks()) {
       const mock = findMockTemplate(params.templateId)
       if (mock) {
