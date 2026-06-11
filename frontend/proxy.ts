@@ -54,7 +54,18 @@ const clerkHandler = clerkMiddleware(async (auth, request) => {
     return NextResponse.next()
   }
   if (!isPublicRoute(request)) {
-    await auth().protect()
+    const { userId } = auth()
+
+    if (!userId) {
+      const signInUrl = request.nextUrl.clone()
+      const localePrefix = request.nextUrl.pathname.match(/^\/(ru|uz)(?:\/|$)/)?.[1]
+
+      signInUrl.pathname = localePrefix ? `/${localePrefix}/sign-in` : '/sign-in'
+      signInUrl.search = ''
+      signInUrl.searchParams.set('redirect_url', request.nextUrl.href)
+
+      return NextResponse.redirect(signInUrl)
+    }
   }
   return handleIntl(request)
 })
