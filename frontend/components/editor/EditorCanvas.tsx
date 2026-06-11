@@ -182,6 +182,7 @@ export function EditorCanvas() {
         ref={workspaceRef}
         className="flex flex-1 overflow-hidden p-6 md:p-10"
         style={{
+          touchAction: 'none',
           cursor: isPanning
             ? 'grabbing'
             : activeTool === 'hand' || isSpacePressed
@@ -196,6 +197,7 @@ export function EditorCanvas() {
             width: CANVAS_WIDTH * zoom,
             height: CANVAS_HEIGHT * zoom,
             transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`,
+            willChange: 'transform',
           }}
         >
           <div

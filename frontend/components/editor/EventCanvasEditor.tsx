@@ -358,7 +358,10 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
         <main
           className="min-w-0 flex-1 overflow-hidden p-6"
           ref={canvasWrapRef}
-          style={{ cursor: isPanning ? 'grabbing' : isSpacePressed ? 'grab' : undefined }}
+          style={{
+            touchAction: 'none',
+            cursor: isPanning ? 'grabbing' : isSpacePressed ? 'grab' : undefined,
+          }}
         >
           <div className="mb-4">
             <h1 className="text-xl font-semibold text-text-primary">{template.title}</h1>
@@ -371,6 +374,7 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
               width: template.size.width * zoom,
               height: template.size.height * zoom,
               transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`,
+              willChange: 'transform',
             }}
           >
             <div
