@@ -183,19 +183,21 @@ export function useCanvasViewportControls({
       setZoom(nextZoom)
     }
 
-    const releaseSpace = (event?: KeyboardEvent) => {
-      if (event && event.code !== 'Space') return
+    const releaseSpace = () => {
       spacePressedRef.current = false
       setIsSpacePressed(false)
+    }
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.code === 'Space') releaseSpace()
     }
     const onWindowBlur = () => releaseSpace()
 
     window.addEventListener('keydown', onKeyDown)
-    window.addEventListener('keyup', releaseSpace)
+    window.addEventListener('keyup', onKeyUp)
     window.addEventListener('blur', onWindowBlur)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('keyup', releaseSpace)
+      window.removeEventListener('keyup', onKeyUp)
       window.removeEventListener('blur', onWindowBlur)
     }
   }, [maxZoom, minZoom, setZoom])
