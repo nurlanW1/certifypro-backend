@@ -192,12 +192,14 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
   const [zoom, setZoom] = useState(0.72)
   const [drag, setDrag] = useState<DragState | null>(null)
   const canvasWrapRef = useRef<HTMLDivElement>(null)
+  const canvasStageRef = useRef<HTMLDivElement>(null)
   const elementsRef = useRef(elements)
   const historyRef = useRef<TemplateElement[][]>([cloneTemplateElements(template)])
   const historyIndexRef = useRef(0)
 
-  const { isPanning, isSpacePressed } = useCanvasViewportControls({
+  const { isPanning, isSpacePressed, panOffset } = useCanvasViewportControls({
     containerRef: canvasWrapRef,
+    contentRef: canvasStageRef,
     zoom,
     setZoom,
     minZoom: 0.25,
@@ -354,7 +356,7 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
       <div className="flex min-h-0 flex-1">
         <EditorSidebar elements={elements} selectedId={selectedId} onSelect={setSelectedId} />
         <main
-          className="min-w-0 flex-1 overflow-auto p-6"
+          className="min-w-0 flex-1 overflow-hidden p-6"
           ref={canvasWrapRef}
           style={{ cursor: isPanning ? 'grabbing' : isSpacePressed ? 'grab' : undefined }}
         >
@@ -363,8 +365,13 @@ export function EventCanvasEditor({ template }: EventCanvasEditorProps) {
             <p className="text-sm text-text-muted">{template.size.label} / {template.category}</p>
           </div>
           <div
+            ref={canvasStageRef}
             className="relative"
-            style={{ width: template.size.width * zoom, height: template.size.height * zoom }}
+            style={{
+              width: template.size.width * zoom,
+              height: template.size.height * zoom,
+              transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`,
+            }}
           >
             <div
               className="absolute left-0 top-0 origin-top-left rounded border border-divide bg-white shadow-sm"

@@ -21,6 +21,7 @@ export function EditorCanvas() {
   const initializedRef = useRef(false)
   const hydratingRef = useRef(true)
   const workspaceRef = useRef<HTMLDivElement>(null)
+  const canvasStageRef = useRef<HTMLDivElement>(null)
 
   const {
     setFabricCanvas,
@@ -37,8 +38,9 @@ export function EditorCanvas() {
     activeTool,
   } = useEditorStore()
 
-  const { isPanning, isSpacePressed } = useCanvasViewportControls({
+  const { isPanning, isSpacePressed, panOffset, resetPan } = useCanvasViewportControls({
     containerRef: workspaceRef,
+    contentRef: canvasStageRef,
     zoom,
     setZoom,
     leftPanEnabled: activeTool === 'hand',
@@ -169,13 +171,16 @@ export function EditorCanvas() {
 
   const handleZoomIn = () => setZoom(Math.min(zoom + 0.1, 3))
   const handleZoomOut = () => setZoom(Math.max(zoom - 0.1, 0.3))
-  const handleFitScreen = () => setZoom(0.75)
+  const handleFitScreen = () => {
+    resetPan()
+    setZoom(0.75)
+  }
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden bg-workspace-canvas">
       <div
         ref={workspaceRef}
-        className="flex flex-1 overflow-auto p-6 md:p-10"
+        className="flex flex-1 overflow-hidden p-6 md:p-10"
         style={{
           cursor: isPanning
             ? 'grabbing'
@@ -185,8 +190,13 @@ export function EditorCanvas() {
         }}
       >
         <div
+          ref={canvasStageRef}
           className="relative m-auto shrink-0"
-          style={{ width: CANVAS_WIDTH * zoom, height: CANVAS_HEIGHT * zoom }}
+          style={{
+            width: CANVAS_WIDTH * zoom,
+            height: CANVAS_HEIGHT * zoom,
+            transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`,
+          }}
         >
           <div
             className="absolute left-0 top-0 rounded-sm border border-border bg-surface shadow-lg"

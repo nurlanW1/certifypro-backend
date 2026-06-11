@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react'
 
 interface CanvasViewportControlsOptions {
   containerRef: RefObject<HTMLElement>
+  contentRef?: RefObject<HTMLElement>
   zoom: number
   setZoom: (zoom: number) => void
   minZoom?: number
@@ -23,6 +24,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 
 export function useCanvasViewportControls({
   containerRef,
+  contentRef,
   zoom,
   setZoom,
   minZoom = 0.3,
@@ -31,7 +33,9 @@ export function useCanvasViewportControls({
 }: CanvasViewportControlsOptions) {
   const [isPanning, setIsPanning] = useState(false)
   const [isSpacePressed, setIsSpacePressed] = useState(false)
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 })
   const zoomRef = useRef(zoom)
+  const panOffsetRef = useRef(panOffset)
   const spacePressedRef = useRef(false)
   const panRef = useRef<{
     pointerId: number
@@ -42,6 +46,10 @@ export function useCanvasViewportControls({
   useEffect(() => {
     zoomRef.current = zoom
   }, [zoom])
+
+  useEffect(() => {
+    panOffsetRef.current = panOffset
+  }, [panOffset])
 
   useEffect(() => {
     const container = containerRef.current
@@ -79,8 +87,12 @@ export function useCanvasViewportControls({
       const pan = panRef.current
       if (!pan || pan.pointerId !== event.pointerId) return
       event.preventDefault()
-      container.scrollLeft -= event.clientX - pan.clientX
-      container.scrollTop -= event.clientY - pan.clientY
+      const nextOffset = {
+        x: panOffsetRef.current.x + event.clientX - pan.clientX,
+        y: panOffsetRef.current.y + event.clientY - pan.clientY,
+      }
+      panOffsetRef.current = nextOffset
+      setPanOffset(nextOffset)
       pan.clientX = event.clientX
       pan.clientY = event.clientY
     }
@@ -95,18 +107,36 @@ export function useCanvasViewportControls({
       )
       if (nextZoom === currentZoom) return
 
-      const bounds = container.getBoundingClientRect()
-      const localX = event.clientX - bounds.left
-      const localY = event.clientY - bounds.top
-      const contentX = (container.scrollLeft + localX) / currentZoom
-      const contentY = (container.scrollTop + localY) / currentZoom
+      const content = contentRef?.current
+      const previousBounds = content?.getBoundingClientRect()
+      const contentX = previousBounds
+        ? (event.clientX - previousBounds.left) / currentZoom
+        : null
+      const contentY = previousBounds
+        ? (event.clientY - previousBounds.top) / currentZoom
+        : null
 
       zoomRef.current = nextZoom
       setZoom(nextZoom)
-      requestAnimationFrame(() => {
-        container.scrollLeft = contentX * nextZoom - localX
-        container.scrollTop = contentY * nextZoom - localY
-      })
+      if (content && contentX !== null && contentY !== null) {
+        requestAnimationFrame(() => {
+          const nextBounds = content.getBoundingClientRect()
+          const nextOffset = {
+            x:
+              panOffsetRef.current.x +
+              event.clientX -
+              contentX * nextZoom -
+              nextBounds.left,
+            y:
+              panOffsetRef.current.y +
+              event.clientY -
+              contentY * nextZoom -
+              nextBounds.top,
+          }
+          panOffsetRef.current = nextOffset
+          setPanOffset(nextOffset)
+        })
+      }
     }
 
     const onContextMenu = (event: MouseEvent) => event.preventDefault()
@@ -126,7 +156,7 @@ export function useCanvasViewportControls({
       container.removeEventListener('wheel', onWheel)
       container.removeEventListener('contextmenu', onContextMenu)
     }
-  }, [containerRef, leftPanEnabled, maxZoom, minZoom, setZoom])
+  }, [containerRef, contentRef, leftPanEnabled, maxZoom, minZoom, setZoom])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -170,5 +200,11 @@ export function useCanvasViewportControls({
     }
   }, [maxZoom, minZoom, setZoom])
 
-  return { isPanning, isSpacePressed }
+  const resetPan = () => {
+    const origin = { x: 0, y: 0 }
+    panOffsetRef.current = origin
+    setPanOffset(origin)
+  }
+
+  return { isPanning, isSpacePressed, panOffset, resetPan }
 }
