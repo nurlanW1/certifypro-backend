@@ -335,6 +335,134 @@ export const STARTER_TEMPLATES: StarterTemplate[] = [
     ],
   }),
   makeTemplate({
+    id: 'modern-blue-certificate-v2',
+    title: 'Modern Blue Certificate',
+    description: 'Modern blue and gold participation certificate with editable recipient, description, signature, role, and date.',
+    style: 'minimalistic',
+    category: 'certificate',
+    size: { width: 841.89, height: 595.28, unit: 'px', label: 'A4 landscape print' },
+    thumbnail: '/templates/certificate/modern-blue-v2/preview.webp',
+    backgroundAsset: '/templates/certificate/modern-blue-v2/background.svg',
+    tags: ['certificate', 'modern', 'blue', 'gold', 'participation', 'editable'],
+    popularity: 98,
+    elements: [
+      text('certificate-title', 420.95, 157, 'CERTIFICATE', 34, '#C98B19', {
+        align: 'middle',
+        fontWeight: '500',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('certificate-subtitle', 420.95, 184, 'OF PARTICIPATION', 12, '#161616', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('award-line', 420.95, 220, 'This certificate is awarded to', 13, '#161616', {
+        align: 'middle',
+        fontWeight: '500',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('participant-name', 420.95, 275, '{{participantName}}', 29, '#161616', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('description-line-1', 420.95, 303, 'Tadbirdagi faol ishtiroki, tashabbuskorligi va erishgan natijalari uchun', 9, '#161616', {
+        align: 'middle',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('description-line-2', 420.95, 316, 'ushbu sertifikat bilan taqdirlanadi. Kelgusi faoliyatida ulkan', 9, '#161616', {
+        align: 'middle',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('description-line-3', 420.95, 329, 'muvaffaqiyatlar va yangi yutuqlar tilaymiz.', 9, '#161616', {
+        align: 'middle',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('signatory-name', 225, 449, '{{signatoryName}}', 13, '#161616', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('signatory-role', 225, 477, '{{signatoryRole}}', 11, '#161616', {
+        align: 'middle',
+        fontWeight: '500',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('date-value', 620, 449, '{{date}}', 14, '#161616', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('date-label', 620, 477, 'DATE', 11, '#161616', {
+        align: 'middle',
+        fontWeight: '500',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+    ],
+  }),
+  makeTemplate({
+    id: 'classic-golden-certificate-v3',
+    title: 'Classic Golden Achievement Certificate',
+    description: 'Elegant white and gold achievement certificate with editable recipient, certificate copy, and signatory details.',
+    style: 'classic',
+    category: 'certificate',
+    size: { width: 841.89, height: 595.28, unit: 'px', label: 'A4 landscape print' },
+    thumbnail: '/templates/certificate/classic-golden-v3/preview.webp',
+    backgroundAsset: '/templates/certificate/classic-golden-v3/background.svg',
+    tags: ['certificate', 'classic', 'gold', 'achievement', 'award', 'editable'],
+    popularity: 97,
+    elements: [
+      text('certificate-title', 420.95, 91, 'CERTIFICATE', 34, '#7E671D', {
+        align: 'middle',
+        fontWeight: '500',
+        fontFamily: 'Georgia, serif',
+      }),
+      text('certificate-subtitle', 420.95, 122, 'OF ACHIEVEMENT', 12, '#B48A27', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('presentation-line', 420.95, 191, 'THIS CERTIFICATE IS PROUDLY PRESENTED TO:', 10, '#161616', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('participant-name', 420.95, 251, '{{participantName}}', 32, '#161616', {
+        align: 'middle',
+        fontWeight: '700',
+        fontFamily: 'Georgia, serif',
+      }),
+      text('description-line-1', 420.95, 295, 'Tadbir rivojiga qo‘shgan munosib hissasi va yuksak natijalari uchun', 10, '#424242', {
+        align: 'middle',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('description-line-2', 420.95, 310, 'tashkilotchilar tomonidan chuqur minnatdorlik bilan taqdirlanadi.', 10, '#424242', {
+        align: 'middle',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('left-signatory-name', 250, 458, '{{signatoryName}}', 12, '#161616', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('left-signatory-role', 250, 478, 'PRESIDENT DIRECTOR', 10, '#8A6A17', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('right-signatory-name', 590, 458, '{{organization}}', 12, '#161616', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+      text('right-signatory-role', 590, 478, 'GENERAL MANAGER', 10, '#8A6A17', {
+        align: 'middle',
+        fontWeight: '600',
+        fontFamily: 'Montserrat, Arial, sans-serif',
+      }),
+    ],
+  }),
+  makeTemplate({
     id: 'classic-invitation-006',
     title: 'Classic Invitation',
     description: 'Formal invitation layout with gold details and registration QR.',
