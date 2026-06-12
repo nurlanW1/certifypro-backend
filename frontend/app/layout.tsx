@@ -3,6 +3,7 @@ import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { ClerkConfigProvider } from '@/components/auth/ClerkConfigContext'
 import { AppProviders } from '@/components/AppProviders'
+import { GlobalNavigation } from '@/components/layout/GlobalNavigation'
 import { ThemeScript } from '@/components/theme/ThemeScript'
 import {
   getClerkPublishableKey,
@@ -28,7 +29,10 @@ export default async function RootLayout({
   const appBody = (
     <ClerkConfigProvider publishable={publishable} authenticated={authenticated}>
       <ThemeScript />
-      <AppProviders>{children}</AppProviders>
+      <AppProviders>
+        {children}
+        <GlobalNavigation />
+      </AppProviders>
     </ClerkConfigProvider>
   )
 
